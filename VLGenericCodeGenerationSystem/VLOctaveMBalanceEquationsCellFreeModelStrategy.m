@@ -47,33 +47,48 @@
     [buffer appendFormat:@"\n"];
     
     // call to the kinetics function -
-    [buffer appendString:@"\t\% Calculate the kinetics rate vector -- \n"];
-    [buffer appendString:@"\trV = Kinetics(t,x,kV,DF);\n"];
+    [buffer appendString:@"\% Calculate the kinetics rate vector -- \n"];
+    [buffer appendString:@"rV = Kinetics(t,x,kV,DF);\n"];
     [buffer appendFormat:@"\n"];
-    [buffer appendString:@"\t\% Calculate the v-variable vector -- \n"];
-    [buffer appendString:@"\tvV = Control(t,x,rV,kV,DF);\n"];
+    [buffer appendString:@"\% Calculate the v-variable vector -- \n"];
+    [buffer appendString:@"vV = Control(t,x,rV,kV,DF);\n"];
     [buffer appendFormat:@"\n"];
-    [buffer appendString:@"\t\% Modify the rate vector -- \n"];
-    [buffer appendString:@"\trate_vector = rV.*vV;\n"];
+    [buffer appendString:@"\% Modify the rate vector -- \n"];
+    [buffer appendString:@"rate_vector = rV.*vV;\n"];
     [buffer appendFormat:@"\n"];
     
     
     // ok, if we are do compact form, then we are almost done -
     if ([compact_form isLike:@"TRUE"] == YES)
     {
-        [buffer appendString:@"\t\% Write the mass balance equations (compact form) -- \n"];
-        [buffer appendFormat:@"\tDXDT = S*rate_vector;\n"];
+        [buffer appendString:@"\% Write the mass balance equations (compact form) -- \n"];
+        [buffer appendFormat:@"DXDT = S*rate_vector;\n"];
         [buffer appendFormat:@"\n"];
     }
     else
     {
-        [buffer appendString:@"\t\% Write the mass balance equations (expansive form) -- \n"];
+        [buffer appendString:@"\% Write the mass balance equations (expansive form) -- \n"];
         
         // How many states do we have?
         [buffer appendString:@"DXDT(NUMBER_OF_STATES,1) = zeros(NUMBER_OF_STATES,1);\n"];
+        [buffer appendFormat:@"\n"];
         
         // ok, when I get here - I need to know what type of source encoding that I have -
-        
+        if ([model_source_encoding isLike:@"VFF"] == YES)
+        {
+            // Get list of species -
+            NSArray *species_array = [input_tree nodesForXPath:@".//listOfSpecies/species" error:nil];
+            NSInteger balance_counter = 1;
+            for (NSXMLElement *species_node in species_array)
+            {
+                // Symbol -
+                NSString *symbol = [[species_node attributeForName:@"symbol"] stringValue];
+                [buffer appendFormat:@"\%% Balance %lu - %@\n",(long)balance_counter,symbol];
+                
+                // update balance counter and go around again -
+                balance_counter++;
+            }
+        }
     }
     
     
