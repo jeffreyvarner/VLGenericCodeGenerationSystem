@@ -10,6 +10,20 @@
 		AD3A887418A1951D00BAA649 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD3A887318A1951D00BAA649 /* Foundation.framework */; };
 		AD3A887718A1951D00BAA649 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A887618A1951D00BAA649 /* main.m */; };
 		AD3A887B18A1951D00BAA649 /* VLGenericCodeGenerationSystem.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AD3A887A18A1951D00BAA649 /* VLGenericCodeGenerationSystem.1 */; };
+		AD3A888418A1956B00BAA649 /* VLCoreUtilitiesLib.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A888318A1956B00BAA649 /* VLCoreUtilitiesLib.m */; };
+		AD3A888818A2D06B00BAA649 /* VLAbstractService.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A888718A2D06B00BAA649 /* VLAbstractService.m */; };
+		AD3A888B18A2D0F400BAA649 /* VLGenericCodeGenerationService.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A888A18A2D0F400BAA649 /* VLGenericCodeGenerationService.m */; };
+		AD3A889118A2D81700BAA649 /* VLAbstractInputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A889018A2D81700BAA649 /* VLAbstractInputHandler.m */; };
+		AD3A889418A2D82B00BAA649 /* VLAbstractOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A889318A2D82B00BAA649 /* VLAbstractOutputHandler.m */; };
+		AD3A889718A2D83E00BAA649 /* VLAbstractFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A889618A2D83E00BAA649 /* VLAbstractFilterHandler.m */; };
+		AD3A889A18A2D88600BAA649 /* VLVFFInputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A889918A2D88600BAA649 /* VLVFFInputHandler.m */; };
+		AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A88A218A2D95300BAA649 /* VLIdentityFilterHandler.m */; };
+		AD3A88A618A2DA8500BAA649 /* VLSBMLOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A88A518A2DA8500BAA649 /* VLSBMLOutputHandler.m */; };
+		ADFAB39618B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39518B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m */; };
+		ADFAB39918B77F88004C45BD /* VLOctaveMOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39818B77F88004C45BD /* VLOctaveMOutputHandler.m */; };
+		ADFAB39C18B7826A004C45BD /* VLAbstractStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39B18B7826A004C45BD /* VLAbstractStrategy.m */; };
+		ADFAB39F18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39E18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m */; };
+		ADFAB3A218B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB3A118B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +45,34 @@
 		AD3A887618A1951D00BAA649 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AD3A887918A1951D00BAA649 /* VLGenericCodeGenerationSystem-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VLGenericCodeGenerationSystem-Prefix.pch"; sourceTree = "<group>"; };
 		AD3A887A18A1951D00BAA649 /* VLGenericCodeGenerationSystem.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = VLGenericCodeGenerationSystem.1; sourceTree = "<group>"; };
+		AD3A888218A1956B00BAA649 /* VLCoreUtilitiesLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCoreUtilitiesLib.h; sourceTree = "<group>"; };
+		AD3A888318A1956B00BAA649 /* VLCoreUtilitiesLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCoreUtilitiesLib.m; sourceTree = "<group>"; };
+		AD3A888618A2D06B00BAA649 /* VLAbstractService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLAbstractService.h; sourceTree = "<group>"; };
+		AD3A888718A2D06B00BAA649 /* VLAbstractService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLAbstractService.m; sourceTree = "<group>"; };
+		AD3A888918A2D0F400BAA649 /* VLGenericCodeGenerationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGenericCodeGenerationService.h; sourceTree = "<group>"; };
+		AD3A888A18A2D0F400BAA649 /* VLGenericCodeGenerationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGenericCodeGenerationService.m; sourceTree = "<group>"; };
+		AD3A888F18A2D81700BAA649 /* VLAbstractInputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLAbstractInputHandler.h; sourceTree = "<group>"; };
+		AD3A889018A2D81700BAA649 /* VLAbstractInputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLAbstractInputHandler.m; sourceTree = "<group>"; };
+		AD3A889218A2D82B00BAA649 /* VLAbstractOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLAbstractOutputHandler.h; sourceTree = "<group>"; };
+		AD3A889318A2D82B00BAA649 /* VLAbstractOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLAbstractOutputHandler.m; sourceTree = "<group>"; };
+		AD3A889518A2D83E00BAA649 /* VLAbstractFilterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLAbstractFilterHandler.h; sourceTree = "<group>"; };
+		AD3A889618A2D83E00BAA649 /* VLAbstractFilterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLAbstractFilterHandler.m; sourceTree = "<group>"; };
+		AD3A889818A2D88600BAA649 /* VLVFFInputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLVFFInputHandler.h; sourceTree = "<group>"; };
+		AD3A889918A2D88600BAA649 /* VLVFFInputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLVFFInputHandler.m; sourceTree = "<group>"; };
+		AD3A88A118A2D95300BAA649 /* VLIdentityFilterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLIdentityFilterHandler.h; sourceTree = "<group>"; };
+		AD3A88A218A2D95300BAA649 /* VLIdentityFilterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLIdentityFilterHandler.m; sourceTree = "<group>"; };
+		AD3A88A418A2DA8500BAA649 /* VLSBMLOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLSBMLOutputHandler.h; sourceTree = "<group>"; };
+		AD3A88A518A2DA8500BAA649 /* VLSBMLOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLSBMLOutputHandler.m; sourceTree = "<group>"; };
+		ADFAB39418B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGenericCodeGenerationStrategyFactory.h; sourceTree = "<group>"; };
+		ADFAB39518B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGenericCodeGenerationStrategyFactory.m; sourceTree = "<group>"; };
+		ADFAB39718B77F88004C45BD /* VLOctaveMOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMOutputHandler.h; sourceTree = "<group>"; };
+		ADFAB39818B77F88004C45BD /* VLOctaveMOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMOutputHandler.m; sourceTree = "<group>"; };
+		ADFAB39A18B7826A004C45BD /* VLAbstractStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLAbstractStrategy.h; sourceTree = "<group>"; };
+		ADFAB39B18B7826A004C45BD /* VLAbstractStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLAbstractStrategy.m; sourceTree = "<group>"; };
+		ADFAB39D18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMDataFileCellFreeModelStrategy.h; sourceTree = "<group>"; };
+		ADFAB39E18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMDataFileCellFreeModelStrategy.m; sourceTree = "<group>"; };
+		ADFAB3A018B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMBalanceEquationsCellFreeModelStrategy.h; sourceTree = "<group>"; };
+		ADFAB3A118B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMBalanceEquationsCellFreeModelStrategy.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +115,8 @@
 		AD3A887518A1951D00BAA649 /* VLGenericCodeGenerationSystem */ = {
 			isa = PBXGroup;
 			children = (
+				AD3A888518A2D05000BAA649 /* generator */,
+				AD3A888118A1955D00BAA649 /* util */,
 				AD3A887618A1951D00BAA649 /* main.m */,
 				AD3A887A18A1951D00BAA649 /* VLGenericCodeGenerationSystem.1 */,
 				AD3A887818A1951D00BAA649 /* Supporting Files */,
@@ -86,6 +130,80 @@
 				AD3A887918A1951D00BAA649 /* VLGenericCodeGenerationSystem-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AD3A888118A1955D00BAA649 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				AD3A888218A1956B00BAA649 /* VLCoreUtilitiesLib.h */,
+				AD3A888318A1956B00BAA649 /* VLCoreUtilitiesLib.m */,
+			);
+			name = util;
+			sourceTree = "<group>";
+		};
+		AD3A888518A2D05000BAA649 /* generator */ = {
+			isa = PBXGroup;
+			children = (
+				ADFAB39318B6C348004C45BD /* strategy_system */,
+				AD3A888E18A2D7F100BAA649 /* filter_handler */,
+				AD3A888D18A2D7E600BAA649 /* output_handler */,
+				AD3A888C18A2D7DD00BAA649 /* input_handler */,
+				AD3A888618A2D06B00BAA649 /* VLAbstractService.h */,
+				AD3A888718A2D06B00BAA649 /* VLAbstractService.m */,
+				AD3A888918A2D0F400BAA649 /* VLGenericCodeGenerationService.h */,
+				AD3A888A18A2D0F400BAA649 /* VLGenericCodeGenerationService.m */,
+			);
+			name = generator;
+			sourceTree = "<group>";
+		};
+		AD3A888C18A2D7DD00BAA649 /* input_handler */ = {
+			isa = PBXGroup;
+			children = (
+				AD3A888F18A2D81700BAA649 /* VLAbstractInputHandler.h */,
+				AD3A889018A2D81700BAA649 /* VLAbstractInputHandler.m */,
+				AD3A889818A2D88600BAA649 /* VLVFFInputHandler.h */,
+				AD3A889918A2D88600BAA649 /* VLVFFInputHandler.m */,
+			);
+			name = input_handler;
+			sourceTree = "<group>";
+		};
+		AD3A888D18A2D7E600BAA649 /* output_handler */ = {
+			isa = PBXGroup;
+			children = (
+				AD3A889218A2D82B00BAA649 /* VLAbstractOutputHandler.h */,
+				AD3A889318A2D82B00BAA649 /* VLAbstractOutputHandler.m */,
+				AD3A88A418A2DA8500BAA649 /* VLSBMLOutputHandler.h */,
+				AD3A88A518A2DA8500BAA649 /* VLSBMLOutputHandler.m */,
+				ADFAB39718B77F88004C45BD /* VLOctaveMOutputHandler.h */,
+				ADFAB39818B77F88004C45BD /* VLOctaveMOutputHandler.m */,
+			);
+			name = output_handler;
+			sourceTree = "<group>";
+		};
+		AD3A888E18A2D7F100BAA649 /* filter_handler */ = {
+			isa = PBXGroup;
+			children = (
+				AD3A889518A2D83E00BAA649 /* VLAbstractFilterHandler.h */,
+				AD3A889618A2D83E00BAA649 /* VLAbstractFilterHandler.m */,
+				AD3A88A118A2D95300BAA649 /* VLIdentityFilterHandler.h */,
+				AD3A88A218A2D95300BAA649 /* VLIdentityFilterHandler.m */,
+			);
+			name = filter_handler;
+			sourceTree = "<group>";
+		};
+		ADFAB39318B6C348004C45BD /* strategy_system */ = {
+			isa = PBXGroup;
+			children = (
+				ADFAB39418B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.h */,
+				ADFAB39518B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m */,
+				ADFAB39A18B7826A004C45BD /* VLAbstractStrategy.h */,
+				ADFAB39B18B7826A004C45BD /* VLAbstractStrategy.m */,
+				ADFAB39D18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.h */,
+				ADFAB39E18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m */,
+				ADFAB3A018B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.h */,
+				ADFAB3A118B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m */,
+			);
+			name = strategy_system;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,7 +257,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD3A889A18A2D88600BAA649 /* VLVFFInputHandler.m in Sources */,
+				AD3A889718A2D83E00BAA649 /* VLAbstractFilterHandler.m in Sources */,
+				ADFAB3A218B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m in Sources */,
+				AD3A888B18A2D0F400BAA649 /* VLGenericCodeGenerationService.m in Sources */,
+				ADFAB39F18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m in Sources */,
+				AD3A888818A2D06B00BAA649 /* VLAbstractService.m in Sources */,
+				AD3A889118A2D81700BAA649 /* VLAbstractInputHandler.m in Sources */,
+				AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */,
+				AD3A889418A2D82B00BAA649 /* VLAbstractOutputHandler.m in Sources */,
 				AD3A887718A1951D00BAA649 /* main.m in Sources */,
+				AD3A888418A1956B00BAA649 /* VLCoreUtilitiesLib.m in Sources */,
+				ADFAB39C18B7826A004C45BD /* VLAbstractStrategy.m in Sources */,
+				ADFAB39618B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m in Sources */,
+				AD3A88A618A2DA8500BAA649 /* VLSBMLOutputHandler.m in Sources */,
+				ADFAB39918B77F88004C45BD /* VLOctaveMOutputHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +383,7 @@
 				AD3A888018A1951D00BAA649 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

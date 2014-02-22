@@ -6,4 +6,8 @@
 
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
+
+    // my files -
+    #import "VLCoreUtilitiesLib.h"
+    #import "VLGenericCodeGenerationStrategyFactory.h"
 #endif
