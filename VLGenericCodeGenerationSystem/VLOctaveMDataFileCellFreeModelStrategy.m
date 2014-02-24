@@ -163,6 +163,10 @@
                 enzyme_counter++;
             }
         }
+        else
+        {
+            
+        }
     }
     
     // return -

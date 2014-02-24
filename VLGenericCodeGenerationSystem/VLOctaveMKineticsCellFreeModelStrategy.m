@@ -62,6 +62,8 @@
             [buffer appendFormat:@""];
         }
     }
+    
+    [buffer appendString:@"return;\n"];
 
     // return -
     return buffer;
