@@ -17,5 +17,7 @@
 // language specific logic methods
 -(id)generateOctaveMDataFileActionWithOptions:(NSDictionary *)options;
 -(id)generateOctaveMBalanceEquationsActionWithOptions:(NSDictionary *)options;
+-(id)generateOctaveMSolveBalanceEquationsActionWithOptions:(NSDictionary *)options;
+-(id)generateOctaveMKineticsActionWithOptions:(NSDictionary *)options;
 
 @end

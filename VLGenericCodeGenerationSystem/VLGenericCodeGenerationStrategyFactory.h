@@ -10,6 +10,8 @@
 #import "VLOctaveMOutputHandler.h"
 #import "VLOctaveMDataFileCellFreeModelStrategy.h"
 #import "VLOctaveMBalanceEquationsCellFreeModelStrategy.h"
+#import "VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h"
+#import "VLOctaveMKineticsCellFreeModelStrategy.h"
 
 @interface VLGenericCodeGenerationStrategyFactory : NSObject
 {

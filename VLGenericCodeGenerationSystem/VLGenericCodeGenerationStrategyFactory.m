@@ -60,6 +60,7 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
 {
     // how do we do the matching?
     id result = nil;
+    VLAbstractStrategy *strategy = nil;
     
     // hardcode for now - we need to make this dynamic somehow ...
     if ([callerObject isKindOfClass:[VLOctaveMOutputHandler class]] == YES)
@@ -72,8 +73,7 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
             if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
             {
                 // octave-m datafile for a cell free model -
-                VLOctaveMDataFileCellFreeModelStrategy *strategy = [[VLOctaveMDataFileCellFreeModelStrategy alloc] init];
-                result = [strategy executeStrategyWithOptions:options];
+                strategy = [[VLOctaveMDataFileCellFreeModelStrategy alloc] init];
             }
         }
         else if ([method_selector_string isEqualToString:@"generateOctaveMBalanceEquationsActionWithOptions:"] == YES)
@@ -82,8 +82,20 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
             if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
             {
                 // octave-m datafile for a cell free model -
-                VLOctaveMBalanceEquationsCellFreeModelStrategy *strategy = [[VLOctaveMBalanceEquationsCellFreeModelStrategy alloc] init];
-                result = [strategy executeStrategyWithOptions:options];
+                strategy = [[VLOctaveMBalanceEquationsCellFreeModelStrategy alloc] init];
+            }
+        }
+        else if ([method_selector_string isEqualToString:@"generateOctaveMSolveBalanceEquationsActionWithOptions:"] == YES)
+        {
+            // this code will be the same no matter what model type we have -
+            strategy = [[VLOctaveMGenericDriverSolveBalancesEquationsStrategy alloc] init];
+        }
+        else if ([method_selector_string isEqualToString:@"generateOctaveMKineticsActionWithOptions:"] == YES)
+        {
+            // ok, we are building an octave-m datafile, what type of model?
+            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
+            {
+                strategy = [[VLOctaveMKineticsCellFreeModelStrategy alloc] init];
             }
         }
         else
@@ -91,6 +103,9 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
             
         }
     }
+    
+    // execute the strategy -
+    result = [strategy executeStrategyWithOptions:options];
     
     // default is to return nil -
     return  result;
