@@ -52,63 +52,97 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
     return self;
 }
 
+//-(id)executeStrategyForClass:(NSObject *)callerObject
+//                 andSelector:(SEL)methodSelector
+//               withModelType:(NSString *)modelType
+//          withSourceEncoding:(NSString *)sourceEncoding
+//                 withOptions:(NSDictionary *)options
+//{
+//    // how do we do the matching?
+//    id result = nil;
+//    VLAbstractStrategy *strategy = nil;
+//    
+//    // hardcode for now - we need to make this dynamic somehow ...
+//    if ([callerObject isKindOfClass:[VLOctaveMOutputHandler class]] == YES)
+//    {
+//        // ok, we have a octave-m job. What type of job?
+//        NSString *method_selector_string = NSStringFromSelector(methodSelector);
+//        if ([method_selector_string isEqualToString:@"generateOctaveMDataFileActionWithOptions:"] == YES)
+//        {
+//            // ok, we are building an octave-m datafile, what type of model?
+//            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
+//            {
+//                // octave-m datafile for a cell free model -
+//                strategy = [[VLOctaveMDataFileCellFreeModelStrategy alloc] init];
+//            }
+//        }
+//        else if ([method_selector_string isEqualToString:@"generateOctaveMBalanceEquationsActionWithOptions:"] == YES)
+//        {
+//            // ok, we are building an octave-m datafile, what type of model?
+//            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
+//            {
+//                // octave-m datafile for a cell free model -
+//                strategy = [[VLOctaveMBalanceEquationsCellFreeModelStrategy alloc] init];
+//            }
+//        }
+//        else if ([method_selector_string isEqualToString:@"generateOctaveMSolveBalanceEquationsActionWithOptions:"] == YES)
+//        {
+//            // this code will be the same no matter what model type we have -
+//            strategy = [[VLOctaveMGenericDriverSolveBalancesEquationsStrategy alloc] init];
+//        }
+//        else if ([method_selector_string isEqualToString:@"generateOctaveMKineticsActionWithOptions:"] == YES)
+//        {
+//            // ok, we are building an octave-m datafile, what type of model?
+//            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
+//            {
+//                strategy = [[VLOctaveMKineticsCellFreeModelStrategy alloc] init];
+//            }
+//        }
+//        else
+//        {
+//            
+//        }
+//    }
+//    
+//    // execute the strategy -
+//    result = [strategy executeStrategyWithOptions:options];
+//    
+//    // default is to return nil -
+//    return  result;
+//}
+
 -(id)executeStrategyForClass:(NSObject *)callerObject
                  andSelector:(SEL)methodSelector
                withModelType:(NSString *)modelType
           withSourceEncoding:(NSString *)sourceEncoding
                  withOptions:(NSDictionary *)options
 {
+    // if we do *not* have the mapping tree, then all is lost ...
+    if ([self myStrategyMappingTree] == nil)
+    {
+        return nil;
+    }
+    
+    
     // how do we do the matching?
     id result = nil;
     VLAbstractStrategy *strategy = nil;
     
-    // hardcode for now - we need to make this dynamic somehow ...
-    if ([callerObject isKindOfClass:[VLOctaveMOutputHandler class]] == YES)
-    {
-        // ok, we have a octave-m job. What type of job?
-        NSString *method_selector_string = NSStringFromSelector(methodSelector);
-        if ([method_selector_string isEqualToString:@"generateOctaveMDataFileActionWithOptions:"] == YES)
-        {
-            // ok, we are building an octave-m datafile, what type of model?
-            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
-            {
-                // octave-m datafile for a cell free model -
-                strategy = [[VLOctaveMDataFileCellFreeModelStrategy alloc] init];
-            }
-        }
-        else if ([method_selector_string isEqualToString:@"generateOctaveMBalanceEquationsActionWithOptions:"] == YES)
-        {
-            // ok, we are building an octave-m datafile, what type of model?
-            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
-            {
-                // octave-m datafile for a cell free model -
-                strategy = [[VLOctaveMBalanceEquationsCellFreeModelStrategy alloc] init];
-            }
-        }
-        else if ([method_selector_string isEqualToString:@"generateOctaveMSolveBalanceEquationsActionWithOptions:"] == YES)
-        {
-            // this code will be the same no matter what model type we have -
-            strategy = [[VLOctaveMGenericDriverSolveBalancesEquationsStrategy alloc] init];
-        }
-        else if ([method_selector_string isEqualToString:@"generateOctaveMKineticsActionWithOptions:"] == YES)
-        {
-            // ok, we are building an octave-m datafile, what type of model?
-            if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
-            {
-                strategy = [[VLOctaveMKineticsCellFreeModelStrategy alloc] init];
-            }
-        }
-        else
-        {
-            
-        }
-    }
+    // Get the strategy_mapping_block -
+    NSXMLDocument *mapping_tree = self.myStrategyMappingTree;
+    NSString *caller_class = NSStringFromClass([callerObject class]);
+    NSString *method_selector_string = NSStringFromSelector(methodSelector);
+    NSString *xpath = [NSString stringWithFormat:@".//strategy_mapping_block/%@/strategy_map[@model_type='%@' and @method = '%@']/@strategy_class",caller_class,modelType,method_selector_string];
+    NSString *strategy_class_string = [[[mapping_tree nodesForXPath:xpath error:nil] lastObject] stringValue];
+    
+    // Build my strategy class -
+    strategy = [[NSClassFromString(strategy_class_string) alloc] init];
     
     // execute the strategy -
     result = [strategy executeStrategyWithOptions:options];
     
-    // default is to return nil -
-    return  result;
+    // return nil result by default -
+    return result;
 }
 
 
@@ -120,6 +154,8 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
 
 -(void)cleanMyMemory
 {
+    // kia my iVars -
+    self.myStrategyMappingTree = nil;
     
     // remove me from notifications -
     [[NSNotificationCenter defaultCenter] removeObserver:self];

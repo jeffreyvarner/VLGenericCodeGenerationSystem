@@ -11,6 +11,7 @@
 // code generation classes -
 #import "VLCoreUtilitiesLib.h"
 #import "VLGenericCodeGenerationService.h"
+#import "VLGenericCodeGenerationStrategyFactory.h"
 
 // define -
 #define INDEX_TRANSFORMATION_FILE 0
@@ -47,6 +48,10 @@ int main(int argc, const char * argv[])
         NSString *path_to_mapping_file = [argsArray objectAtIndex:INDEX_MAPPING_FILE];
         NSXMLDocument *xml_mapping_tree = [VLCoreUtilitiesLib createXMLDocumentFromFile:[NSURL fileURLWithPath:path_to_mapping_file]];
 
+        // Build the strategy factory -
+        VLGenericCodeGenerationStrategyFactory *strategy_factory = [VLGenericCodeGenerationStrategyFactory buildStrategyFactory];
+        [strategy_factory setMyStrategyMappingTree:xml_mapping_tree];
+        
         // Build the service -
         VLGenericCodeGenerationService *service = [VLGenericCodeGenerationService startService];
         

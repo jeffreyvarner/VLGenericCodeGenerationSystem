@@ -15,8 +15,12 @@
 
 @interface VLGenericCodeGenerationStrategyFactory : NSObject
 {
-    
+    @private
+    NSXMLDocument *_myStrategyMappingTree;
 }
+
+@property (strong) NSXMLDocument *myStrategyMappingTree;
+
 
 // Build my factory (singleton) -
 +(VLGenericCodeGenerationStrategyFactory *)buildStrategyFactory;
