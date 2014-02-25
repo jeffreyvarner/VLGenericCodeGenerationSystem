@@ -117,12 +117,14 @@ static  VLGenericCodeGenerationStrategyFactory *_sharedInstance;
           withSourceEncoding:(NSString *)sourceEncoding
                  withOptions:(NSDictionary *)options
 {
-    // if we do *not* have the mapping tree, then all is lost ...
-    if ([self myStrategyMappingTree] == nil)
+    // if we do *not* have the mapping tree, are other required stuff to look up the strategy, then all is lost ...
+    if ([self myStrategyMappingTree] == nil ||
+        modelType == nil ||
+        callerObject == nil ||
+        methodSelector == NULL)
     {
         return nil;
     }
-    
     
     // how do we do the matching?
     id result = nil;

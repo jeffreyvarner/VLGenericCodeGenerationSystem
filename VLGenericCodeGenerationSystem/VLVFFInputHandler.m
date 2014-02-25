@@ -65,7 +65,7 @@
     
     // Compute the species set -
     [buffer appendString:@"\t<listOfSpecies>\n"];
-    NSSet *species_set = [self constructListOfSpeciesFromVFFComponents:componentArray forModelType:modelType];
+    NSArray *species_set = [self constructListOfSpeciesFromVFFComponents:componentArray forModelType:modelType];
     for (NSString *species_symbol in species_set)
     {
         [buffer appendFormat:@"\t\t<species symbol='%@' initial_amount='0.0'/>\n",species_symbol];
@@ -74,7 +74,7 @@
     
     // compute the reaction set -
     [buffer appendString:@"\t<listOfInteractions>\n"];
-    NSSet *reaction_set = [self constructListOfReactionsFromVFFComponents:componentArray];
+    NSArray *reaction_set = [self constructListOfReactionsFromVFFComponents:componentArray];
     for (NSString *reaction_block in reaction_set)
     {
         [buffer appendFormat:@"\t\t%@\n",reaction_block];
@@ -93,12 +93,13 @@
     return document;
 }
 
--(NSSet *)constructListOfReactionsFromVFFComponents:(NSArray *)componentArray
+-(NSArray *)constructListOfReactionsFromVFFComponents:(NSArray *)componentArray
 {
     // reaction set -
-    NSMutableSet *reaction_set = [NSMutableSet set];
+    NSMutableArray *reaction_set = [NSMutableArray array];
     
     // ok - go through my array -
+    NSInteger reaction_counter = 0;
     for (NSArray *reaction in componentArray)
     {
         // Buffer -
@@ -114,12 +115,12 @@
         if ([raw_reverse_string isEqualToString:@"inf;"] == YES)
         {
             // reversible - split
-            [buffer appendFormat:@"<interaction id='%@::FORWARD'>\n",raw_name_string];
+            [buffer appendFormat:@"<interaction index='%lu' id='%@::FORWARD'>\n",reaction_counter++,raw_name_string];
             [buffer appendFormat:@"\t<interaction_input reaction_string='%@'/>\n",raw_input_string];
             [buffer appendFormat:@"\t<interaction_output reaction_string='%@'/>\n",raw_output_string];
             [buffer appendFormat:@"</interaction>\n"];
             
-            [buffer appendFormat:@"<interaction id='%@::REVERSE'>\n",raw_name_string];
+            [buffer appendFormat:@"<interaction index='%lu' id='%@::REVERSE'>\n",reaction_counter++,raw_name_string];
             [buffer appendFormat:@"\t<interaction_input reaction_string='%@'/>\n",raw_output_string];
             [buffer appendFormat:@"\t<interaction_output reaction_string='%@'/>\n",raw_input_string];
             [buffer appendFormat:@"</interaction>\n"];
@@ -127,7 +128,7 @@
         else
         {
             // *not* reversible -
-            [buffer appendFormat:@"<interaction id='%@::FORWARD'>\n",raw_name_string];
+            [buffer appendFormat:@"<interaction index='%lu' id='%@::FORWARD'>\n",reaction_counter++,raw_name_string];
             [buffer appendFormat:@"\t<interaction_input reaction_string='%@'/>\n",raw_input_string];
             [buffer appendFormat:@"\t<interaction_output reaction_string='%@'/>\n",raw_output_string];
             [buffer appendFormat:@"</interaction>\n"];
@@ -137,15 +138,15 @@
     }
     
     // return the set -
-    return [NSSet setWithSet:reaction_set];
+    return [NSArray arrayWithArray:reaction_set];
 }
 
 
--(NSSet *)constructListOfSpeciesFromVFFComponents:(NSArray *)componentArray
+-(NSArray *)constructListOfSpeciesFromVFFComponents:(NSArray *)componentArray
                                      forModelType:(NSString *)modelType
 {
     NSMutableArray *species_array = [[NSMutableArray alloc] init];
-    NSMutableSet *species_set = [NSMutableSet set];
+    NSMutableArray *final_species_array = [NSMutableArray array];
     
     
     for (NSArray *reaction in componentArray)
@@ -161,20 +162,30 @@
         // go through the array -
         for (NSString *species in species_array)
         {
-            // do we have a stoichiometric coefficient?
-            NSRange range = [species rangeOfString:@"*" options:NSCaseInsensitiveSearch];
-            if (range.location != NSNotFound)
+            // is this the null species?
+            if ([species isEqualToString:@"[]"] == NO)
             {
-                // ok, so we have a stoichiometric coefficient -
-                NSArray *split_components = [species componentsSeparatedByString:@"*"];
-                
-                // the species symbol will be the *last* object in the array -
-                [species_set addObject:[split_components lastObject]];
-            }
-            else
-            {
-                // no stoichometric coefficients -
-                [species_set addObject:species];
+                // do we have a stoichiometric coefficient?
+                NSRange range = [species rangeOfString:@"*" options:NSCaseInsensitiveSearch];
+                if (range.location != NSNotFound)
+                {
+                    // ok, so we have a stoichiometric coefficient -
+                    NSArray *split_components = [species componentsSeparatedByString:@"*"];
+                    
+                    NSString *test_symbol = [split_components lastObject];
+                    if ([final_species_array containsObject:test_symbol] == NO)
+                    {
+                        [final_species_array addObject:test_symbol];
+                    }
+                }
+                else
+                {
+                    // no stoichometric coefficients -
+                    if ([final_species_array containsObject:species] == NO)
+                    {
+                        [final_species_array addObject:species];
+                    }
+                }
             }
         }
     }
@@ -186,11 +197,11 @@
         for (NSArray *reaction in componentArray)
         {
             NSString *species_symbol = [NSString stringWithFormat:@"E_%lu",(long)reaction_counter++];
-            [species_set addObject:species_symbol];
+            [final_species_array addObject:species_symbol];
         }
     }
     
-    return [NSSet setWithSet:species_set];
+    return [NSArray arrayWithArray:final_species_array];
 }
 
 @end
