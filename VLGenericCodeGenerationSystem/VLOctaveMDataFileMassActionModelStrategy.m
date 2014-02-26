@@ -194,7 +194,7 @@
     [tmpBuffer appendString:@"DF.STOICHIOMETRIC_MATRIX          =   STM;\n"];
     [tmpBuffer appendString:@"DF.INITIAL_CONDITION_VECTOR       =   IC;\n"];
     [tmpBuffer appendString:@"DF.PARAMETER_VECTOR               =   kV;\n"];
-    [tmpBuffer appendString:@"DF.MEASUREMENT_SELECTION_VECTOR   = MEASUREMENT_INDEX_VECTOR;\n"];
+    [tmpBuffer appendString:@"DF.MEASUREMENT_SELECTION_VECTOR   =   MEASUREMENT_INDEX_VECTOR;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_PARAMETERS              =   NPARAMETERS;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_OF_STATES               =   NSTATES;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_OF_RATES                =   NRATES;\n"];
