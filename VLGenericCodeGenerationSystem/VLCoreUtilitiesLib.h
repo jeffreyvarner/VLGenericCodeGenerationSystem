@@ -22,6 +22,7 @@
                  withRecordDeliminator:(NSString *)recordDeliminator
                   withFieldDeliminator:(NSString *)fieldDeliminator;
 
++(NSArray *)loadCopyrightFileAtPath:(NSString *)filePath;
 +(NSString *)lookupInputPathForTransformationWithName:(NSString *)transformName inTree:(NSXMLDocument *)blueprintTree;
 +(NSString *)lookupOutputPathForTransformationWithName:(NSString *)transformName inTree:(NSXMLDocument *)blueprintTree;
 

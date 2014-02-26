@@ -105,9 +105,9 @@ static VLGenericCodeGenerationService *_sharedInstance;
         };
 
         // process my outputs -
-        id output = [self processOutputsForTransformation:transformation
-                                    withMappingDictionary:mapping_dictionary
-                                               andOptions:output_options];
+        __unused id output = [self processOutputsForTransformation:transformation
+                                             withMappingDictionary:mapping_dictionary
+                                                        andOptions:output_options];
         
     }
     

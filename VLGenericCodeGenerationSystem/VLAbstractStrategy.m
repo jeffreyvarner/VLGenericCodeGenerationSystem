@@ -16,5 +16,8 @@
     return nil;
 }
 
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer
+{
+}
 
 @end

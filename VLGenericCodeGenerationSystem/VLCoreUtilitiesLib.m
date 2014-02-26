@@ -41,6 +41,51 @@
     }
 }
 
++(NSArray *)loadCopyrightFileAtPath:(NSString *)filePath
+{
+    // major problem?
+    if (filePath == nil)
+    {
+        return nil;
+    }
+    
+    // Method attributes -
+    NSError *error = nil;
+    NSMutableArray *tmpArray = [NSMutableArray array];
+    NSString *record_delim = @"\n";
+    
+    // Load the file -
+    NSURL *tmpFileURL = [NSURL fileURLWithPath:filePath isDirectory:NO];
+    
+    // Load the file -
+    NSString *fileString = [NSString stringWithContentsOfURL:tmpFileURL encoding:NSUTF8StringEncoding error:&error];
+    
+    // Ok, we need to walk through this file, and put it an array -
+    NSScanner *scanner = [NSScanner scannerWithString:fileString];
+    while (![scanner isAtEnd])
+    {
+        // Ok, let'd grab a row -
+        NSString *tmpString;
+        [scanner scanUpToString:record_delim intoString:&tmpString];
+        
+        if ([tmpString length] == 0)
+        {
+            [tmpArray addObject:@"\n"];
+        }
+        else
+        {
+            // Load the row -
+            [tmpArray addObject:tmpString];
+        }
+        
+        // dedug -
+        NSLog(@"Processed - %@",tmpString);
+    }
+    
+    // return -
+    return [NSArray arrayWithArray:tmpArray];
+}
+
 +(NSArray *)loadGenericFlatFile:(NSString *)filePath
                  withRecordDeliminator:(NSString *)recordDeliminator
                   withFieldDeliminator:(NSString *)fieldDeliminator

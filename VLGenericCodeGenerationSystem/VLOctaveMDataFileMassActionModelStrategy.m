@@ -25,6 +25,11 @@
     NSXMLElement *transformation = [options objectForKey:@"TRANSFORMATION_XML_ELEMENT"];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:@"INPUT_DATA_TREE"];
     
+    // I need to load the copyright block -
+    NSString *copyright_xpath = @".//properties/property[@symbol=\"COPYRIGHT_TEXT\"]/@value";
+    NSString *copyright_file_path = [[[transformation_tree nodesForXPath:copyright_xpath error:nil] lastObject] stringValue];
+    NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
+    
     // What is my model type?
     NSString *model_type_xpath = @"./Model/@type";
     NSString *typeString = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
@@ -34,6 +39,9 @@
     NSString *tmpFunctionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
     
     // start -
+    // add the copyright statement -
+    [self addCopyrightStatement:copyright_buffer toBuffer:buffer];
+    
     // Populate the buffer --
     [buffer appendFormat:@"function DF = %@(TSTART,TSTOP,Ts,INDEX)\n",tmpFunctionName];
     [buffer appendString:@"% ---------------------------------------------------------------------- %\n"];
@@ -52,7 +60,7 @@
     
     // load the stoichiometric matrix -
     [buffer appendString:@"% Stoichiometric matrix --\n"];
-    [buffer appendString:@"STM = load('./network/');\n"];
+    [buffer appendString:@"STM = load('./network/Network.dat');\n"];
     [buffer appendString:@"\n"];
     
     // formulate the parameters list -
@@ -196,5 +204,19 @@
     return tmpBuffer;
 }
 
+#pragma mark - override the copyright statement
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer
+{
+    // first line -
+    [buffer appendString:@"% ------------------------------------------------------------------------------------ %\n"];
+    
+    for (NSString *line in statement)
+    {
+        [buffer appendFormat:@"\%% %@ \n",line];
+    }
+    
+    // close -
+    [buffer appendString:@"% ------------------------------------------------------------------------------------ %\n"];
+}
 
 @end

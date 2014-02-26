@@ -33,7 +33,13 @@
     NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
     NSString *tmpFunctionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
     
+    // add the copyright statement -
+    NSString *copyright_xpath = @".//properties/property[@symbol=\"COPYRIGHT_TEXT\"]/@value";
+    NSString *copyright_file_path = [[[transformation_tree nodesForXPath:copyright_xpath error:nil] lastObject] stringValue];
+    NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
 
+    [self addCopyrightStatement:copyright_buffer toBuffer:buffer];
+    
     // Build the prototype and import buffer -
     NSString *tmpPrototype = [self formulateFunctionPrototypeBufferWithOptions:options];
     [buffer appendString:tmpPrototype];
@@ -338,7 +344,7 @@
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:@"INPUT_DATA_TREE"];
     
     // build the buffer -
-    [buffer appendString:@"void calculateKinetics(ColumnVector& kV,ColumnVector& x,ColumnVector& rV)\n"];
+    [buffer appendString:@"void calculateKinetics(ColumnVector& kV,ColumnVector& xV,ColumnVector& rV)\n"];
     [buffer appendString:@"{\n"];
     [buffer appendString:@"\t// Formulate the kinetics - \n"];
     [buffer appendString:@"\t// First alias the species symbols (helps with debugging)\n"];
@@ -436,6 +442,21 @@
     
     // return -
     return buffer;
+}
+
+#pragma mark - override the copyright statement
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer
+{
+    // first line -
+    [buffer appendString:@"// ------------------------------------------------------------------------------------ %\n"];
+    
+    for (NSString *line in statement)
+    {
+        [buffer appendFormat:@"// %@ \n",line];
+    }
+    
+    // close -
+    [buffer appendString:@"// ------------------------------------------------------------------------------------ %\n"];
 }
 
 

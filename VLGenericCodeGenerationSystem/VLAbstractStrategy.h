@@ -14,5 +14,6 @@
 }
 
 -(id)executeStrategyWithOptions:(NSDictionary *)options;
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer;
 
 @end

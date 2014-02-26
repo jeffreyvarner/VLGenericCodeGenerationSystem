@@ -69,5 +69,19 @@
     return buffer;
 }
 
+#pragma mark - override the copyright statement
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer
+{
+    // first line -
+    [buffer appendString:@"% ------------------------------------------------------------------------------------ %\n"];
+    
+    for (NSString *line in statement)
+    {
+        [buffer appendFormat:@"\%% %@ \n",line];
+    }
+    
+    // close -
+    [buffer appendString:@"% ------------------------------------------------------------------------------------ %\n"];
+}
 
 @end
