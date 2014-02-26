@@ -26,6 +26,8 @@
 		ADCF3DBC18BD273600A83257 /* VLOctaveCDataFileMassActionModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DBB18BD273600A83257 /* VLOctaveCDataFileMassActionModelStrategy.m */; };
 		ADCF3DBF18BD275B00A83257 /* VLOctaveCBalanceEquationsMassActionModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DBE18BD275B00A83257 /* VLOctaveCBalanceEquationsMassActionModelStrategy.m */; };
 		ADCF3DC218BD277F00A83257 /* VLOctaveCKineticsMassActionModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DC118BD277F00A83257 /* VLOctaveCKineticsMassActionModelStrategy.m */; };
+		ADCF3DC518BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DC418BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m */; };
+		ADCF3DC818BD699200A83257 /* VLSharedUtilitiesOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DC718BD699200A83257 /* VLSharedUtilitiesOutputHandler.m */; };
 		ADFAB39618B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39518B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m */; };
 		ADFAB39918B77F88004C45BD /* VLOctaveMOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39818B77F88004C45BD /* VLOctaveMOutputHandler.m */; };
 		ADFAB39C18B7826A004C45BD /* VLAbstractStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADFAB39B18B7826A004C45BD /* VLAbstractStrategy.m */; };
@@ -84,6 +86,10 @@
 		ADCF3DBE18BD275B00A83257 /* VLOctaveCBalanceEquationsMassActionModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveCBalanceEquationsMassActionModelStrategy.m; sourceTree = "<group>"; };
 		ADCF3DC018BD277F00A83257 /* VLOctaveCKineticsMassActionModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveCKineticsMassActionModelStrategy.h; sourceTree = "<group>"; };
 		ADCF3DC118BD277F00A83257 /* VLOctaveCKineticsMassActionModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveCKineticsMassActionModelStrategy.m; sourceTree = "<group>"; };
+		ADCF3DC318BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMDataFileMassActionModelStrategy.h; sourceTree = "<group>"; };
+		ADCF3DC418BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMDataFileMassActionModelStrategy.m; sourceTree = "<group>"; };
+		ADCF3DC618BD699200A83257 /* VLSharedUtilitiesOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLSharedUtilitiesOutputHandler.h; sourceTree = "<group>"; };
+		ADCF3DC718BD699200A83257 /* VLSharedUtilitiesOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLSharedUtilitiesOutputHandler.m; sourceTree = "<group>"; };
 		ADFAB39418B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGenericCodeGenerationStrategyFactory.h; sourceTree = "<group>"; };
 		ADFAB39518B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGenericCodeGenerationStrategyFactory.m; sourceTree = "<group>"; };
 		ADFAB39718B77F88004C45BD /* VLOctaveMOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMOutputHandler.h; sourceTree = "<group>"; };
@@ -201,6 +207,8 @@
 				ADFAB39818B77F88004C45BD /* VLOctaveMOutputHandler.m */,
 				ADCF3DB218BD1A8000A83257 /* VLOctaveCOutputHandler.h */,
 				ADCF3DB318BD1A8000A83257 /* VLOctaveCOutputHandler.m */,
+				ADCF3DC618BD699200A83257 /* VLSharedUtilitiesOutputHandler.h */,
+				ADCF3DC718BD699200A83257 /* VLSharedUtilitiesOutputHandler.m */,
 			);
 			name = output_handler;
 			sourceTree = "<group>";
@@ -227,6 +235,8 @@
 				ADCF3DAD18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m */,
 				ADCF3DAF18BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.h */,
 				ADCF3DB018BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.m */,
+				ADCF3DC318BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.h */,
+				ADCF3DC418BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m */,
 			);
 			name = octave_m;
 			sourceTree = "<group>";
@@ -318,6 +328,7 @@
 				ADFAB39F18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m in Sources */,
 				AD3A888818A2D06B00BAA649 /* VLAbstractService.m in Sources */,
 				AD3A889118A2D81700BAA649 /* VLAbstractInputHandler.m in Sources */,
+				ADCF3DC518BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m in Sources */,
 				AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */,
 				ADCF3DB718BD1BB800A83257 /* VLGSLCOutputHandler.m in Sources */,
 				AD3A889418A2D82B00BAA649 /* VLAbstractOutputHandler.m in Sources */,
@@ -329,6 +340,7 @@
 				ADCF3DBC18BD273600A83257 /* VLOctaveCDataFileMassActionModelStrategy.m in Sources */,
 				AD3A88A618A2DA8500BAA649 /* VLSBMLOutputHandler.m in Sources */,
 				ADFAB39918B77F88004C45BD /* VLOctaveMOutputHandler.m in Sources */,
+				ADCF3DC818BD699200A83257 /* VLSharedUtilitiesOutputHandler.m in Sources */,
 				ADCF3DB418BD1A8000A83257 /* VLOctaveCOutputHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

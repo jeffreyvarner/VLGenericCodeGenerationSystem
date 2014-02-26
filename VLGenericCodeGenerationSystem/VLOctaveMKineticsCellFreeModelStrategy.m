@@ -21,7 +21,7 @@
     NSMutableString *buffer = [[NSMutableString alloc] init];
 
     // Get our trees from the dictionary -
-    NSXMLDocument *transformation_tree = [options objectForKey:@"TRANSFORMATION_TREE"];
+    __unused NSXMLDocument *transformation_tree = [options objectForKey:@"TRANSFORMATION_TREE"];
     NSXMLElement *transformation = [options objectForKey:@"TRANSFORMATION_XML_ELEMENT"];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:@"INPUT_DATA_TREE"];
 
