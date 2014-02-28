@@ -232,6 +232,13 @@
 			name = filter_handler;
 			sourceTree = "<group>";
 		};
+		AD62086218C0CF960091DC42 /* matlab_m */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = matlab_m;
+			sourceTree = "<group>";
+		};
 		ADCF3DB818BD26DC00A83257 /* octave_m */ = {
 			isa = PBXGroup;
 			children = (
@@ -267,6 +274,7 @@
 		ADFAB39318B6C348004C45BD /* strategy_system */ = {
 			isa = PBXGroup;
 			children = (
+				AD62086218C0CF960091DC42 /* matlab_m */,
 				ADCF3DB918BD26EF00A83257 /* octave_c */,
 				ADCF3DB818BD26DC00A83257 /* octave_m */,
 				ADFAB39418B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.h */,
