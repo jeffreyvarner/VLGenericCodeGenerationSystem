@@ -63,9 +63,6 @@
         [buffer appendString:@"\tgsl_vector *pStateVector = gsl_vector_alloc(NUMBER_OF_STATES);\n"];
         [buffer appendString:@"\tgsl_vector *pRightHandSideVector = gsl_vector_alloc(NUMBER_OF_STATES);\n"];
         NEW_LINE;
-        [buffer appendString:@"\t/* Evaluate the kinetics -- */\n"];
-        [buffer appendFormat:@"\t%@(t,x,pRateVector,parameter_object);\n",dependencyName];
-        NEW_LINE;
         [buffer appendString:@"\t/* Setup mass balance calculations -- */\n"];
         [buffer appendString:@"\tgsl_matrix *pStoichiometricMatrix = parameter_struct->pModelStoichiometricMatrix;\n"];
         NEW_LINE;
@@ -82,6 +79,9 @@
         [buffer appendString:@"\t\t\tgsl_vector_set(pStateVector,state_index,x[state_index]);\n"];
         [buffer appendString:@"\t\t}\n"];
         [buffer appendString:@"\t}\n"];
+        NEW_LINE;
+        [buffer appendString:@"\t/* Evaluate the kinetics -- */\n"];
+        [buffer appendFormat:@"\t%@(t,pStateVector,pRateVector,parameter_object);\n",dependencyName];
         NEW_LINE;
         [buffer appendString:@"\t/* Calculate the right hand side -- */\n"];
         [buffer appendString:@"\tgsl_blas_dgemv(CblasNoTrans,1.0,pStoichiometricMatrix,pRateVector,0.0,pRightHandSideVector);\n"];

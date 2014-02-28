@@ -14,6 +14,10 @@ NSString *const kXMLTransformationTree = @"TRANSFORMATION_TREE";
 NSString *const kXMLTransformationElement = @"TRANSFORMATION_XML_ELEMENT";
 
 
-// Model type encodings -
+// Model source encodings -
 NSString *const kSourceEncodingVFF = @"VFF";
 NSString *const kSourceEncodingSBML = @"SBML";
+
+// Model types -
+NSString *const kModelTypeMassActionModel = @"MASS_ACTION_MODEL";
+NSString *const kModelTypeCellFreeModel = @"CELL_FREE_MODEL";

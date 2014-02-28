@@ -37,7 +37,7 @@
     // headers -
     [buffer appendFormat:@"#include \"%@.h\"\n",tmpFunctionName];
     [buffer appendString:@"\n"];
-    [buffer appendFormat:@"void %@(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object)\n",tmpFunctionName];
+    [buffer appendFormat:@"void %@(double t,gsl_vector *pStateVector, gsl_vector *pRateVector, void* parameter_object)\n",tmpFunctionName];
     [buffer appendString:@"{\n"];
     [buffer appendString:@"\t/* initialize -- */\n"];
     [buffer appendString:@"\tdouble rate_value = 0.0;\n"];
@@ -60,7 +60,7 @@
         for (NSXMLElement *state in state_vector)
         {
             NSString *state_symbol = [[state attributeForName:@"symbol"] stringValue];
-            [buffer appendFormat:@"\tdouble %@ = state_vector[%lu];\n",state_symbol,state_counter++];
+            [buffer appendFormat:@"\tdouble %@ = gsl_vector_get(pStateVector,%lu);\n",state_symbol,state_counter++];
         }
 
         [buffer appendString:@"\n"];

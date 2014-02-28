@@ -113,6 +113,18 @@
     return result;
 }
 
+-(id)generateGSLCShellScriptActionWithOptions:(NSDictionary *)options
+{
+    // build the shell script -
+    NSString *shell_script = [self generateModelSolveShellScriptBufferWithOptions:options];
+    
+    // dump to disk -
+    [self writeCodeGenerationOutput:shell_script toFileWithOptions:options];
+    
+    // return -
+    return shell_script;
+}
+
 #pragma mark - helpers
 -(id)executeStrategyFactoryCallForObject:(NSObject *)caller
                              andSelector:(SEL)methodSelector
@@ -173,7 +185,7 @@
     [buffer appendString:@"};\n\n"];
     [buffer appendString:@"\n"];
     [buffer appendString:@"/* public methods */\n"];
-    [buffer appendFormat:@"void %@(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object);\n\n",functionName];
+    [buffer appendFormat:@"void %@(double t,gsl_vector *pStateVector, gsl_vector *pRateVector, void* parameter_object);\n\n",functionName];
     [buffer appendString:@"\n"];
     
     // return -
@@ -220,6 +232,74 @@
     
 }
 
+-(NSString *)generateModelSolveShellScriptBufferWithOptions:(NSDictionary *)options
+{
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+
+    // get the transformation -
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLElement *transformation_tree = [options objectForKey:kXMLTransformationTree];
+    
+    // What is the executable name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"EXECUTABLE_NAME\"]/@value";
+    NSString *functionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+    
+    // What is my working directory?
+    NSString *working_directory = [[[transformation_tree nodesForXPath:@".//property[@symbol='WORKING_DIRECTORY']/@value" error:nil] lastObject] stringValue];
+    
+    // What is my working directory?
+    [buffer appendString:@"#!/bin/sh\n"];
+    NEW_LINE;
+    
+    // what options do we have?
+    NSArray *dependency_array = [transformation nodesForXPath:@"./output_handler/output_handler_dependencies/dependency" error:nil];
+    for (NSXMLElement *dependency_node in dependency_array)
+    {
+        // Get the type and value data -
+        NSString *type_string = [[dependency_node attributeForName:@"type"] stringValue];
+        NSString *value_string = [[dependency_node attributeForName:@"value"] stringValue];
+        NSString *full_path;
+        
+        // Do we have a working dir to append?
+        if (working_directory!=nil)
+        {
+            full_path = [NSString stringWithFormat:@"%@%@",working_directory,value_string];
+        }
+        else
+        {
+            full_path = value_string;
+        }
+        
+        
+        // build the read-only lines -
+        [buffer appendFormat:@"readonly %@=%@\n",type_string,full_path];
+    }
+    
+    //readonly EXECUTABLE_PATH=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P3/src
+    //readonly OUTPUT_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/Simulation_P1.out
+    //readonly KINETICS_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/Parameters.dat
+    //readonly IC_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/InitialConditions.dat
+    //readonly ST_MATRIX=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/StoichiometricMatrix.dat
+    //readonly FLOW_MATRIX=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/CirculationMatrix.dat
+    //readonly VOLUME_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/Volume.dat
+    
+    NEW_LINE;
+    
+    // build the execution line -
+    for (NSXMLElement *dependency_node in dependency_array)
+    {
+        // Get the type and value data -
+        NSString *type_string = [[dependency_node attributeForName:@"type"] stringValue];
+        [buffer appendFormat:@"$%@ ",type_string];
+    }
+    
+    [buffer appendString:@"$1 $2 $3\n"];
+
+    // return -
+    return buffer;
+}
+
 -(NSString *)generateModelMakeFileBufferWithOptions:(NSDictionary *)options
 {
     // initialize the buffer -
@@ -255,7 +335,7 @@
     }
     
     // write driver target -
-    [buffer appendString:@"Driver: "];
+    [buffer appendString:@"Model: "];
     for (NSString *file_name in file_name_array)
     {
         [buffer appendFormat:@"%@.c ",file_name];
@@ -263,7 +343,7 @@
     NEW_LINE;
     
     // write the compile line -
-    [buffer appendString:@"\t$(CC) $(CCFLAGS) -o Driver "];
+    [buffer appendString:@"\t$(CC) $(CCFLAGS) -o Model "];
     for (NSString *file_name in file_name_array)
     {
         [buffer appendFormat:@"%@.c ",file_name];

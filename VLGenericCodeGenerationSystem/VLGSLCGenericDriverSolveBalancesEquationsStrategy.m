@@ -31,8 +31,13 @@
     NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
     
     // What is my model type?
+    NSString *model_type_xpath = @"./Model/@type";
+    NSString *model_type_string = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
+    
+    // What is my model type?
     NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
-    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
+    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES &&
+        [model_type_string isEqualToString:kModelTypeMassActionModel] == YES)
     {
         // system dimension?
         NSUInteger NUMBER_OF_RATES = [[input_tree nodesForXPath:@".//interaction" error:nil] count];
@@ -56,7 +61,7 @@
         [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
         NEW_LINE;
         [buffer appendString:@"/* Problem specific define statements -- */\n"];
-        [buffer appendString:@"#define NUMBER_OF_ARGUEMENTS 10\n"];
+        [buffer appendString:@"#define NUMBER_OF_ARGUEMENTS 8\n"];
         [buffer appendFormat:@"#define NUMBER_OF_RATES %lu\n",NUMBER_OF_RATES];
         [buffer appendFormat:@"#define NUMBER_OF_STATES %lu\n",NUMBER_OF_STATES];
         [buffer appendFormat:@"#define NUMBER_OF_PARAMETERS %lu\n",NUMBER_OF_PARAMETERS];
@@ -100,11 +105,9 @@
         [buffer appendString:@"\tchar *pInputParametersFile = argv[2];              // Get kinetics datafile path \n"];
         [buffer appendString:@"\tchar *pInputInitialConditionsFile = argv[3];       // Get ic datafile patah\n"];
         [buffer appendString:@"\tchar *pStoichiometricMatrixFile = argv[4];         // Get stoichiometric matrix path \n"];
-        [buffer appendString:@"\tchar *pCirculationMatrixFile = argv[5];            // Get circulation matrix path \n"];
-        [buffer appendString:@"\tchar *pVolumeVectorFile = argv[6];                 // Get circulation matrix path \n"];
-        [buffer appendString:@"\tsscanf(argv[7], \"%lf\", &dblTimeStart);           // Start time\n"];
-        [buffer appendString:@"\tsscanf(argv[8], \"%lf\", &dblTimeStop);            // Stop time\n"];
-        [buffer appendString:@"\tsscanf(argv[9], \"%lf\", &dblTimeStep);            // Time step size\n\n"];
+        [buffer appendString:@"\tsscanf(argv[5], \"%lf\", &dblTimeStart);           // Start time\n"];
+        [buffer appendString:@"\tsscanf(argv[6], \"%lf\", &dblTimeStop);            // Stop time\n"];
+        [buffer appendString:@"\tsscanf(argv[7], \"%lf\", &dblTimeStep);            // Time step size\n\n"];
         NEW_LINE;
         [buffer appendString:@"\t/* Allocate space for the system parameters -- */\n"];
         [buffer appendString:@"\tparameters_object.pModelKineticsParameterVector = gsl_vector_alloc(NUMBER_OF_PARAMETERS);\n"];
@@ -115,9 +118,7 @@
         NEW_LINE;
         [buffer appendString:@"\t/* Load model parameters and matrices from disk  -- */\n"];
         [buffer appendString:@"\tpopulateGSLMatrixFromFile(pStoichiometricMatrixFile,parameters_object.pModelStoichiometricMatrix);\n"];
-        [buffer appendString:@"\tpopulateGSLMatrixFromFile(pCirculationMatrixFile,parameters_object.pModelCirculationMatrix);\n"];
         [buffer appendString:@"\tpopulateGSLVectorFromFile(pInputParametersFile,parameters_object.pModelKineticsParameterVector);\n"];
-        [buffer appendString:@"\tpopulateGSLVectorFromFile(pVolumeVectorFile,parameters_object.pModelVolumeVector);\n"];
         [buffer appendString:@"\tpopulateDoubleCArraryFromFile(pInputInitialConditionsFile,pStateArray);\n"];
         NEW_LINE;
         [buffer appendString:@"\t/* Setup the GSL solver  -- */\n"];
