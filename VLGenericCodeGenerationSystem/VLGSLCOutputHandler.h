@@ -19,6 +19,6 @@
 -(id)generateGSLCBalanceEquationsActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCSolveBalanceEquationsActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCKineticsActionWithOptions:(NSDictionary *)options;
-
+-(id)generateGSLCMakeFileActionWithOptions:(NSDictionary *)options;
 
 @end

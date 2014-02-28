@@ -8,6 +8,8 @@
 
 #import "VLGSLCOutputHandler.h"
 
+#define NEW_LINE [buffer appendString:@"\n"]
+
 @implementation VLGSLCOutputHandler
 
 -(id)performVLGenericCodeGenerationOutputActionWithOptions:(NSDictionary *)options
@@ -23,6 +25,17 @@
 }
 
 #pragma mark - public methods
+-(id)generateGSLCMakeFileActionWithOptions:(NSDictionary *)options
+{
+    // construct the build file -
+    NSString *buffer = [self generateModelMakeFileBufferWithOptions:options];
+    
+    // write -
+    [self writeCodeGenerationOutput:buffer toFileWithOptions:options];
+
+    return buffer;
+}
+
 -(id)generateGSLCKineticsActionWithOptions:(NSDictionary *)options
 {
     // I also need my current method sel and my class -
@@ -151,6 +164,78 @@
     [buffer appendString:@"/* public methods */\n"];
     [buffer appendString:@"void Kinetics(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object);\n\n"];
     [buffer appendString:@"\n"];
+    
+    // return -
+    return [NSString stringWithString:buffer];
+}
+
+-(NSString *)generateModelMakeFileBufferWithOptions:(NSDictionary *)options
+{
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    NSMutableArray *file_name_array = [[NSMutableArray alloc] init];
+    
+    // get trees from the options -
+    NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationElement];
+    
+    // build the flags at the beginning -
+    [buffer appendString:@"CFLAGS = -std=c99 -pedantic -v -O2\n"];
+    [buffer appendString:@"CC = gcc\n"];
+    [buffer appendString:@"LFLAGS = /usr/local/lib/libgsl.a /usr/local/lib/libgslcblas.a -lm\n"];
+    NEW_LINE;
+    
+    // Get the list of transformations -
+    NSError *xpath_error;
+    NSArray *transformation_array = [transformation_tree nodesForXPath:@"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value" error:&xpath_error];
+    for (NSXMLElement *value in transformation_array)
+    {
+        // get the children -
+        NSString *output_file_name = [value stringValue];
+        
+        // What is the extension?
+        NSString *file_extension = [output_file_name pathExtension];
+        if ([file_extension isEqualToString:@"c"] == YES || [file_extension isEqualToString:@".c"] == YES)
+        {
+            // ok, so grab -
+            NSRange name_range = NSMakeRange(0, [output_file_name length] - 2);
+            NSString *file_name = [output_file_name substringWithRange:name_range];
+            [file_name_array addObject:file_name];
+        }
+    }
+    
+    // write driver target -
+    [buffer appendString:@"Driver: "];
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.c ",file_name];
+    }
+    NEW_LINE;
+    
+    // write the compile line -
+    [buffer appendString:@"\t$(CC) $(CCFLAGS) -o Driver "];
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.c ",file_name];
+    }
+    [buffer appendString:@"$(LFLAGS)"];
+    NEW_LINE;
+    
+    // write clean target -
+    [buffer appendString:@"clean:\n\trm -f "];
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.o %@ ",file_name,file_name];
+    }
+    NEW_LINE;
+    
+    // write the all target -
+    [buffer appendString:@"all:\n\trm -f "];
+    
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.o %@ %@.c %@.h ",file_name,file_name,file_name,file_name];
+    }
+    NEW_LINE;
     
     // return -
     return [NSString stringWithString:buffer];

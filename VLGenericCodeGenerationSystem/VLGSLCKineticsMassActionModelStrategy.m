@@ -23,13 +23,11 @@
     NSMutableString *buffer = [[NSMutableString alloc] init];
     
     // Get our trees from the dictionary -
-    NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
-    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    __unused NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
+    __unused NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
     
     // What is my model type?
-    NSString *model_type_xpath = @"./Model/@type";
-    NSString *typeString = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
     NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
     
     // headers -
@@ -109,8 +107,8 @@
             NSString *comment_string = [NSString stringWithFormat:@"%@ --> %@",reactant_string,product_string];
             
             [buffer appendFormat:@"\t/* %@ */\n",comment_string];
-            [buffer appendFormat:@"\tdouble parameter_value = gsl_vector_get(pV,%lu);\n",rate_counter];
-            [buffer appendFormat:@"\tdouble rate_value = parameter_value"];
+            [buffer appendFormat:@"\tparameter_value = gsl_vector_get(pV,%lu);\n",rate_counter];
+            [buffer appendFormat:@"\trate_value = parameter_value"];
             
             // process the species -
             if ([local_order_array count] == 0)
