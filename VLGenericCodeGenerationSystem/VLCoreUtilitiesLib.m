@@ -108,18 +108,21 @@
         NSString *tmpString;
         [scanner scanUpToString:recordDeliminator intoString:&tmpString];
         
+        // replace - w _
+        NSString *new_string = [tmpString stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+        
         // Skip comments -
-        NSRange range = [tmpString rangeOfString:@"//" options:NSCaseInsensitiveSearch];
+        NSRange range = [new_string rangeOfString:@"//" options:NSCaseInsensitiveSearch];
         if(range.location == NSNotFound)
         {
             // Ok, so let's cut around the tabs -
-            NSArray *chunks = [tmpString componentsSeparatedByString:fieldDeliminator];
+            NSArray *chunks = [new_string componentsSeparatedByString:fieldDeliminator];
             
             // Load the row -
             [tmpArray addObject:chunks];
         }
         
-        NSLog(@"Processed - %@",tmpString);
+        NSLog(@"Processed - %@",new_string);
     }
     
     // return -

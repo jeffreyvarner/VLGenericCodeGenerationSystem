@@ -36,6 +36,10 @@
     // write -
     [self writeCodeGenerationOutput:result toFileWithOptions:options];
     
+    // Header content -
+    NSString *header_buffer = [self generateModelOperationKineticsHeaderBufferWithOptions:options];
+    [self writeCodeGenerationHeaderFileOutput:header_buffer toFileWithOptions:options];
+    
     // return the result from the strategy object -
     return result;
 }
@@ -92,7 +96,7 @@
     return result;
 }
 
-#pragma mark - helper
+#pragma mark - helpers
 -(id)executeStrategyFactoryCallForObject:(NSObject *)caller
                              andSelector:(SEL)methodSelector
                              withOptions:(NSDictionary *)options
@@ -117,6 +121,39 @@
                                               withOptions:options];
     
     return result;
+}
+
+-(NSString *)generateModelOperationKineticsHeaderBufferWithOptions:(NSDictionary *)options
+{
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // headers -
+    [buffer appendString:@"/* Load the GSL and other headers - */\n"];
+    [buffer appendString:@"#include <stdio.h>\n"];
+    [buffer appendString:@"#include <math.h>\n"];
+    [buffer appendString:@"#include <time.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+    [buffer appendString:@"\n"];
+    [buffer appendString:@"/* parameter struct */\n"];
+    [buffer appendString:@"struct VLParameters\n"];
+    [buffer appendString:@"{\n"];
+    [buffer appendString:@"\tgsl_vector *pModelKineticsParameterVector;\n"];
+    [buffer appendString:@"\tgsl_vector *pModelVolumeVector;\n"];
+    [buffer appendString:@"\tgsl_matrix *pModelCirculationMatrix;\n"];
+    [buffer appendString:@"\tgsl_matrix *pModelStoichiometricMatrix;\n"];
+    [buffer appendString:@"};\n\n"];
+    [buffer appendString:@"\n"];
+    [buffer appendString:@"/* public methods */\n"];
+    [buffer appendString:@"void Kinetics(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object);\n\n"];
+    [buffer appendString:@"\n"];
+    
+    // return -
+    return [NSString stringWithString:buffer];
 }
 
 

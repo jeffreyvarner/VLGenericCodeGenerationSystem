@@ -16,6 +16,6 @@
 
 -(id)performVLGenericCodeGenerationOutputActionWithOptions:(NSDictionary *)options;
 -(void)writeCodeGenerationOutput:(id)output toFileWithOptions:(NSDictionary *)options;
-
+-(void)writeCodeGenerationHeaderFileOutput:(id)output toFileWithOptions:(NSDictionary *)options;
 
 @end

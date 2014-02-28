@@ -104,7 +104,7 @@
     NSString *model_source_encoding = [[[document nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
     
     // depending upon the type of model *and* the source encoding, we execute different logic
-    if ([model_source_encoding isEqualToString:@"VFF"] == YES)
+    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
     {
         // ok - we have a cell free model coming from a VFF file.
         // need multiple saturation kinetics
