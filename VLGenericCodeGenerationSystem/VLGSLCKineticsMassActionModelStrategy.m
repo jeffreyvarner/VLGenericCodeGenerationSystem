@@ -30,10 +30,14 @@
     // What is my model type?
     NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
     
+    // function name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
+    NSString *tmpFunctionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+
     // headers -
-    [buffer appendString:@"#include \"Kinetics.h\"\n"];
+    [buffer appendFormat:@"#include \"%@.h\"\n",tmpFunctionName];
     [buffer appendString:@"\n"];
-    [buffer appendString:@"void Kinetics(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object)\n"];
+    [buffer appendFormat:@"void %@(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object)\n",tmpFunctionName];
     [buffer appendString:@"{\n"];
     [buffer appendString:@"\t/* initialize -- */\n"];
     [buffer appendString:@"\tdouble rate_value = 0.0;\n"];
@@ -42,7 +46,6 @@
     [buffer appendString:@"\t/* Get the parameters from disk - */\n"];
     [buffer appendString:@"\tstruct VLParameters *parameter_struct = (struct VLParameters *)parameter_object;\n"];
     [buffer appendString:@"\tgsl_vector *pV = parameter_struct->pModelKineticsParameterVector;\n"];
-    [buffer appendString:@"\tgsl_vector *pVolume = parameter_struct->pModelVolumeVector;\n"];
     [buffer appendString:@"\n"];
     [buffer appendString:@"\t/* Alias elements of the state vector - */\n"];
     

@@ -24,9 +24,17 @@
     
     // Get our trees from the dictionary -
     __unused NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
-    __unused NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
     
+    // function name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
+    NSString *tmpFunctionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+    
+    // Balance equations requires the name of the kinetics function name -
+    NSString *dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"KINETICS_FUNCTION_NAME\"]/@value";
+    NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
+
     // What is my model type?
     NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
     if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
@@ -38,7 +46,7 @@
         __unused NSUInteger NUMBER_OF_COMPARTMENTS = 1;
 
         // headers -
-        [buffer appendString:@"#include \"MassBalances.h\"\n"];
+        [buffer appendFormat:@"#include \"%@.h\"\n",tmpFunctionName];
         NEW_LINE;
         
         [buffer appendString:@"/* Problem specific define statements -- */\n"];
@@ -47,7 +55,7 @@
         [buffer appendString:@"#define EPSILON 1e-8\n"];
         NEW_LINE;
         
-        [buffer appendString:@"int MassBalances(double t,const double x[],double f[],void * parameter_object)\n"];
+        [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object)\n",tmpFunctionName];
         [buffer appendString:@"{\n"];
         [buffer appendString:@"\t/* Initialize -- */\n"];
         [buffer appendString:@"\tstruct VLParameters *parameter_struct = (struct VLParameters *)parameter_object;\n"];
@@ -56,7 +64,7 @@
         [buffer appendString:@"\tgsl_vector *pRightHandSideVector = gsl_vector_alloc(NUMBER_OF_STATES);\n"];
         NEW_LINE;
         [buffer appendString:@"\t/* Evaluate the kinetics -- */\n"];
-        [buffer appendString:@"\tKinetics(t,x,pRateVector,parameter_object);\n"];
+        [buffer appendFormat:@"\t%@(t,x,pRateVector,parameter_object);\n",dependencyName];
         NEW_LINE;
         [buffer appendString:@"\t/* Setup mass balance calculations -- */\n"];
         [buffer appendString:@"\tgsl_matrix *pStoichiometricMatrix = parameter_struct->pModelStoichiometricMatrix;\n"];

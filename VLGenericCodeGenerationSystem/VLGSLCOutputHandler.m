@@ -142,6 +142,13 @@
 
 -(NSString *)generateModelOperationKineticsHeaderBufferWithOptions:(NSDictionary *)options
 {
+    // get the transformation -
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    
+    // function name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
+    NSString *functionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+
     // initialize the buffer -
     NSMutableString *buffer = [[NSMutableString alloc] init];
     
@@ -166,7 +173,7 @@
     [buffer appendString:@"};\n\n"];
     [buffer appendString:@"\n"];
     [buffer appendString:@"/* public methods */\n"];
-    [buffer appendString:@"void Kinetics(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object);\n\n"];
+    [buffer appendFormat:@"void %@(double t,double const state_vector[], gsl_vector *pRateVector, void* parameter_object);\n\n",functionName];
     [buffer appendString:@"\n"];
     
     // return -
@@ -175,6 +182,17 @@
 
 -(NSString *)generateModelMassBalancesHeaderBufferWithOptions:(NSDictionary *)options
 {
+    // get the transformation -
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    
+    // function name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
+    NSString *functionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+    
+    // Balance equations requires the name of the kinetics function name -
+    NSString *dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"KINETICS_FUNCTION_NAME\"]/@value";
+    NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
+    
     // initialize the buffer -
     NSMutableString *buffer = [[NSMutableString alloc] init];
     
@@ -191,10 +209,10 @@
     
     NEW_LINE;
     [buffer appendString:@"/* Load the model specific headers - */\n"];
-    [buffer appendString:@"#include \"Kinetics.h\"\n"];
+    [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
     NEW_LINE;
     [buffer appendString:@"/* public methods */\n"];
-    [buffer appendString:@"int MassBalances(double t,const double x[],double f[],void * parameter_object);\n"];
+    [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object);\n",functionName];
     
     
     // return -

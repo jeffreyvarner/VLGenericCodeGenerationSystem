@@ -23,8 +23,12 @@
     
     // Get our trees from the dictionary -
     __unused NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
-    __unused NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    
+    // main requires balance equations header/function name -
+    NSString *dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"BALANCE_EQUATIONS_FUNCTION_NAME\"]/@value";
+    NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
     
     // What is my model type?
     NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
@@ -49,7 +53,7 @@
         
         NEW_LINE;
         [buffer appendString:@"/* Load the model specific headers - */\n"];
-        [buffer appendString:@"#include \"MassBalances.h\"\n"];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
         NEW_LINE;
         [buffer appendString:@"/* Problem specific define statements -- */\n"];
         [buffer appendString:@"#define NUMBER_OF_ARGUEMENTS 10\n"];
@@ -92,15 +96,15 @@
         [buffer appendString:@"\tdouble dblTimeStart,dblTimeStop,dblTimeStep,dblTime;\n"];
         [buffer appendString:@"\tdouble *pStateArray;\n"];
         [buffer appendString:@"\tFILE *pSimulationOutputFile;\n"];
-        [buffer appendString:@"\tchar *pSimulationOutputFilePath = argv[1];\t\t// Assign data output file\n"];
-        [buffer appendString:@"\tchar *pInputParametersFile = argv[2];\t\t// Get kinetics datafile path \n"];
-        [buffer appendString:@"\tchar *pInputInitialConditionsFile = argv[3];\t\t\t// Get ic datafile patah\n"];
-        [buffer appendString:@"\tchar *pStoichiometricMatrixFile = argv[4];\t\t\t// Get stoichiometric matrix path \n"];
-        [buffer appendString:@"\tchar *pCirculationMatrixFile = argv[5];\t\t\t// Get circulation matrix path \n"];
-        [buffer appendString:@"\tchar *pVolumeVectorFile = argv[6];\t\t\t// Get circulation matrix path \n"];
-        [buffer appendString:@"\tsscanf(argv[7], \"%lf\", &dblTimeStart);\t\t// Start time\n"];
-        [buffer appendString:@"\tsscanf(argv[8], \"%lf\", &dblTimeStop);\t\t// Stop time\n"];
-        [buffer appendString:@"\tsscanf(argv[9], \"%lf\", &dblTimeStep);\t\t\t// Time step size\n\n"];
+        [buffer appendString:@"\tchar *pSimulationOutputFilePath = argv[1];         // Assign data output file\n"];
+        [buffer appendString:@"\tchar *pInputParametersFile = argv[2];              // Get kinetics datafile path \n"];
+        [buffer appendString:@"\tchar *pInputInitialConditionsFile = argv[3];       // Get ic datafile patah\n"];
+        [buffer appendString:@"\tchar *pStoichiometricMatrixFile = argv[4];         // Get stoichiometric matrix path \n"];
+        [buffer appendString:@"\tchar *pCirculationMatrixFile = argv[5];            // Get circulation matrix path \n"];
+        [buffer appendString:@"\tchar *pVolumeVectorFile = argv[6];                 // Get circulation matrix path \n"];
+        [buffer appendString:@"\tsscanf(argv[7], \"%lf\", &dblTimeStart);           // Start time\n"];
+        [buffer appendString:@"\tsscanf(argv[8], \"%lf\", &dblTimeStop);            // Stop time\n"];
+        [buffer appendString:@"\tsscanf(argv[9], \"%lf\", &dblTimeStep);            // Time step size\n\n"];
         NEW_LINE;
         [buffer appendString:@"\t/* Allocate space for the system parameters -- */\n"];
         [buffer appendString:@"\tparameters_object.pModelKineticsParameterVector = gsl_vector_alloc(NUMBER_OF_PARAMETERS);\n"];
@@ -121,7 +125,7 @@
         [buffer appendString:@"\tgsl_odeiv2_step *pStep = gsl_odeiv2_step_alloc(pT,NUMBER_OF_STATES);\n"];
         [buffer appendString:@"\tgsl_odeiv2_control *pControl = gsl_odeiv2_control_y_new(TOLERANCE,TOLERANCE);\n"];
         [buffer appendString:@"\tgsl_odeiv2_evolve *pEvolve = gsl_odeiv2_evolve_alloc(NUMBER_OF_STATES);\n"];
-        [buffer appendString:@"\tgsl_odeiv2_system sys = {MassBalances,NULL,NUMBER_OF_STATES,&parameters_object};\n"];
+        [buffer appendFormat:@"\tgsl_odeiv2_system sys = {%@,NULL,NUMBER_OF_STATES,&parameters_object};\n",dependencyName];
         NEW_LINE;
         [buffer appendString:@"\t/* Open simulation output file  -- */\n"];
         [buffer appendString:@"\tpSimulationOutputFile = fopen(pSimulationOutputFilePath, \"w\");\n"];
