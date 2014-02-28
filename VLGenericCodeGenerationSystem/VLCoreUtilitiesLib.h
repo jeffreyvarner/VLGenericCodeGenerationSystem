@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <stdlib.h>
 
 @interface VLCoreUtilitiesLib : NSObject
 {
@@ -25,6 +26,6 @@
 +(NSArray *)loadCopyrightFileAtPath:(NSString *)filePath;
 +(NSString *)lookupInputPathForTransformationWithName:(NSString *)transformName inTree:(NSXMLDocument *)blueprintTree;
 +(NSString *)lookupOutputPathForTransformationWithName:(NSString *)transformName inTree:(NSXMLDocument *)blueprintTree;
-
++(float)generateRandomFloatingPointNumber;
 
 @end

@@ -228,5 +228,11 @@
     }
 }
 
++(float)generateRandomFloatingPointNumber
+{
+    float value = ((float)arc4random()/RAND_MAX);
+    return value;
+}
+
 
 @end

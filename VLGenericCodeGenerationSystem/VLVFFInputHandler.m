@@ -11,8 +11,9 @@
 #define INDEX_NAME_STRING 0
 #define INDEX_REACTANT_STRING 1
 #define INDEX_PRODUCT_STRING 2
-#define INDEX_FORWARD_STRING 3
-#define INDEX_REVERSE_STRING 4
+#define INDEX_REVERSE_STRING 3
+#define INDEX_FORWARD_STRING 4
+
 
 @implementation VLVFFInputHandler
 
@@ -112,7 +113,10 @@
 
         // Is this reaction reversible?
         NSString *raw_reverse_string = [reaction objectAtIndex:INDEX_REVERSE_STRING];
-        if ([raw_reverse_string isEqualToString:@"inf;"] == YES)
+        
+        // does this the reverse *containt* inf
+        NSRange contains_inf_range = [raw_reverse_string rangeOfString:@"inf"];
+        if (contains_inf_range.location != NSNotFound)
         {
             // reversible - split
             [buffer appendFormat:@"<interaction index='%lu' id='%@::FORWARD'>\n",reaction_counter++,raw_name_string];

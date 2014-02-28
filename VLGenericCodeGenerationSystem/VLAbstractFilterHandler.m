@@ -10,4 +10,9 @@
 
 @implementation VLAbstractFilterHandler
 
+-(id)performVLGenericCodeGenerationFilterActionWithOptions:(NSDictionary *)options
+{
+    return nil;
+}
+
 @end

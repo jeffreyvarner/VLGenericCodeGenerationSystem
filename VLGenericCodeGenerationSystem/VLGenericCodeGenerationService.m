@@ -93,7 +93,31 @@ static VLGenericCodeGenerationService *_sharedInstance;
                                              andOptions:input_options];
         
         // process my filters -
-        // ...
+        // How many filters do I have on this transformation block?
+        NSArray *filter_block_array = [transformation nodesForXPath:@"./filter_handler" error:nil];
+        NSXMLDocument *original_input_tree = (NSXMLDocument *)input;
+        NSXMLDocument *revised_input_tree = original_input_tree;
+        for (NSXMLElement *filter in filter_block_array)
+        {
+            // ok, so filters act to alter the input tree -
+            
+            // Generate options dictionary for filter handler -
+            NSDictionary *filter_options = @
+            {
+                @"TRANSFORMATION_TREE"          :   tree,
+                @"TRANSFORMATION_XML_ELEMENT"   :   transformation,
+                @"MAPPING_TREE"                 :   mapping_tree,
+                @"INPUT_DATA_TREE"              :   revised_input_tree
+            };
+            
+            // Generate new tree -
+            NSXMLDocument *new_input_tree = (NSXMLDocument *)[self processFiltersForTransformation:filter
+                                                                             withMappingDictionary:mapping_dictionary
+                                                                                        andOptions:filter_options];
+            
+            // update the revised tree pointer -
+            revised_input_tree = new_input_tree;
+        }
         
         // Generate options dictionary for output handler -
         NSDictionary *output_options = @
@@ -101,7 +125,7 @@ static VLGenericCodeGenerationService *_sharedInstance;
             @"TRANSFORMATION_TREE"          :   tree,
             @"TRANSFORMATION_XML_ELEMENT"   :   transformation,
             @"MAPPING_TREE"                 :   mapping_tree,
-            @"INPUT_DATA_TREE"              :   input
+            @"INPUT_DATA_TREE"              :   revised_input_tree
         };
 
         // process my outputs -
@@ -116,6 +140,37 @@ static VLGenericCodeGenerationService *_sharedInstance;
 }
 
 #pragma mark - helper
+-(id)processFiltersForTransformation:(NSXMLElement *)transformation
+               withMappingDictionary:(NSDictionary *)mappingDictionary
+                          andOptions:(NSDictionary *)options
+{
+    // What is my inpt key?
+    NSString *input_handler_strategy_key = [[transformation attributeForName:@"strategy_handler"] stringValue];
+    
+    // Get my implementation dicionary -
+    NSDictionary *input_symbol_dictionary = [mappingDictionary objectForKey:input_handler_strategy_key];
+    
+    // Build the input class and method pointers -
+    VLAbstractInputHandler *input_handler_class = [[NSClassFromString([input_symbol_dictionary valueForKey:@"CLASS"]) alloc] init];
+    
+    // get the selector -
+    NSString *filter_handle_selector_string = [input_symbol_dictionary valueForKey:@"METHOD"];
+    SEL filter_handler_selector = NSSelectorFromString(filter_handle_selector_string);
+    
+    //specify the function pointer
+    typedef NSString* (*methodPtr)(id, SEL,NSDictionary*);
+    
+    // get the actual method
+    methodPtr filter_handler_command = (methodPtr)[input_handler_class methodForSelector:filter_handler_selector];
+    
+    // run the input method -
+    id filter_code_block = filter_handler_command(input_handler_class,filter_handler_selector,options);
+    
+    // return -
+    return filter_code_block;
+}
+
+
 -(id)processInputsForTransformation:(NSXMLElement *)transformation
               withMappingDictionary:(NSDictionary *)mappingDictionary
                          andOptions:(NSDictionary *)options

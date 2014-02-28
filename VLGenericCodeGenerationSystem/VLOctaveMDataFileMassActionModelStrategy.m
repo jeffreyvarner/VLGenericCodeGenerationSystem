@@ -60,7 +60,7 @@
     
     // load the stoichiometric matrix -
     [buffer appendString:@"% Stoichiometric matrix --\n"];
-    [buffer appendString:@"STM = load('./network/Network.dat');\n"];
+    [buffer appendString:@"STM = load('../network/Network.dat');\n"];
     [buffer appendString:@"\n"];
     
     // formulate the parameters list -
@@ -116,6 +116,38 @@
             // What is the reaction name?
             NSString *reaction_name_string = [[reaction_node attributeForName:@"id"] stringValue];
             
+            // Depending upon FORWARD -or- RERVESE 
+            NSRange contains_forward_range = [reaction_name_string rangeOfString:@"FORWARD"];
+            NSRange contains_reverse_range = [reaction_name_string rangeOfString:@"REVERSE"];
+            NSRange contains_gen_range = [reaction_name_string rangeOfString:@"GEN"];
+            
+            float value = 0.0f;
+            if (contains_forward_range.location == NSNotFound &&
+                contains_reverse_range.location == NSNotFound)
+            {
+                value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+            }
+            else if (contains_reverse_range.location != NSNotFound &&
+                     contains_forward_range.location == NSNotFound)
+            {
+                // reverse value -
+                value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+            }
+            else if (contains_reverse_range.location == NSNotFound &&
+                     contains_forward_range.location != NSNotFound)
+            {
+                if (contains_gen_range.location == NSNotFound)
+                {
+                    // reverse value -
+                    value = 10*[VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+                }
+                else
+                {
+                    value = 0.0f;
+                }
+            }
+
+            
             //  get string -
             NSString *reactant_string = [[[reaction_node nodesForXPath:@"./interaction_input/@reaction_string" error:nil] lastObject] stringValue];
             NSString *product_string = [[[reaction_node nodesForXPath:@"./interaction_output/@reaction_string" error:nil] lastObject] stringValue];
@@ -124,7 +156,7 @@
             NSString *comment_string = [NSString stringWithFormat:@"%@ --> %@",reactant_string,product_string];
             
             // ok, so we have a k_cat for each reaction, *and* a variable number of K -
-            [buffer appendFormat:@"\t 1.0\t;\t \%%  %lu k_%lu %@\n",(long)parameter_counter++,reaction_counter,comment_string];
+            [buffer appendFormat:@"\t %f\t;\t \%%  %lu k_%lu %@\n",value,(long)parameter_counter++,reaction_counter,comment_string];
             
             // update the reaction counter (1 based becuase we in octave/,atlab)
             reaction_counter++;
@@ -183,11 +215,12 @@
     NSMutableString *tmpBuffer = [NSMutableString string];
     
     [tmpBuffer appendString:@"% Initialize the measurement selection matrix. Default is *all* the states -- \n"];
-    [tmpBuffer appendString:@"MEASUREMENT_INDEX_VECTOR = [1:NSTATES];\n"];
-    [tmpBuffer appendString:@"\n"];
     [tmpBuffer appendString:@"% Get the system dimension - \n"];
     [tmpBuffer appendString:@"NRATES = length(kV);\n"];
     [tmpBuffer appendString:@"NSTATES = length(IC);\n"];
+    [tmpBuffer appendString:@"NPARAMETERS = length(kV);\n"];
+    [tmpBuffer appendString:@"\n"];
+    [tmpBuffer appendString:@"MEASUREMENT_INDEX_VECTOR = [1:NSTATES];\n"];
     [tmpBuffer appendString:@"\n"];
     
     [tmpBuffer appendString:@"% =========== DO NOT EDIT BELOW THIS LINE ========================== %\n"];

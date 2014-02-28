@@ -1,14 +1,14 @@
 //
-//  VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m
+//  VLOctaveCGenericDriverSolveBalancesEquationsStrategy.m
 //  VLGenericCodeGenerationSystem
 //
-//  Created by Jeffrey Varner on 2/24/14.
+//  Created by Jeffrey Varner on 2/27/14.
 //  Copyright (c) 2014 Varnerlab. All rights reserved.
 //
 
-#import "VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h"
+#import "VLOctaveCGenericDriverSolveBalancesEquationsStrategy.h"
 
-@implementation VLOctaveMGenericDriverSolveBalancesEquationsStrategy
+@implementation VLOctaveCGenericDriverSolveBalancesEquationsStrategy
 
 -(id)executeStrategyWithOptions:(NSDictionary *)options
 {
@@ -25,7 +25,7 @@
     NSXMLDocument *transformation_tree = [options objectForKey:@"TRANSFORMATION_TREE"];
     NSXMLElement *transformation = [options objectForKey:@"TRANSFORMATION_XML_ELEMENT"];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:@"INPUT_DATA_TREE"];
-
+    
     // Get some specific stuff from the trees -
     // What is my function name?
     NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
@@ -35,7 +35,7 @@
     NSString *copyright_xpath = @".//properties/property[@symbol=\"COPYRIGHT_TEXT\"]/@value";
     NSString *copyright_file_path = [[[transformation_tree nodesForXPath:copyright_xpath error:nil] lastObject] stringValue];
     NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
-
+    
     // build the buffer -
     [self addCopyrightStatement:copyright_buffer toBuffer:buffer];
     
@@ -52,7 +52,7 @@
     NSString *tmpInputBlock = [self formulateInputBlockWithDictionary:options];
     [buffer appendString:tmpInputBlock];
     [buffer appendString:@"\n"];
-
+    
     // Write the solver block -
     NSString *tmpSolverBlock = [self formulateSolverBlockWithDictionary:options];
     [buffer appendString:tmpSolverBlock];
@@ -61,7 +61,7 @@
     // write the return block -
     [buffer appendString:@"% return to caller -- \n"];
     [buffer appendString:@"return;\n"];
-
+    
     return buffer;
 }
 
@@ -108,7 +108,7 @@
     NSMutableString *tmpBuffer = [NSMutableString string];
     
     [tmpBuffer appendString:@"% Solve the mass balances using LSODE -- \n"];
-    [tmpBuffer appendString:@"pBalanceEquations = @(x,t)BalanceEquations(x,t,DF,S,kV,NUMBER_OF_STATES,NUMBER_OF_RATES);\n"];
+    [tmpBuffer appendString:@"pBalanceEquations = @(x,t)BalanceEquations(x,t,S,kV,NUMBER_OF_RATES,NUMBER_OF_STATES);\n"];
 	[tmpBuffer appendString:@"X = lsode(pBalanceEquations,IC,TSIM);\n"];
     [tmpBuffer appendString:@"\n"];
     [tmpBuffer appendString:@"% make sure all is positive - \n"];
