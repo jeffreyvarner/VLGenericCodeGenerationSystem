@@ -23,6 +23,7 @@
 		AD62086918C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = AD62086818C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.m */; };
 		AD62086C18C0DF660091DC42 /* VLGSLCGenericDriverSolveBalancesEquationsStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD62086B18C0DF660091DC42 /* VLGSLCGenericDriverSolveBalancesEquationsStrategy.m */; };
 		AD62086F18C0EC8E0091DC42 /* VLGSLCBalanceEquationsMassActionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD62086E18C0EC8E0091DC42 /* VLGSLCBalanceEquationsMassActionStrategy.m */; };
+		AD62087218C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD62087118C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.m */; };
 		ADCF3DAE18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DAD18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m */; };
 		ADCF3DB118BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DB018BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.m */; };
 		ADCF3DB418BD1A8000A83257 /* VLOctaveCOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DB318BD1A8000A83257 /* VLOctaveCOutputHandler.m */; };
@@ -86,6 +87,8 @@
 		AD62086B18C0DF660091DC42 /* VLGSLCGenericDriverSolveBalancesEquationsStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCGenericDriverSolveBalancesEquationsStrategy.m; sourceTree = "<group>"; };
 		AD62086D18C0EC8E0091DC42 /* VLGSLCBalanceEquationsMassActionStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCBalanceEquationsMassActionStrategy.h; sourceTree = "<group>"; };
 		AD62086E18C0EC8E0091DC42 /* VLGSLCBalanceEquationsMassActionStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCBalanceEquationsMassActionStrategy.m; sourceTree = "<group>"; };
+		AD62087018C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCJacobianMatrixMassActionModelStategy.h; sourceTree = "<group>"; };
+		AD62087118C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCJacobianMatrixMassActionModelStategy.m; sourceTree = "<group>"; };
 		ADCF3DAC18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h; sourceTree = "<group>"; };
 		ADCF3DAD18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m; sourceTree = "<group>"; };
 		ADCF3DAF18BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMKineticsCellFreeModelStrategy.h; sourceTree = "<group>"; };
@@ -262,6 +265,8 @@
 				AD62086B18C0DF660091DC42 /* VLGSLCGenericDriverSolveBalancesEquationsStrategy.m */,
 				AD62086D18C0EC8E0091DC42 /* VLGSLCBalanceEquationsMassActionStrategy.h */,
 				AD62086E18C0EC8E0091DC42 /* VLGSLCBalanceEquationsMassActionStrategy.m */,
+				AD62087018C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.h */,
+				AD62087118C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.m */,
 			);
 			name = gsl_c;
 			sourceTree = "<group>";
@@ -381,6 +386,7 @@
 				ADCF3DC518BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m in Sources */,
 				AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */,
 				ADCF3DB718BD1BB800A83257 /* VLGSLCOutputHandler.m in Sources */,
+				AD62087218C208DA0091DC42 /* VLGSLCJacobianMatrixMassActionModelStategy.m in Sources */,
 				AD3A889418A2D82B00BAA649 /* VLAbstractOutputHandler.m in Sources */,
 				ADCF3DAE18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m in Sources */,
 				AD3A887718A1951D00BAA649 /* main.m in Sources */,
