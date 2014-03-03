@@ -195,9 +195,9 @@
     }
     
     // if we have a CELL_FREE_MODEL - we need to include enzymes -
-    if ([modelType isEqualToString:@"CELL_FREE_MODEL"] == YES)
+    if ([modelType isEqualToString:kModelTypeCellFreeModel] == YES)
     {
-        NSInteger reaction_counter = 1;
+        NSInteger reaction_counter = 0;
         for (NSArray *reaction in componentArray)
         {
             NSString *species_symbol = [NSString stringWithFormat:@"E_%lu",(long)reaction_counter++];
