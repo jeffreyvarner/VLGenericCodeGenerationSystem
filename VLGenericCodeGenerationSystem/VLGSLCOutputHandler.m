@@ -217,6 +217,11 @@
 {
     // get the transformation -
     NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    
+    // What is my model type?
+    NSString *model_type_xpath = @".//model/@type";
+    NSString *model_type_string = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
     
     // function name?
     NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
@@ -228,24 +233,53 @@
     
     // initialize the buffer -
     NSMutableString *buffer = [[NSMutableString alloc] init];
-    
-    // headers -
-    [buffer appendString:@"/* Load the GSL and other headers - */\n"];
-    [buffer appendString:@"#include <stdio.h>\n"];
-    [buffer appendString:@"#include <math.h>\n"];
-    [buffer appendString:@"#include <time.h>\n"];
-    [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
-    [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
-    [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
-    [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
-    [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
-    
-    NEW_LINE;
-    [buffer appendString:@"/* Load the model specific headers - */\n"];
-    [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
-    NEW_LINE;
-    [buffer appendString:@"/* public methods */\n"];
-    [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object);\n",functionName];
+
+    // There are a few options *depending* upon which model type we are -
+    if ([model_type_string isEqualToString:kModelTypeCellFreeModel] == YES)
+    {
+        // Cell free *also* depends upon a control function -
+        NSString *dependency_xpath_control = @"./output_handler/output_handler_dependencies/dependency[@type=\"ENZYME_ACTIVITY_CONTROL_FUNCTION_NAME\"]/@value";
+        NSString *dependencyNameControl = [[[transformation nodesForXPath:dependency_xpath_control error:nil] lastObject] stringValue];
+        
+        // headers -
+        [buffer appendString:@"/* Load the GSL and other headers - */\n"];
+        [buffer appendString:@"#include <stdio.h>\n"];
+        [buffer appendString:@"#include <math.h>\n"];
+        [buffer appendString:@"#include <time.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+        
+        NEW_LINE;
+        [buffer appendString:@"/* Load the model specific headers - */\n"];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyNameControl];
+        NEW_LINE;
+        [buffer appendString:@"/* public methods */\n"];
+        [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object);\n",functionName];
+    }
+    else if ([model_type_string isEqualToString:kModelTypeMassActionModel] == YES)
+    {
+        // headers -
+        [buffer appendString:@"/* Load the GSL and other headers - */\n"];
+        [buffer appendString:@"#include <stdio.h>\n"];
+        [buffer appendString:@"#include <math.h>\n"];
+        [buffer appendString:@"#include <time.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+        
+        NEW_LINE;
+        [buffer appendString:@"/* Load the model specific headers - */\n"];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
+        NEW_LINE;
+        [buffer appendString:@"/* public methods */\n"];
+        [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object);\n",functionName];
+    }
     
     
     // return -

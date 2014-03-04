@@ -36,7 +36,7 @@
     NSString *model_type_string = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
     
     // What is my model type?
-    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./model/@source_encoding" error:nil] lastObject] stringValue];
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
     if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES &&
         [model_type_string isEqualToString:kModelTypeMassActionModel] == YES)
     {

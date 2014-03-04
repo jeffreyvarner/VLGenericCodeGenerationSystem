@@ -37,4 +37,50 @@
 		
 	</transformation>
 
+	<transformation id="SBML_2_SOLVE_BALANCE_EQUATIONS">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_SOLVE_BALANCE_EQUATIONS">
+			<transformation_property type="PATH" value="/src/main.c"/>
+			<transformation_property type="FUNCTION_NAME" value="main"/>
+
+			<output_handler_dependencies>
+				<dependency type="KINETICS_FUNCTION_NAME" value="Kinetics"/>
+				<dependency type="BALANCE_EQUATIONS_FUNCTION_NAME" value="BalanceEquations"/>
+			</output_handler_dependencies>
+
+		</output_handler>
+		
+	</transformation>
+
+	<transformation id="SBML_2_BALANCE_EQUATIONS">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_BALANCE_EQUATIONS">
+			<transformation_property type="PATH" value="/src/BalanceEquations.c"/>
+			<transformation_property type="HEADER_PATH" value="/src/BalanceEquations.h"/>
+			<transformation_property type="FUNCTION_NAME" value="BalanceEquations"/>
+			<transformation_property type="COMPACT_BALANCE_MODE" value="TRUE"/>
+			
+			<output_handler_dependencies>
+				<dependency type="KINETICS_FUNCTION_NAME" value="Kinetics"/>
+				<dependency type="ENZYME_ACTIVITY_CONTROL_FUNCTION_NAME" value="Control"/>
+			</output_handler_dependencies>
+			
+		</output_handler>
+		
+	</transformation>
+
 </Model>

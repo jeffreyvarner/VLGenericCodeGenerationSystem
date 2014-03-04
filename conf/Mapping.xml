@@ -53,6 +53,8 @@
 		<VLGSLCOutputHandler>
 			
 			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCKineticsActionWithOptions:" strategy_class="VLGSLCKineticsCellFreeModelStrategy"/>
+			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCSolveBalanceEquationsActionWithOptions:" strategy_class="VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy"/>
+			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCBalanceEquationsActionWithOptions:" strategy_class="VLGSLCBalanceEquationsCellFreeModelStrategy"/>
 			
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCBalanceEquationsActionWithOptions:" strategy_class="VLGSLCBalanceEquationsMassActionStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCKineticsActionWithOptions:" strategy_class="VLGSLCKineticsMassActionModelStrategy"/>
