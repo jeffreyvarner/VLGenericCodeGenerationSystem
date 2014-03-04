@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD3A4F9618C603420018C84D /* VLSBMLInputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A4F9518C603420018C84D /* VLSBMLInputHandler.m */; };
 		AD3A887418A1951D00BAA649 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD3A887318A1951D00BAA649 /* Foundation.framework */; };
 		AD3A887718A1951D00BAA649 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A887618A1951D00BAA649 /* main.m */; };
 		AD3A887B18A1951D00BAA649 /* VLGenericCodeGenerationSystem.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AD3A887A18A1951D00BAA649 /* VLGenericCodeGenerationSystem.1 */; };
@@ -58,6 +59,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD3A4F9418C603420018C84D /* VLSBMLInputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLSBMLInputHandler.h; sourceTree = "<group>"; };
+		AD3A4F9518C603420018C84D /* VLSBMLInputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLSBMLInputHandler.m; sourceTree = "<group>"; };
+		AD3A4F9718C6060D0018C84D /* Copyright.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = Copyright.text; sourceTree = "<group>"; };
+		AD3A4F9818C606230018C84D /* Mapping.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Mapping.xml; sourceTree = "<group>"; };
 		AD3A887018A1951D00BAA649 /* VLGenericCodeGenerationSystem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VLGenericCodeGenerationSystem; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD3A887318A1951D00BAA649 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AD3A887618A1951D00BAA649 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -181,6 +186,8 @@
 		AD3A887818A1951D00BAA649 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				AD3A4F9818C606230018C84D /* Mapping.xml */,
+				AD3A4F9718C6060D0018C84D /* Copyright.text */,
 				AD3A887918A1951D00BAA649 /* VLGenericCodeGenerationSystem-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -219,6 +226,8 @@
 				AD3A889018A2D81700BAA649 /* VLAbstractInputHandler.m */,
 				AD3A889818A2D88600BAA649 /* VLVFFInputHandler.h */,
 				AD3A889918A2D88600BAA649 /* VLVFFInputHandler.m */,
+				AD3A4F9418C603420018C84D /* VLSBMLInputHandler.h */,
+				AD3A4F9518C603420018C84D /* VLSBMLInputHandler.m */,
 			);
 			name = input_handler;
 			sourceTree = "<group>";
@@ -432,6 +441,7 @@
 				ADFAB39C18B7826A004C45BD /* VLAbstractStrategy.m in Sources */,
 				ADFAB39618B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m in Sources */,
 				ADCF3DBC18BD273600A83257 /* VLOctaveCDataFileMassActionModelStrategy.m in Sources */,
+				AD3A4F9618C603420018C84D /* VLSBMLInputHandler.m in Sources */,
 				AD3A88A618A2DA8500BAA649 /* VLSBMLOutputHandler.m in Sources */,
 				ADFAB39918B77F88004C45BD /* VLOctaveMOutputHandler.m in Sources */,
 				ADCF3DC818BD699200A83257 /* VLSharedUtilitiesOutputHandler.m in Sources */,
