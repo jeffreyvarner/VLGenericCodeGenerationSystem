@@ -104,6 +104,28 @@
             [buffer appendFormat:@"\t\t\t</reaction>\n"];
         }
         
+        // ok, is we have a CELL_FREE_MODEL - we need to put the enzyme degradation rates -
+        if ([model_type isEqualToString:kModelTypeCellFreeModel] == YES)
+        {
+            // How many enzymes do we have?
+            NSArray *list_of_enzymes = [input_tree nodesForXPath:@".//species[contains(@symbol,'ENZYME_')]" error:nil];
+            for (NSXMLElement *enzyme_node in list_of_enzymes)
+            {
+                // what is the species?
+                NSString *species_symbol = [[enzyme_node attributeForName:@"symbol"] stringValue];
+                NSString *interaction_id = [NSString stringWithFormat:@"DEGRADE_%@",species_symbol];
+                
+                [buffer appendFormat:@"\t\t\t<reaction id='R_%@' name='%@' reversible='false'>\n",interaction_id,interaction_id];
+                [buffer appendString:@"\t\t\t\t<listOfReactants>\n"];
+                [buffer appendFormat:@"\t\t\t\t\t<speciesReference species='%@' stoichiometry='%@'/>\n",species_symbol,@"1.0"];
+                [buffer appendString:@"\t\t\t\t</listOfReactants>\n"];
+                [buffer appendString:@"\t\t\t\t<listOfProducts>\n"];
+                [buffer appendString:@"\t\t\t\t</listOfProducts>\n"];
+                [buffer appendFormat:@"\t\t\t</reaction>\n"];
+            }
+        }
+        
+        
         [buffer appendString:@"\t\t</listOfReactions>\n"];
         NEW_LINE;
         

@@ -200,7 +200,7 @@
         NSInteger reaction_counter = 0;
         for (NSArray *reaction in componentArray)
         {
-            NSString *species_symbol = [NSString stringWithFormat:@"E_%lu",(long)reaction_counter++];
+            NSString *species_symbol = [NSString stringWithFormat:@"ENZYME_%lu",(long)reaction_counter++];
             [final_species_array addObject:species_symbol];
         }
     }
