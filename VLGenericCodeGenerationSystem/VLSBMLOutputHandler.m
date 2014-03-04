@@ -76,11 +76,28 @@
             [buffer appendFormat:@"\t\t\t<reaction id='R_%@' name='%@' reversible='false'>\n",interaction_id,interaction_id];
             [buffer appendString:@"\t\t\t\t<listOfReactants>\n"];
             
-            // build species reference -
+            // build species reference for inputs -
+            NSString *input_string = [[[interaction_node nodesForXPath:@"./interaction_input/@reaction_string" error:nil] lastObject] stringValue];
+            NSDictionary *reactant_dictionary = [self parseReactionString:input_string];
+            for (NSString *key in reactant_dictionary)
+            {
+                // What is the stcoeff?
+                NSString *stcoeff = [reactant_dictionary objectForKey:key];
+                [buffer appendFormat:@"\t\t\t\t\t<speciesReference species='%@' stoichiometry='%@'/>\n",key,stcoeff];
+            }
             
             [buffer appendString:@"\t\t\t\t</listOfReactants>\n"];
-            
             [buffer appendString:@"\t\t\t\t<listOfProducts>\n"];
+            
+            // build species reference for outputs -
+            NSString *output_string = [[[interaction_node nodesForXPath:@"./interaction_output/@reaction_string" error:nil] lastObject] stringValue];
+            NSDictionary *product_dictionary = [self parseReactionString:output_string];
+            for (NSString *key in product_dictionary)
+            {
+                // What is the stcoeff?
+                NSString *stcoeff = [product_dictionary objectForKey:key];
+                [buffer appendFormat:@"\t\t\t\t\t<speciesReference species='%@' stoichiometry='%@'/>\n",key,stcoeff];
+            }
             [buffer appendString:@"\t\t\t\t</listOfProducts>\n"];
             
             // close -
@@ -111,5 +128,33 @@
 }
 
 #pragma mark - private helper methods
+-(NSDictionary *)parseReactionString:(NSString *)reaction
+{
+    // Build the dictionary -
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    
+    
+    // cut the string -
+    NSArray *reactant_array = [reaction componentsSeparatedByString:@"+"];
+    for (NSString *raw_symbol in reactant_array)
+    {
+        // do we have a *?
+        NSArray *star_components = [raw_symbol componentsSeparatedByString:@"*"];
+        if ([star_components count] == 1)
+        {
+            // ok, we just have the raw symbol -
+            [dictionary setObject:@"1.0" forKey:raw_symbol];
+        }
+        else
+        {
+            // split -
+            NSString *stcoeff = [star_components objectAtIndex:0];
+            NSString *symbol = [star_components objectAtIndex:1];
+            [dictionary setObject:stcoeff forKey:symbol];
+        }
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:dictionary];
+}
 
 @end
