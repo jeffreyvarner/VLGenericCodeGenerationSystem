@@ -12,8 +12,8 @@
 
 -(id)performVLGenericCodeGenerationFilterActionWithOptions:(NSDictionary *)options
 {
-    // force the user to overide -
-    return @"we_are_in_a_subclass_bitches!";
+    NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    return input_tree;
 }
 
 @end

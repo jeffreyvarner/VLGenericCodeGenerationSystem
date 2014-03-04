@@ -32,7 +32,7 @@
     NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
     
     // What is my model type?
-    NSString *model_type_xpath = @"./Model/@type";
+    NSString *model_type_xpath = @"./model/@type";
     NSString *typeString = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
     
     // What is my function name?

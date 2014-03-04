@@ -31,7 +31,7 @@
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
 
     // what source encoding do I have?
-    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./model/@source_encoding" error:nil] lastObject] stringValue];
     
     // What model type do I have?
     NSString *model_type = [[[transformation_tree nodesForXPath:@"/Model/@type" error:nil] lastObject] stringValue];
@@ -41,7 +41,7 @@
         // header -
         [buffer appendString:@"<?xml version=\"1.0\" standalone=\"yes\"?>\n"];
         [buffer appendString:@"<sbml xmlns=\"http://www.sbml.org/sbml/level2\" level=\"2\" version=\"1\">\n"];
-        [buffer appendFormat:@"\t<model type='%@' source_encoding='%@'>\n",model_type,model_source_encoding];
+        [buffer appendFormat:@"\t<model type='%@' source_encoding='%@'>\n",model_type,@"SBML"];
         
         // list of compartmemts -
         [buffer appendString:@"\t\t<listOfCompartments>\n"];

@@ -62,7 +62,7 @@
     
     // header -
     [buffer appendString:@"<?xml version=\"1.0\" standalone=\"yes\"?>\n"];
-    [buffer appendFormat:@"<Model type='%@' source_encoding='VFF'>\n",modelType];
+    [buffer appendFormat:@"<model type='%@' source_encoding='VFF'>\n",modelType];
     
     // Compute the species set -
     [buffer appendString:@"\t<listOfSpecies>\n"];
@@ -85,7 +85,7 @@
     [buffer appendString:@"\t</listOfInteractions>\n"];
     
     // close -
-    [buffer appendString:@"</Model>\n"];
+    [buffer appendString:@"</model>\n"];
     
     // Build document -
     NSXMLDocument *document = [[NSXMLDocument alloc] initWithXMLString:[NSString stringWithString:buffer]

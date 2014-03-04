@@ -43,7 +43,7 @@
     }
     
     // add the nodes back -
-    NSXMLElement *list_of_species = [[input_tree nodesForXPath:@"/Model/listOfSpecies" error:nil] lastObject];
+    NSXMLElement *list_of_species = [[input_tree nodesForXPath:@"/model/listOfSpecies" error:nil] lastObject];
     for (NSXMLElement *species_node in sorted_species_nodes)
     {
         [list_of_species addChild:species_node];

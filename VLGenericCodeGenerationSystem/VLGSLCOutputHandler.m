@@ -155,7 +155,7 @@
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:@"INPUT_DATA_TREE"];
     
     // Get some stuff from model tree -
-    NSString *model_node_xpath = @"/Model";
+    NSString *model_node_xpath = @".//model";
     NSXMLElement *model_node = [[input_tree nodesForXPath:model_node_xpath error:nil] lastObject];
     NSString *model_type = [[model_node attributeForName:@"type"] stringValue];
     NSString *model_source_encoding = [[model_node attributeForName:@"source_encoding"] stringValue];

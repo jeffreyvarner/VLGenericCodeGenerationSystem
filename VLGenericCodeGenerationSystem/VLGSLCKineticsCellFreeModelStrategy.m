@@ -27,7 +27,7 @@
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
     
     // What is my model type?
-    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./model/@source_encoding" error:nil] lastObject] stringValue];
     
     // function name?
     NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
