@@ -1,0 +1,6 @@
+// These reactions were taken from Denson, Clin. Microbiol. Rev, 4:359 - 395, 1991, A.A. Korotaevskiy et al. / Mathematical Biosciences 222 (2009) 127–143,AM Lesher and W-C Song, Dirk Spitzer, Lynne M. Mitchell, John P. Atkinson and Dennis E. Hourcade J Immunol 2007; 179:2600-2608;
+// Initial part of the cascade - Formation of nascent C3b
+C3_SPLIT,C3,C3-H20,-inf,inf;
+C3_FactorB_Bind,C3-H20+FactorB,C3-H20-FB,-inf,inf;
+C3_FactorB_FactorD_Bind,C3-H20-FB+FactorD,C3-H20-FB-FD,-inf,inf;
+C3_FactorB_FactorD_Cat,C3-H20-FB-FD,C3Bb-H20+FactorD,0,inf;

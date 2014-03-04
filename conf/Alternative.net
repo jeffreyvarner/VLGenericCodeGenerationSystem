@@ -1,0 +1,125 @@
+// These reactions were taken from Denson, Clin. Microbiol. Rev, 4:359 - 395, 1991, A.A. Korotaevskiy et al. / Mathematical Biosciences 222 (2009) 127–143,AM Lesher and W-C Song, Dirk Spitzer, Lynne M. Mitchell, John P. Atkinson and Dennis E. Hourcade J Immunol 2007; 179:2600-2608;
+// Initial part of the cascade - Formation of nascent C3b
+C3_SPLIT,C3,C3-H20,-inf,inf;
+C3_FactorB_Bind,C3-H20+FactorB,C3-H20-FB,-inf,inf;
+C3_FactorB_FactorD_Bind,C3-H20-FB+FactorD,C3-H20-FB-FD,-inf,inf;
+C3_FactorB_FactorD_Cat,C3-H20-FB-FD,C3Bb-H20+FactorD,0,inf; 
+FLUID_C3_BIND,C3Bb-H20+C3,C3Bb-H20-C3,-inf,inf; 
+FLUID_C3_Cat,C3Bb-H20-C3,C3Bb-H20+C3a+C3b,0,inf; 
+C3Bb_Decomposition,C3Bb-H20,C3-H20+Bb,-inf,inf;
+
+// Interaction of nascent C3b with bacterial surface where S is the bacterial surface
+C3b_SURFACE_Binding,C3b+S,C3b-S,-inf,inf;
+C3-FactorB,C3b-S+FactorB,C3b-S-FB,-inf,inf;
+C3-FB-FactorD_Bind,C3b-S-FB+FactorD,C3b-S-FB-FD,-inf,inf;
+C3-FB-FactorD_Cat,C3b-S-FB-FD,C3bBb-S+FBF+FactorD,0,inf; 
+Properdin_BIND_C3Convertase,C3bBb-S+FactorP,C3bBb-S-FP,-inf,inf; 
+C3bBb_Decomposition,C3bBb-S,C3b-S+Bb,-inf,inf;
+C3bBb_Decomposition,C3bBb-S,C3bBb+S,-inf,inf; 
+
+// Properdin initiation
+FactorP_SURFACE_Binding,FactorP+S,FP-S,-inf,inf;
+FLUID_C3b_Binding_Properdin,C3b+FP-S,C3b-FP-S,-inf,inf;
+C3b-FP-FactorB_Bind,C3b-FP-S+FactorB,C3b-FP-S-FB,-inf,inf;
+C3b-FP-FB-FactorD_Bind,C3b-FP-S-FB+FactorD,C3b-FP-S-FB-FD,-inf,inf;
+C3b-FP-FB-FactorD_Cat,C3b-FP-S-FB-FD,C3bBb-S-FP+FactorD+FBF,0,inf; 
+
+//Adding Properdin stabilized C3 Convertase based amplification
+C3_C3bBb-FP_Bind,C3bBb-S-FP+C3,C3-C3bBb-S-FP,-inf,inf;
+C3_C3bBb-FP_Cat,C3-C3bBb-S-FP,C3b+C3a+C3bBb-S-FP,0,inf;
+
+// Amplification loop -
+C3_C3bBb_Bind,C3bBb-S+C3,C3-C3bBb-S,-inf,inf;
+C3_C3bBb_Cat,C3-C3bBb-S,C3b+C3a+C3bBb-S,0,inf;
+
+//Formation of properdin stabilized C5 convertase
+C3bBb-FP_C3b_Bind,C3bBb-S-FP+C3b,C3bBbC3b-S-FP,-inf,inf;
+
+// Formation of the C5 convertase -
+C3bBb_C3b_Bind,C3bBb-S+C3b,C3bBbC3b-S,-inf,inf;
+
+
+// Formation of C5a -
+C5_Bind,C3bBbC3b-S+C5,C3bBbC3b-S-C5,-inf,inf;
+C5_Bind_FP,C3bBbC3b-S-FP+C5,C3bBbC3b-S-FP-C5,-inf,inf;
+C5_Cat,C3bBbC3b-S-C5,C3bBbC3b-S+C5a+C5b,0,inf;
+C5_Cat_FP,C3bBbC3b-S-FP-C5,C3bBbC3b-S-FP+C5a+C5b,0,inf;
+
+// Formation of the MAC -
+C5b_Bind_Surface,C5b+S,C5b-S,-inf,inf;
+C5b_Bind_Surface_C6,C5b-S+C6,C5b-S-C6,-inf,inf;
+C5b_Bind_2,C5b-S-C6+C7,C5b-S-C6-C7,-inf,inf;
+C5b_Bind_3,C5b-S-C6-C7+C8,C5b-S-C6-C7-C8,-inf,inf;
+C5b_Bind_4,C5b-S-C6-C7-C8+C9,C5b-S-C6-C7-C8-C9,-inf,inf;
+
+// Control elements/Regulatory elements ---------------------------
+// Factor H and Factor I control elements -
+//C3_FactorH,C3-H20+FactorH,C3-H20-FH,-inf,inf;
+//C3_FactorI,C3-H20-FH+FactorI,C3-H20-FH-FI,-inf,inf;
+
+// Inhibitors of C3Bb (fluid phase C3 convertase) -
+// FactorH and C4bp inhibit soluble c3 convertase -
+FactorH_C3b_Bind,C3b+FactorH,C3b-FH,-inf,inf;
+//FactorH_C3bB_Bind,C3bB+FactorH,C3bB-FH,-inf,inf;
+//FactorH_C3b_Bind,C3Bb+FactorH,C3Bb-FH,-inf,inf;
+//FactorH_C3b_Bind,C3bBbC3b+FactorH,C3bBbC3b-FH,-inf,inf;
+//C4bp_C3b_Bind,C3Bb+C4bp,C3Bb-C4bp,-inf,inf;
+
+// FactorI catalyzed C3b inactivation -
+C3b_FactorI_Bind,C3b-FH+FactorI,C3b-FH-FI,-inf,inf;
+C3b_FactorI_Cat,C3b-FH-FI,iC3b+FactorI+FactorH,0,inf;
+
+// Inhibitors of C3b-S 
+//CR1_Bind,C3b+CR1,C3b-CR1,-inf,inf;
+//MCP_Bind,C3b+MCP,C3b-MCP,-inf,inf;
+
+// Protein S -
+SProtein_Bind,C5b-S-C6-C7+PS,C5b-S-C6-C7-PS,-inf,inf;
+
+//Clusterin
+Clusterin_Bind,C5b-S-C6-C7-C8+Clu,C5b-S-C6-C7-C8-Clu,-inf,inf;
+
+// CD59 and C8bp -
+//CD59,CD59+C8,CD59-C8,-inf,inf;
+//CBbp,C8bp+C8,C8bp-C8,-inf,inf;
+
+// Ok, so we need loss and synthesis terms to account for production
+// and clearance from the blood -
+// Generation
+C3_GEN,[],C3,0,inf;
+C5_GEN,[],C5,0,inf;
+C6_GEN,[],C6,0,inf;
+C7_GEN,[],C7,0,inf;
+C8_GEN,[],C8,0,inf;
+C9_GEN,[],C9,0,inf;
+C4bp_GEN,[],C4bp,0,inf;
+PS_GEN,[],PS,0,inf;
+FactorB_GEN,[],FactorB,0,inf;
+FactorD_GEN,[],FactorD,0,inf;
+FactorH_GEN,[],FactorH,0,inf;
+FactorI_GEN,[],FactorI,0,inf;
+FactorP_GEN,[],FactorP,0,inf;
+Clusterin_GEN,[],Clu,0,inf;
+
+// Clearance -
+C3_CLEAR,C3,[],0,inf;
+C5_CLEAR,C5,[],0,inf;
+C6_CLEAR,C6,[],0,inf;
+C7_CLEAR,C7,[],0,inf;
+C8_CLEAR,C8,[],0,inf;
+C9_CLEAR,C9,[],0,inf;
+C4bp_CLEAR,C4bp,[],0,inf;
+PS_CLEAR,PS,[],0,inf;
+C3Bb_CLEAR,C3Bb,[],0,inf;
+FactorB_CLEAR,FactorB,[],0,inf;
+FactorD_CLEAR,FactorD,[],0,inf;
+FactorH_CLEAR,FactorH,[],0,inf;
+FactorI_CLEAR,FactorI,[],0,inf;
+FactorP_CLEAR,FactorP,[],0,inf;
+Clusterin_CLEAR,Clu,[],0,inf;
+FBF_CLEAR,FBF,[],0,inf;
+C3a_CLEAR,C3a,[],0,inf;
+C3b_CLEAR,C3b,[],0,inf;
+C5a_CLEAR,C5a,[],0,inf;
+C5b_CLEAR,C5b,[],0,inf;
+Bb_CLEAR,Bb,[],0,inf;

@@ -1,0 +1,89 @@
+<?xml version="1.0" standalone="yes"?>
+<Model type="CELL_FREE_MODEL">
+
+	<properties>
+		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/Desktop/MyUniversalProjects/VLGenericCodeGenerationSystem/conf"/>
+		<property symbol="COPYRIGHT_TEXT" value="/Users/jeffreyvarner/Desktop/MyUniversalProjects/VLGenericCodeGenerationSystem/conf/Copyright.text"/>
+	</properties>
+
+	<transformation id="VFF_2_SBML">
+		
+		<input_handler strategy_handler="READ_VFF">
+			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_SBML">
+			<transformation_property type="PATH" value="/model/network/ECCFModel_v1_1.xml"/>
+		</output_handler>
+		
+	</transformation>
+
+	<transformation id="VFF_2_DATAFILE">
+		
+		<input_handler strategy_handler="READ_VFF">
+			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_OCATVE_M_DATAFILE">
+			<transformation_property type="PATH" value="/model/src/DataFile.m"/>
+			<transformation_property type="FUNCTION_NAME" value="DataFile"/>
+		</output_handler>
+		
+	</transformation>
+
+	<transformation id="VFF_2_BALANCE_EQUATIONS">
+		
+		<input_handler strategy_handler="READ_VFF">
+			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_OCTAVE_M_BALANCE_EQUATIONS">
+			<transformation_property type="PATH" value="/model/src/BalanceEquations.m"/>
+			<transformation_property type="FUNCTION_NAME" value="BalanceEquations"/>
+			<transformation_property type="COMPACT_BALANCE_MODE" value="FALSE"/>
+		</output_handler>
+		
+	</transformation>
+	
+	<transformation id="VFF_2_SOLVE_BALANCE_EQUATIONS">
+		
+		<input_handler strategy_handler="READ_VFF">
+			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_OCTAVE_M_SOLVE_BALANCE_EQUATIONS">
+			<transformation_property type="PATH" value="/model/src/SolveMassBalances.m"/>
+			<transformation_property type="FUNCTION_NAME" value="SolveMassBalances"/>
+		</output_handler>
+		
+	</transformation>
+	
+	<transformation id="VFF_2_KINETICS">
+		
+		<input_handler strategy_handler="READ_VFF">
+			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_OCTAVE_M_KINETICS_EQUATIONS">
+			<transformation_property type="PATH" value="/model/src/Kinetics.m"/>
+			<transformation_property type="FUNCTION_NAME" value="Kinetic"/>
+		</output_handler>
+		
+	</transformation>
+	
+</Model>

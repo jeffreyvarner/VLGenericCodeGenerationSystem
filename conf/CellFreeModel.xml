@@ -1,0 +1,40 @@
+<?xml version="1.0" standalone="yes"?>
+<Model type="CELL_FREE_MODEL">
+
+	<properties>
+		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/octave_work/cell_free_model_v1"/>
+		<property symbol="COPYRIGHT_TEXT" value="/Users/jeffreyvarner/Desktop/MyUniversalProjects/VLGenericCodeGenerationSystem/conf/Copyright.text"/>
+	</properties>
+
+	<transformation id="VFF_2_SBML">
+		
+		<input_handler strategy_handler="READ_VFF">
+			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</output_handler>
+		
+	</transformation>
+	
+	<transformation id="SBML_2_KINETICS">
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_KINETICS_EQUATIONS">
+			<transformation_property type="PATH" value="/src/Kinetics.c"/>
+			<transformation_property type="HEADER_PATH" value="/src/Kinetics.h"/>
+			<transformation_property type="FUNCTION_NAME" value="Kinetics"/>
+		</output_handler>
+		
+	</transformation>
+
+</Model>

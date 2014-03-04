@@ -1,0 +1,490 @@
+// ==========================================
+// Glycolysis
+// ==========================================
+PTS,GLC+PEP,G6P+PYR,0,inf;
+HEX,GLC+ATP,G6P+ADP,0,inf;
+pgi_BG12366_5.3.1.9,G6P,F6P,-inf,inf;
+pfk_BG12644_2.7.1.11,ATP+F6P,ADP+F16BP,0,inf;
+ywjI_BG10415_3.1.3.11,F16BP,F6P+PI,0,inf;
+fbaA_BG10412_4.1.2.13,F16BP,GA3P+DHAP,-inf,inf;
+iolJ_BG11125_4.1.2.13,F16BP,GA3P+DHAP,-inf,inf;
+tpi_BG10897_5.3.1.1,GA3P,DHAP,-inf,inf;
+gapA_BG10827_1.2.1.12,GA3P+PI+NAD,G13P+NADH,-inf,inf;
+
+// Removed gapB --
+
+pgk_BG11062_2.7.2.3,ADP+G13P,ATP+3PG,-inf,inf;
+yflL_BG12947_3.6.1.7,G13P,3PG+PI,0,inf;
+pgm_BG10898_5.4.2.1,3PG,2PG,-inf,inf;
+eno_BG10899_4.2.1.11,2PG,PEP,-inf,inf;
+pykA_BG12661_2.7.1.40,ADP+PEP,ATP+PYR,0,inf;
+pckA_BG11841_4.1.1.49,ATP+OAA,ADP+PEP+CO2,0,inf;
+ppc,PEP+CO2,OAA+PI,0,inf;
+pps_BG12657_2.7.9.2,ATP+PYR,AMP+PEP+PI,0,inf;
+
+// pdh is treated as a lumped enzyme
+pdhA_BG1O207_1.2.4.1,PYR+CoA+NAD,NADH+CO2+Acetyl-CoA,0,inf;
+
+// ==========================================
+// Glycerol metabolism
+// ==========================================
+glpK_2.7.1.30,GL+ATP,GL3P+ADP,-inf,inf;
+gpsA_BG11366_1.1.1.94,GL3P+NADP,DHAP+NADPH,-inf,inf;
+gpsA_BG11366_1.1.1.94,GL3P+NAD,DHAP+NADH,-inf,inf;
+
+// ==========================================
+// PENTOSE PHOSPHATE PATHWAY (PPP)
+// ==========================================
+zwf_BG11739_1.1.1.49,G6P+NADP,G15L6P+NADPH,-inf,inf;
+no_bsuorf_3.1.1.31,G15L6P,6PDG,0,inf;
+gntZ_BG10651_1.1.1.44,6PDG+NADP,RU5P+CO2+NADPH,0,inf;
+yqeC_BG11631_1.1.1.44,6PDG+NADP,RU5P+CO2+NADPH,0,inf;
+yqjI_BG11738_1.1.1.44,6PDG+NADP,RU5P+CO2+NADPH,0,inf;
+rpe_BG13393_5.1.3.1,RU5P,X5P,-inf,inf;
+ywlF_BG10942_5.3.1.6,RU5P,R5P,-inf,inf;
+tkt_BG11247_2.2.1.1,R5P+X5P,S7P+GA3P,-inf,inf;
+ywjH_BG10413_2.2.1.2,S7P+GA3P,E4P+F6P,-inf,inf;
+tkt_BG11247_2.2.1.1,X5P+E4P,F6P+GA3P,-inf,inf; 
+_need_to_assign,RU5P,A5P,-inf,inf;
+
+// Bypass -
+edd,6PDG,2KD6PG,0,inf;
+eda,2KD6PG,PYR+GA3P,0,inf;
+
+// ==========================================
+// TCA CYCLE (TCA)
+// ==========================================
+citA_BG10854_2.3.3.1,Acetyl-CoA+OAA,CIT+CoA,-inf,inf;
+citZ_BG10855_2.3.3.1,Acetyl-CoA+OAA,CIT+CoA,-inf,inf;
+mmgD_BG11322_2.3.3.1,Acetyl-CoA+OAA,CIT+CoA,-inf,inf;
+citB_BG10478_4.2.1.3,CIT,ICIT,-inf,inf;
+citC_BG10856_1.1.1.42,ICIT+NADP,OGA+CO2+NADPH,-inf,inf;
+odhAB_BG10272_1.2.4.2,OGA+NAD+CoA,CO2+NADH+SUCCCoA,0,inf;
+sucC_BG12680_6.2.1.5,ADP+PI+SUCCCoA,SUCC+ATP+CoA,-inf,inf;
+sucD_BG12681_6.2.1.5,ADP+PI+SUCCCoA,SUCC+ATP+CoA,-inf,inf;
+sdhABC_BG1035(123)_1.3.99.1,SUCC+FAD,FADH+FUM,-inf,inf;
+citG_BG10384_4.2.1.2,FUM,MAL,-inf,inf;
+citH_BG11386_1.1.1.37,MAL+NAD,OAA+NADH,-inf,inf;
+yjmC_BG13206_1.1.1.37,MAL+NAD,OAA+NADH,-inf,inf;
+ywkA_BG11312_1.1.1.38,MAL+NAD,PYR+NADH+CO2,-inf,inf;
+yqkJ_BG11764_1.1.1.38,MAL+NAD,PYR+NADH+CO2,-inf,inf;
+malS_BG12614_1.1.1.38,MAL+NAD,PYR+NADH+CO2,-inf,inf;
+ytsJ_BG13922_1.1.1.38,MAL+NAD,PYR+NADH+CO2,-inf,inf;
+malS_BG12614_1.1.1.40,MAL+NADP,PYR+NADPH+CO2,-inf,inf;
+
+// ==========================================
+// GLYOXALATE SHUNT 
+// ==========================================
+aceA,ICIT,GLX+SUCC,0,inf;
+aceB,Acetyl-CoA+GLX,CoA+MAL,0,inf;
+
+// ==========================================
+// OVERFLOW METABOLISM
+// ==========================================
+lctE_BG19003_1.1.1.27,PYR+NADH,LAC+NAD,-inf,inf;
+ydaP_BG12063_1.2.3.3,PYR+PI+O2,ACP+CO2,0,inf;
+pta_BG10634_2.3.1.8,Acetyl-CoA+PI,CoA+ACP,-inf,inf;
+ackA_BG10813_2.7.2.1,ACP+ADP,AC+ATP,-inf,inf;
+yflL_BG12947_3.6.1.7,ACP,AC+PI,0,inf;
+acsA_BG10370_6.2.1.1,Acetyl-CoA+PPI+AMP,ATP+AC+CoA,-inf,inf;
+ytcI_BG13834_6.2.1.1,Acetyl-CoA+PPI+AMP,ATP+AC+CoA,-inf,inf;
+
+// ------------------------------------------------
+// Acetoin Formation and Degradation (?)
+// ------------------------------------------------
+alsS_BG10471_2.2.1.6,2*PYR,2-ACETOLACTATE+CO2,-inf,inf;
+alsD_BG10472_4.1.1.5,2-ACETOLACTATE,ACETOIN+CO2,-inf,inf;
+_UNKNOWN_,ACETOIN+NADH,2_3-BUTANEDIOL+NAD,-inf,inf;
+
+// ===============================================
+// PROPANOATE METABOLISM
+// ===============================================
+_SPONT_OR_UNKNOWN_,2-OXOBUTANOATE+PI+O2,PROPIONYL-PHOSPHATE+CO2,0,inf;
+ackA_BG10813_2.7.2.1,ADP+PROPIONYL-PHOSPHATE,ATP+PROPANOATE,-inf,inf;
+
+// ===============================================
+// ETHANOL METABOLISM
+// ===============================================
+ywdH_BG10604_1.2.1.3,AC+NADH,ACETALDEHYDE+NAD,-inf,inf;
+adhE,Acetyl-CoA+2*NADH,ETH+2*NAD+CoA,-inf,inf;
+adhA_BG12562_1.1.1.2,ACETALDEHYDE+NADPH,ETH+NADP,-inf,inf;
+adhB_BG11902_1.1.1.1,ACETALDEHYDE+NADH,ETH+NAD,-inf,inf;
+
+// ===========================================
+// OXIDATIVE PHOSPHORYLATION
+// ===========================================
+yybQ_BG10014_3.6.1.1,PPI,2*PI,0,inf;
+ctaC_BG1O21(5-8)_1.9.3.1,2*Fo-c+0.5*O2,2*Fi-c+2*HEXT,0,inf;
+qoxB_BG10584_1.9.3.-,Q2+0.5*O2,Q1+2*HEXT,0,inf;
+cydD_BG11928_1.10.3.-,Q2+0.5*O2,Q1+HEXT,0,inf;
+ythA_BG13857_1.10.3.-,Q2+0.5*O2,Q1+HEXT,0,inf;
+ndhF_BG10949_1.6.5.3,NADH+Q1,NAD+Q2,0,inf;
+nuo,NADH+Q1,NAD+Q2+3.5*HEXT,0,inf;
+qcrA_BG11325_1.10.2.2,Q2+2*Fi-c,Q1+2*Fo-c+1.5*HEXT,0,inf;
+atpD_BG10821_3.6.3.14,ADP+PI+4*HEXT,ATP,0,inf;
+FADH,FADH+Q1,FAD+Q2,-inf,inf;
+
+// Need to add both transhydrogenases -
+pntA,NADPH+NAD,NADP+NADH,-inf,inf;
+pntB,NADP+NADH+2*HEXT,NADPH+NAD,-inf,inf;
+
+// =============================================
+// CHOR and DIAMPIM SYNTHESIS
+// =============================================
+DIAMPIM_SYNTHESIS,PYR+SUCCCoA+NADPH+ASPSALD+GLU,OGA+SUCC+DIAMPIM+NADP+CoA,0,inf; 
+
+// ===========================================
+// PURINE BIOSYNTHESIS
+// ===========================================
+prs_BG10114_2.7.6.1,ATP+R5P,AMP+PRPP,0,inf;
+purF_BG10707_2.4.2.14,PRPP+GLN,PPI+GLU+PRAM,0,inf;
+purD_BG10711_6.3.4.13,ATP+PRAM+GLY,ADP+PI+GAR,0,inf;
+purN_BG10709_2.1.2.2,GAR+10-FORMYL-THF,THF+FGAR,0,inf;
+purL_BG10705_6.3.5.3,FGAR+ATP+GLN,GLU+ADP+PI+FGAM,0,inf;
+purQ_BG10706_6.3.5.3,FGAR+ATP+GLN,GLU+ADP+PI+FGAM,0,inf;
+purM_BG10708_6.3.3.1,FGAM+ATP,ADP+PI+AIR,0,inf;
+purK_BG10701_4.1.1.21,AIR+CO2+ATP,NCAIR+ADP+PI,-inf,inf;
+purE_BG10700_4.1.1.21,NCAIR,CAIR,-inf,inf;
+
+purC_BG10703_6.3.2.6,CAIR+ATP+ASP,ADP+PI+SAICAR,-inf,inf;
+purB_BG10702_4.3.2.2,SAICAR,FUM+AICAR,-inf,inf;
+
+purH_BG10710_2.1.2.3,AICAR+10-FORMYL-THF,THF+PRFICA,0,inf;
+purH_BG10710_3.5.4.10,PRFICA,IMP,-inf,inf;
+guaB_BG10073_1.1.1.205,IMP+NAD,XMP+NADH,0,inf;
+yhcV_BG11600_1.1.1.205,IMP+NAD,XMP+NADH,0,inf;
+_NEED_TO_DO,IMP+ASP+GTP,ASUCC+PI+GDP,0,inf;
+_NEED_TO_DO,ASUCC,FUM+AMP,0,inf;
+guaA_BG10647_6.3.5.2,ATP+XMP+GLN,AMP+PPI+GMP+GLU,0,inf;
+_NEED_TO_DO_6.3.4.1,ATP+XMP+NH3,GMP+AMP+PPI,-inf,inf;
+yloD_BG13386_2.7.4.8,ATP+GMP,ADP+GDP,-inf,inf;
+gmk_BG13386_2.7.4.8,ATP+GMP,ADP+GDP,-inf,inf;
+
+// ndk reactions
+ndk_BG10282_2.7.4.6,GDP+ATP,GTP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,UDP+ATP,UTP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,CDP+ATP,CTP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,TDP+ATP,TTP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,TMP+ATP,TDP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,dADP+ATP,dATP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,dCDP+ATP,dCTP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,dGDP+ATP,dGTP+ADP,-inf,inf;
+ndk_BG10282_2.7.4.6,dUDP+ATP,dUTP+ADP,-inf,inf;
+
+// CMP (req'd in the cellmass balance)
+_need_to_do,CMP+ATP,ADP+CDP,-inf,inf;
+_need_to_do,CYTD+GTP,GDP+CMP,-inf,inf;
+_need_to_do,CYTD,URI+NH3,0,inf;
+_need_to_do,CMP,CYTD+PI,0,inf;
+_need_to_do,R5P,CYTD+PI,0,inf;
+
+// UMP (req'd in the cellmass balance)
+_need_to_do,UMP+ATP,ADP+UDP,-inf,inf;
+_need_to_do,URI+ATP,ADP+UMP,-inf,inf;
+_need_to_do,URI+GTP,UMP+GDP,-inf,inf;
+_need_to_do,UMP,PI+URI,0,inf;
+
+// =========================================================
+// RIBOFLAVIN BIOSYNTHESIS -- 	For long names I use
+// 				the KEGG number
+// =========================================================
+ribA_BG10520_3.5.4.25,GTP,C01304+FOR+PPI,0,inf;
+ribG_BG10518_3.5.4.26,C01304,C01268+NH3,0,inf;
+ribG_BG10518_1.1.1.193,C01268+NADPH,APD+NADP+PI,0,inf;
+ribB,RU5P,DBP+FOR,0,inf;
+ribH,DBP+APD,DRL+PI,0,inf;
+ribB_BG10519_2.5.1.9(B),2*DRL,RIBOFLAVIN+RAU,0,inf;
+ribH_BG10521_2.5.1.9(B),2*DRL,RIBOFLAVIN+RAU,0,inf;
+ribC_BG11495_2.7.1.26,ATP+RIBOFLAVIN,ADP+FMN,0,inf;
+ribC_BG11495_2.7.7.2,ATP+FMN,PPI+FAD,0,inf;
+
+// ===========================================
+// FORMATE CONSUMPTION (from ribA) 
+// ===========================================
+yrhE_BG12294_1.2.1.2,FOR+NAD,CO2+NADH,-inf,inf;
+
+// =============================================
+// Synthesis of dAMP,dCMP,dGMP and dTMP for DNA
+// =============================================
+ycgT_BG12018_1.8.1.9,OTRD,RTRD,0,inf;
+nrdE_BG11404_1.17.4.1,ADP+RTRD,OTRD+dADP,0,inf;
+ndk_BG10282_2.7.4.6,dADP+ATP,ADP+dATP,-inf,inf;
+nrdE_BG11404_1.17.4.1,GDP+RTRD,OTRD+dGDP,0,inf;
+ndk_BG10282_2.7.4.6,dGDP+ATP,ADP+dGTP,-inf,inf;
+nrdE_BG11404_1.17.4.1,CDP+RTRD,OTRD+dCDP,0,inf;
+ndk_BG10282_2.7.4.6,CTP+ADP,ATP+CDP,-inf,inf;
+ndk_BG10282_2.7.4.6,dCDP+ATP,ADP+dCTP,-inf,inf;
+cmk_BG11004_2.7.4.14,ATP+dCMP,ADP+dCDP,-inf,inf;
+ndk_BBG10282_2.7.4.6,UTP+ADP,ATP+UDP,-inf,inf;
+nrdE_BG11404_1.17.4.1,UDP+RTRD,OTRD+dUDP,0,inf;
+tmk_BG10092_2.7.4.9,dUDP+ADP,dUMP+ATP,-inf,inf;
+tmk_BG10092_2.7.4.9,dTMP+ATP,ADP+dTDP,-inf,inf;
+ndk_BG10282_2.7.4.6,dTDP+ATP,ADP+dTTP,-inf,inf;
+comEB_BG10481_3.5.4.12,dUMP+NH3,dCMP,-inf,inf;
+_2.7.4.8,dGMP+ATP,dGDP+ADP,-inf,inf;
+_2.7.4.11,dAMP+ATP,dADP+ADP,-inf,inf;
+
+// ==========================================
+// CoA BIOSYNTHESIS
+// ==========================================
+panB_2.1.2.11,OIVAL+METHYLENE-THF,AKP+THF,0,inf;
+panE_1.1.1.169,AKP+NADPH,NADP+PANT,0,inf;
+panD_4.1.1.11,ASP,CO2+bALA,0,inf;
+panC_2.7.1.33,PANT+bALA+ATP,AMP+PPI+PNTO,0,inf;
+coaA_2.7.1.33,PNTO+3*ATP+CTP+CYS,2*ADP+CMP+2*PPI+CO2+CoA,0,inf;
+
+// ==============================================
+// C1 and Folate Metabolism (THF,10-FORMYL-THF and METHF)
+// ==============================================
+dfrA_tmp_BG10795_1.5.1.3,NADPH+DIHYDROFOLATE,NADP+THF,-inf,inf;
+thyB_BG10794_2.1.1.45,METHYLENE-THF+dUMP,dTMP+DIHYDROFOLATE,-inf,inf;
+thyA_BG11190_2.1.1.45,METHYLENE-THF+dUMP,dTMP+DIHYDROFOLATE,-inf,inf;
+purU_ykkE_BG13237_3.5.1.10,10-FORMYL-THF,THF+FOR,0,inf;
+yqgN_BG11681_6.3.3.2,5-FORMYL-THF+ATP,5_10-METHENYL-THF+ADP+PI,-inf,0;
+
+_SPONTANEOUS_,5-FORMYL-THF,10-FORMYL-THF,0,inf;
+
+purN_BG10709_2.1.2.2,10-FORMYL-THF,THF+FOR,0,inf;
+folD_BG11711_1.5.1.5,5_10-METHENYL-THF+NADPH,METHYLENE-THF+NADP,-inf,inf;
+folD_BG11711_3.5.4.9,5_10-METHENYL-THF,10-FORMYL-THF,-inf,inf;
+
+// Test reaction
+_NEED_TO_DO,GLY+THF+NAD,METHYLENE-THF+NH3+CO2+NADH,0,inf;
+
+// Generation of DHF
+pabB_pab_BG10137_6.3.5.8,GLN+CHOR,4-AMINO-4-DEOXYCHORISMATE+GLU,0,inf;
+padC_BG10139_4.1.3.38,4-AMINO-4-DEOXYCHORISMATE,PYR+4-AMINOBENZOATE,0,inf;
+mtrA_BG10277_3.5.4.16,GTP,FOR+DIHYDRONEOPTERIN-P3,0,inf;
+recS_recQ_BG11407_3.6.1.-,DIHYDRONEOPTERIN-P3,DIHYDRONEOPTERIN-P+PPI,0,inf;
+recS_recQ_BG11407_3.6.1.-,DIHYDRONEOPTERIN-P,DIHYDRO-NEO-PTERIN+PI,0,inf;
+folA_yacE_BG10141_4.1.2.25,DIHYDRO-NEO-PTERIN,GLYCOLALDEHYDE+AMINO-OH-HYDROXYMETHYL-DIHYDROPTERIDINE,0,inf;
+folK_BG10142_2.7.6.3,AMINO-OH-HYDROXYMETHYL-DIHYDROPTERIDINE+ATP,DIHYDROPTERIN-CH2OH-PP+AMP,0,inf;
+sul_BG10140_2.5.1.15,4-AMINOBENZOATE+DIHYDROPTERIN-CH2OH-PP,7_8-DIHYDROPTEROATE+PPI,0,inf;
+folC_BG10322_6.3.2.17,7_8-DIHYDROPTEROATE+ATP+GLU,DIHYDROFOLATE+PI+ADP,0,inf;
+
+// ==========================================
+// GLYCINE AND SERINE BIOSYNTHESIS
+// ==========================================
+
+// These are KOd in the model -
+//sdaAB_BG13397_4.3.1.17,NH3+PYR,SER,-inf,inf;
+//sdaAA_BG13398_4.3.1.17,NH3+PYR,SER,-inf,inf;
+
+glyA_glyC_ipc-34d_BG10944_2.1.2.1,METHYLENE-THF+GLY,SER+THF,-inf,inf;
+_NEED_TO_ASSIGN,3PG+NAD+GLU,SER+NADH+OGA+PI,0,inf;
+
+// ============================================
+// ASPARTATE BIOSYNTHESIS
+// ============================================
+ansB_BG10301_4.3.1.1,FUM+NH3,ASP,-inf,inf;
+
+// ===========================================
+// METHONINE BIOSYNTHESIS --?
+// ===========================================
+metB_BG11534_2.3.1.46,HSER+SUCCCoA,CoA+O-SUCCINYL-L-HOMOSERINE,0,inf;
+metC_BG12616_2.1.1.14,HCYS+METHYLENE-THF,MET+THF,0,inf;
+
+// ===========================================
+// CYSTEINE BIOSYNTHESIS
+// ===========================================
+yrhB_BG12291_4.4.1.1,2-OXOBUTANOATE+CYS+NH3,L-CYSTATHIONINE,0,inf;
+yjcJ_BG13163_4.4.1.8,L-CYSTATHIONINE,HCYS+NH3+PYR,0,inf;
+yjcI_BG13163_4.4.1.8,PYR+NH3+HS,CYS,0,inf;
+yjcI_BG13162_2.5.1.48,CYS+O-SUCCINYL-L-HOMOSERINE,SUCC+L-CYSTATHIONINE,-inf,inf;
+yjcJ_BG13163_4.4.1.8,L-CYSTATHIONINE,PYR+NH3+HCYS,0,inf;
+cysE_BG10155_2.3.1.30,Acetyl-CoA+SER,CoA+ACETYLSERINE,-inf,inf;
+cysK_BG10136_2.5.1.47,ACETYLSERINE+HS,CYS+AC,0,inf;
+yrhA_BG12290_2.5.1.47,ACETYLSERINE+HS,CYS+AC,0,inf;
+ytkP_BG13872_2.5.1.47,ACETYLSERINE+HS,CYS+AC,0,inf;
+
+// ===========================================
+// LYSINE SYNTHESIS AND DEGRADATION
+// ===========================================
+lysC_BG10350_2.7.2.4,ASP+ATP,L-BETA-ASPARTYL-P+ADP,-inf,inf;
+yclM_BG12033_2.7.2.4,ASP+ATP,L-BETA-ASPARTYL-P+ADP,-inf,inf;
+dapG_lssD_BG10784_2.7.2.4,ASP+ATP,L-BETA-ASPARTYL-P+ADP,-inf,inf;
+asd_BG10783_1.2.1.11,NADPH+L-BETA-ASPARTYL-P,NADP+PI+ASPSALD,-inf,inf;
+hom_tdm_BG10460_1.1.1.3,NADPH+ASPSALD,NADP+HSER,-inf,inf;
+lysA_BG10510_4.1.1.20,DIAMPIM,CO2+LYS,0,inf;
+acuA_BG10369_2.3.1.-,LYS+Acetyl-CoA,N6-ACETYL-L-LYSINE+CoA,-inf,inf;
+
+// ===========================================
+// THREONINE SYNTHESIS AND DEGRADATION
+// ===========================================
+thrB_thrA_BG10462_2.7.1.39,HSER+ATP,O-PHOSPHO-L-HOMOSERINE+ADP,0,inf;
+thrC_thrB_BG10461_4.2.3.1,O-PHOSPHO-L-HOMOSERINE,PI+THR,0,inf;
+
+// This has been removed -
+//ilvA_BG10673_4.3.1.19,THR,2-OXOBUTANOATE+NH3,0,inf;
+
+// ============================================
+// VALINE, LEU AND ILE BIOSYNTHESIS
+// ============================================
+alsS_BG10471_2.2.1.6,PYR+2-OXOBUTANOATE,2-ACETO-2-HYDROXY-BUTYRATE+CO2,0,inf;
+alsS_BG10471_2.2.2.6,2*PYR,2-ACETO-LACTATE+CO2,0,inf;
+ilvC_BG10672_1.1.1.86,2-ACETO-LACTATE+NADPH,DIOH-ISOVALERATE+NADP,-inf,inf;
+ilvC_BG10672_1.1.1.86,2-ACETO-2-HYDROXY-BUTYRATE+NADPH,1-KETO-2-METHYLVALERATE+NADP,-inf,inf;
+ilvD_BG11532_4.2.1.9,DIOH-ISOVALERATE,2-KETO-ISOVALERATE,-inf,inf;
+ilvD_BG11532_4.2.1.9,1-KETO-2-METHYLVALERATE,2-KETO-3-METHYL-VALERATE,-inf,inf;
+ywaA_ipa-0r_BG10546_2.6.1.42,2-KETO-ISOVALERATE+GLU,VAL+OGA,-inf,inf;
+ywaA_ipa-0r_BG10546_2.6.1.42,2-KETO-3-METHYL-VALERATE+GLU,ILE+OGA,-inf,inf;
+leuA_BG11948_2.3.3.13,2-KETO-ISOVALERATE+Acetyl-CoA,3-CARBOXY-3-HYDROXY-ISOCAPROATE+CoA,0,inf;
+leuC_BG11949_4.2.1.33,3-CARBOXY-3-HYDROXY-ISOCAPROATE,2-D-THREO-HYDROXY-3-CARBOXY-ISOCAPROATE,-inf,inf;
+leuB_leuC_BG10675_1.1.1.85,2-D-THREO-HYDROXY-3-CARBOXY-ISOCAPROATE+NAD,2K-4CH3-PENTANOATE+NADH+CO2,-inf,inf;
+ywaA_ipa-0r_BG10546_2.6.1.42,2K-4CH3-PENTANOATE+GLU,LEU+OGA,-inf,inf;
+
+// ===========================================
+// ASN Biosynthesis and Degradation
+// ===========================================
+ansA_BG10300_3.5.1.1,ASN,ASP+NH3,-inf,inf;
+yccC_BG12755_3.5.1.1,ASN,ASP+NH3,-inf,inf;
+asnH_BG11116_6.3.5.4,GLN+ASP+ATP,GLU+ASN+PPI+AMP,-inf,inf;
+asnB_BG11831_6.3.5.4,GLN+ASP+ATP,GLU+ASN+PPI+AMP,-inf,inf;
+asnO_BG12240_6.3.5.4,GLN+ASP+ATP,GLU+ASN+PPI+AMP,-inf,inf;
+ansB_BG10301_4.3.1.1,ASP,FUM+NH3,-inf,inf;
+
+// ===========================================
+// PROLINE BIOSYHTHESIS AND DEGRADATION
+// ===========================================
+proJ_BG12658_2.7.2.11,GLU+ATP,L-GLUTAMATE-5P+ADP,0,inf;
+proB_BG10963_2.7.2.11,GLU+ATP,L-GLUTAMATE-5P+ADP,0,inf;
+proA_BG10964_1.2.1.41,L-GLUTAMATE-5P+NADPH,PYYCX+NADP+PI,0,inf;
+rocA_BG10622_1.5.1.12,GLU+NADH,PYYCX+NAD,0,inf;
+rocA_BG10622_1.5.1.12,GLU+NADPH,PYYCX+NADP,0,inf;
+rocA_BG10622_1.5.1.12,GLU+NADPH,L-GLUTAMTE-5-SA+NADP,0,inf;
+_SPONT_,L-GLUTAMTE-5-SA,PYYCX,-inf,inf;
+proG_BG10841_1.5.1.2,PYYCX+NADPH,PRO+NAD,-inf,inf;
+ykeA_BG10841_1.5.1.2,PRO+NADP,PYYCX+NADPH,-inf,inf;
+yoxE_BG11049_1.5.1.2,PRO+NADP,PYYCX+NADPH,-inf,inf;
+yqjO_BG11744_1.5.1.2,PRO+NADP,NADPH+PYYCX,-inf,inf;
+hcrA_BG10662_1.5.1.12,PYYCX+NADP,GLU+NADPH,0,inf;
+
+// ===========================================
+// HISTIDINE BIOSYHTHESIS AND DEGRADATION
+// ===========================================
+hisG_BG12601_2.4.2.17,ATP+PRPP,PHOSPHORIBOSYL-ATP+PPI,-inf,inf;
+hisI_BG12063_3.6.1.31,PHOSPHORIBOSYL-ATP,PHOSPHORIBOSYL-AMP+PPI,0,inf;
+hisI_BG12063_3.5.4.19,PHOSPHORIBOSYL-AMP,PHOSPHORIBOSYL-FORMIMINO-AICAR-P,0,inf;
+hisA_BG12597_5.3.1.16,PHOSPHORIBOSYL-FORMIMINO-AICAR-P,PHOSPHORIBULOSYL-FORMIMINO-AICAR-P,0,inf;
+hisF_BG12600_4.1.3.-,PHOSPHORIBULOSYL-FORMIMINO-AICAR-P+GLN,GLU+AICAR+D-ERYTHRO-IMIDAZOLE-GLYCEROL-P,0,inf;
+hisB_BG12598_4.2.1.19,D-ERYTHRO-IMIDAZOLE-GLYCEROL-P,IMIDAZOLE-ACETOL-P,0,inf;
+hisC_BG10292_2.6.1.9,IMIDAZOLE-ACETOL-P+GLU,L-HISTIDINOL-P+OGA,-inf,inf;
+hisJ_ytvP_BG13931_3.1.3.15,L-HISTIDINOL-P,HISTIDINOL+PI,0,inf;
+hisD_BG12599_1.1.1.23,HISTIDINOL+NAD,HISTIDINAL+NADH,0,inf;
+hisD_BG12599_1.1.1.23,HISTIDINAL+NAD,HIS+NADH,0,inf;
+
+// ==================================================
+// ARGININE BIOSYNTHESIS, UREA CYCLE AND DEGRADATION
+// ==================================================
+rocD_BG10722_2.6.1.13,L-GLUTAMTE-5-SA+GLU,OGA+ORN,-inf,inf;
+argH_BG12571_4.3.2.1,FUM+ARG,NOSUCC,-inf,inf;
+argG_BG12570_6.3.4.5,NOSUCC+PPI+AMP,ATP+ASP+CITR,-inf,inf;
+argF_BG10197_2.1.3.3,CITR+PI,ORN+CAP,-inf,inf;
+
+// Not sure about this -- we have spe removed but I don't have that
+// in the model - this is close -
+//rocF_BG10932_3.5.3.1,ARG,ORN+UREA,0,inf;
+
+carA_BG10195_6.3.5.5,2*ATP+GLN+CO2,2*ADP+PI+GLU+CAP,0,inf;
+ureA_BG11981_3.5.1.5,UREA,CO2+2*NH3,0,inf;
+ureB_BG11982_3.5.1.5,UREA,2*NH3+CO2,0,inf;
+ureC_BG11983_3.5.1.5,UREA,2*NH3+CO2,0,inf;
+
+// ===========================================
+// PHENYLALANINE BIOSYNTHESIS AND DEGRADATION
+// ===========================================
+_UNKNOWN_,PEP+E4P,3-DEOXY-D_ARBINO-HEPT-2-ULOSONATE+PI,0,inf;
+aroB_BG10285_4.2.3.4,3-DEOXY-D_ARBINO-HEPT-2-ULOSONATE,DEHYDROQUINATE+PI,0,inf;
+aroC_BG10538_4.2.1.10,DEHYDROQUINATE,3-DEHYDRO-SHIKIMATE,-inf,inf;
+yqhS_BG11707_4.2.1.10,DEHYDROQUINATE,3-DEHYDRO-SHIKIMATE,-inf,inf;
+aroD_BG11522_1.1.1.25,NADPH+3-DEHYDRO-SHIKIMATE,NADP+SHIKIMATE,-inf,inf;
+aroK_aroI_BG10457_2.7.1.71,SHIKIMATE+ATP,SHIKIMATE-5P+ADP,0,inf;
+aroE_BG10294_2.5.1.19,SHIKIMATE-5P+PEP,3-ENOLPYRUVYL-SHIKIMATE-5P+PI,-inf,inf;
+aroF_BG10284_4.6.1.4,3-ENOLPYRUVYL-SHIKIMATE-5P,PI+CHOR,0,inf;
+aroH_BG10286_5.4.99.5,CHOR,PREPHENATE,-inf,inf;
+pheB_BG10913_5.4.99.5,CHOR,PREPHENATE,-inf,inf;
+pheA_BG10914_4.2.1.51,PREPHENATE,PHENYL-PYRUVATE+CO2,0,inf;
+ywfG_BG10631_2.6.1.1,PHENYL-PYRUVATE+GLU,OGA+PHE,-inf,inf;
+hisC_BG10292_2.6.1.5,PHENYL-PYRUVATE+GLU,OGA+PHE,-inf,inf;
+aroJ_BG10292_2.6.1.5,PHENYL-PYRUVATE+GLU,OGA+PHE,-inf,inf;
+
+// NO B.subtilis ORFs have been found, but we see this in the GC-MS
+R01377_4.1.1.43,PHENYL-PYRUVATE,PHENYL-ACETALDEHYDE+CO2,0,inf;
+R02536_1.2.1.39,PHENYL-ACETALDEHYDE+NAD,PHENYLACETATE+NADH,0,inf;
+R02536_1.2.1.5,PHENYLACETATE+NADH,PHENYL-ACETALDEHYDE+NAD,0,inf;
+
+
+// ===========================================
+// TYROSINE BIOSYNTHESIS
+// ===========================================
+tyrA_BG10293_1.3.1.12,PREPHENATE+NAD,P-HYDROXY-PHENYLPYRUVATE+CO2+NADH,-inf,inf;
+ywfG_BG10631_2.6.1.1,P-HYDROXY-PHENYLPYRUVATE+GLU,OGA+TYR,-inf,inf;
+hisC_BG10292_2.6.1.5,P-HYDROXY-PHENYLPYRUVATE+GLU,OGA+TYR,-inf,inf;
+aroJ_BG10292_2.6.1.5,P-HYDROXY-PHENYLPYRUVATE+GLU,OGA+TYR,-inf,inf;
+
+// ===========================================
+// TYRPTHOPHAN BIOSYNTHESIS
+// ===========================================
+trpE_BG10287_4.1.3.27,CHOR+GLN,ANTHRANILATE+PYR+GLU,0,inf;
+trpD_BG10288_2.4.2.18,ANTHRANILATE+PRPP,|N-(5-PHOSPHORIBOSYL)-ANTHRANILATE|+PPI,-inf,inf;
+trpF_BG10289_5.3.1.24,|N-(5-PHOSPHORIBOSYL)-ANTHRANILATE|,CARBOXYPHENYLAMINO-DEOXYRIBULOSE-P,-inf,inf;
+trpC_BG11038_4.1.1.48,CARBOXYPHENYLAMINO-DEOXYRIBULOSE-P,INDOLE-3-GLYCEROL-P+CO2,-inf,inf;
+trpA_BG10291_4.2.1.20,INDOLE-3-GLYCEROL-P+SER,TRP+GA3P,0,inf;
+trpB_BG10290_4.2.1.20,INDOLE-3-GLYCEROL-P+SER,TRP+GA3P,0,inf;
+
+// ===========================================
+// ALANINE BIOSYNTHESIS
+// ===========================================
+alr_BG10950_5.1.1.1,ALA,D-ALANINE,-inf,inf;
+yncD_BG12267_5.1.1.1,ALA,D-ALANINE,-inf,inf;
+dat_BG13045_2.6.1.21,PYR+GLU,OGA+D-ALANINE,-inf,inf;
+
+// ==========================================
+// GLUTAMATE AND GLUTAMINE BIOSYNTHESIS
+// ==========================================
+gltA_BG10811_1.4.1.13,GLN+OGA+NADPH,2*GLU+NADP,0,inf;
+gltB_BG12594_1.4.1.13,GLN+OGA+NADPH,2*GLU+NADP,0,inf;
+yerD_BG12832_1.4.1.13,GLN+OGA+NADPH,2*GLU+NADP,0,inf;
+yweB_BG10621_1.4.1.2,OGA+NH3+NADH,GLU+NAD,-inf,inf;
+ypcA_BG11435_1.4.1.2,OGA+NH3+NADH,GLU+NAD,-inf,inf;
+ywfG_BG10631_2.6.1.1,OGA+ASP,OAA+GLU,-inf,inf;
+yhdR_BG13024_2.6.1.1,ASP+OGA,OAA+GLU,-inf,inf;
+aspB_BG11513_2.6.1.1,OGA+ASP,OAA+GLU,-inf,inf;
+yhdR_BG13024_2.6.1.1,OGA+ASP,OAA+GLU,-inf,inf;
+glnA_BG10425_6.3.1.2,ATP+GLU+NH3,ADP+GLN+PI,-inf,inf;
+ybqJ_BG12753_3.5.1.2,ATP+GLU+NH3,ADP+GLN+PI,-inf,inf;
+ylaM_BG13350_3.5.1.2,ATP+GLU+NH3,ADP+GLN+PI,-inf,inf;
+
+// ================================================
+// ENERGY SALVAGE PATHWAYS
+// ================================================
+yjbN_BG13143_2.7.1.23,ATP+NAD,ADP+NADP,0,inf;
+adk_BG10446_2.7.4.3,AMP+ATP,2*ADP,-inf,inf;
+ctrA_BG10410_6.3.4.2,ATP+UTP+NH3,ADP+PI+CTP,0,inf;
+UTP_SYNTHESIS,4*ATP+NH3+PRPP+ASP+NAD,NADH+UTP+4*ADP+PI,0,inf;
+
+// Test hacks
+hack,ATP,ADP+PI,0,inf;
+hack,ADP,AMP+PI,0,inf;
+
+// GTP Recycle into PPI and GDP
+relA_2.7.6.5,GTP+ATP,ppGTP+AMP,0,inf;
+_UNKNOWN_3.6.1.40,ppGTP,ppGDP+PI,0,inf;
+_UNKNOWN_3.1.7.2,ppGDP,GDP+PPI,0,inf;
+_UNKNOWN,GDP+ATP,ppGDP+AMP,0,inf;
+
+// ===============================================
+// PRODUCT BALANCE (CAT)
+// ===============================================
+PRODUCTION,15*ALA+10*ASN+5*ARG+12*ASP+12*GLU+13*GLN+10*GLY+12*HIS+9*ILE+13*LEU+12*LYS+9*MET+20*PHE+7*PRO+10*SER+13*THR+5*TRP+11*TYR+16*VAL+219*ATP+438*GTP,219*AMP+438*GDP+219*PPI+438*PI+PRODUCT,0,inf;
+
+// External supply reactions -
+O2_transfer,O2xt,O2,0,inf;
+CO2_transfer,CO2,CO2xt,0,inf;
+HEXT_transfer,Hxt,HEXT,-inf,inf;
+PI_transfer,PIxt,PI,-inf,inf;
+NH3_TRANSPORT,NH3xt,NH3,-inf,inf;
+SULFUR_TRANSPORT,SLFxt,SLF,-inf,inf;
+AMP_HACK,AMPxt,AMP,-inf,inf;
+GDP_HACK,GDPxt,GDP,-inf,inf;
+PPI_HACK,PPIxt,PPI,-inf,inf;
