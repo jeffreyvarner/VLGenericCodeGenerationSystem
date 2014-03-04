@@ -62,8 +62,6 @@
 /* Begin PBXFileReference section */
 		AD3A4F9418C603420018C84D /* VLSBMLInputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLSBMLInputHandler.h; sourceTree = "<group>"; };
 		AD3A4F9518C603420018C84D /* VLSBMLInputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLSBMLInputHandler.m; sourceTree = "<group>"; };
-		AD3A4F9718C6060D0018C84D /* Copyright.text */ = {isa = PBXFileReference; lastKnownFileType = text; path = Copyright.text; sourceTree = "<group>"; };
-		AD3A4F9818C606230018C84D /* Mapping.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Mapping.xml; sourceTree = "<group>"; };
 		AD3A887018A1951D00BAA649 /* VLGenericCodeGenerationSystem */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VLGenericCodeGenerationSystem; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD3A887318A1951D00BAA649 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AD3A887618A1951D00BAA649 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -189,8 +187,6 @@
 		AD3A887818A1951D00BAA649 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				AD3A4F9818C606230018C84D /* Mapping.xml */,
-				AD3A4F9718C6060D0018C84D /* Copyright.text */,
 				AD3A887918A1951D00BAA649 /* VLGenericCodeGenerationSystem-Prefix.pch */,
 			);
 			name = "Supporting Files";
