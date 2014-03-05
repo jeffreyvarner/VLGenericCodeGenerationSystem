@@ -23,6 +23,7 @@
 	<map_link symbol="WRITE_GSL_C_MAKEFILE" class="VLGSLCOutputHandler" method="generateGSLCMakeFileActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_EXECUABLE_SHELL_SCRIPT" class="VLGSLCOutputHandler" method="generateGSLCShellScriptActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_JACOBIAN_MATRIX" class="VLGSLCOutputHandler" method="generateGSLCJacobianMatrixActionWithOptions:"/>
+	<map_link symbol="WRITE_GSL_C_ENZYME_ACTIVITY_CONTROL_FUNCTION" class="VLGSLCOutputHandler" method="generateGSLCEnzymeActivityControlActionWithOptions:"/>
 	
 	<map_link symbol="FILTER_IDENTITY" class="VLIdentityFilterHandler" method="performVLGenericCodeGenerationFilterActionWithOptions:"/>
 	<map_link symbol="FILTER_SPECIES_ALPHABETICAL" class="VLAlphabeticalSpeciesFilterHandler" method="performVLGenericCodeGenerationFilterActionWithOptions:"/>
@@ -55,6 +56,8 @@
 			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCKineticsActionWithOptions:" strategy_class="VLGSLCKineticsCellFreeModelStrategy"/>
 			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCSolveBalanceEquationsActionWithOptions:" strategy_class="VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy"/>
 			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCBalanceEquationsActionWithOptions:" strategy_class="VLGSLCBalanceEquationsCellFreeModelStrategy"/>
+			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCEnzymeActivityControlActionWithOptions:" strategy_class="VLGSLCEnzymeActivityControlCellFreeModelStrategy"/>
+			<strategy_map model_type="CELL_FREE_MODEL" method="generateGSLCDataFileActionWithOptions:" strategy_class="VLGSLCDataFileCellFreeModelStrategy"/>
 			
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCBalanceEquationsActionWithOptions:" strategy_class="VLGSLCBalanceEquationsMassActionStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCKineticsActionWithOptions:" strategy_class="VLGSLCKineticsMassActionModelStrategy"/>

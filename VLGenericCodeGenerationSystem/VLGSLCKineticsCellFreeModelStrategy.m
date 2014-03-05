@@ -24,7 +24,7 @@
     NSMutableString *buffer = [[NSMutableString alloc] init];
     
     // Get our trees from the dictionary -
-    NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
+    __unused NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
     NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
     
@@ -41,8 +41,7 @@
     [buffer appendFormat:@"void %@(double t,gsl_vector *pStateVector, gsl_vector *pRateVector, void* parameter_object)\n",tmpFunctionName];
     [buffer appendString:@"{\n"];
     [buffer appendString:@"\t/* initialize -- */\n"];
-    [buffer appendString:@"\tdouble rate_value = 0.0;\n"];
-    [buffer appendString:@"\tdouble parameter_value = 0.0;\n"];
+    [buffer appendString:@"\tdouble rate_law = 0.0;\n"];
     [buffer appendString:@"\n"];
     [buffer appendString:@"\t/* Get the parameters from disk - */\n"];
     [buffer appendString:@"\tstruct VLParameters *parameter_struct = (struct VLParameters *)parameter_object;\n"];

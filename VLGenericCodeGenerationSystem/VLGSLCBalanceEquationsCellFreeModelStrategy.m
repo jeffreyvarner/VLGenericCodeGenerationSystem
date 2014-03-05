@@ -201,7 +201,7 @@
         [buffer appendString:@"\tgsl_vector_free(pRateVector);\n"];
         [buffer appendString:@"\tgsl_vector_free(pStateVector);\n"];
         [buffer appendString:@"\tgsl_vector_free(pControlVector);\n"];
-        [buffer appendString:@"\tgsl_vector_free(pCorrectedVector);\n"];
+        [buffer appendString:@"\tgsl_vector_free(pCorrectedRateVector);\n"];
         [buffer appendString:@"\tgsl_vector_free(pRightHandSideVector);\n"];
         [buffer appendString:@"\treturn(GSL_SUCCESS);\n"];
         [buffer appendString:@"}\n"];

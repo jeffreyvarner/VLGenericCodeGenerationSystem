@@ -9,7 +9,7 @@
 	<transformation id="VFF_2_SBML">
 		
 		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/ECCFModel_v1_1.net"/>
+			<transformation_property type="PATH" value="/Test.net"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
@@ -33,6 +33,21 @@
 			<transformation_property type="PATH" value="/src/Kinetics.c"/>
 			<transformation_property type="HEADER_PATH" value="/src/Kinetics.h"/>
 			<transformation_property type="FUNCTION_NAME" value="Kinetics"/>
+		</output_handler>
+		
+	</transformation>
+
+	<transformation id="SBML_2_DATAFILE">
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_DATAFILE">
+			<transformation_property type="PATH" value="/src/DataFile.m"/>
+			<transformation_property type="FUNCTION_NAME" value="DataFile"/>
 		</output_handler>
 		
 	</transformation>
@@ -77,6 +92,67 @@
 			<output_handler_dependencies>
 				<dependency type="KINETICS_FUNCTION_NAME" value="Kinetics"/>
 				<dependency type="ENZYME_ACTIVITY_CONTROL_FUNCTION_NAME" value="Control"/>
+			</output_handler_dependencies>
+			
+		</output_handler>
+		
+	</transformation>
+	
+	<transformation id="SBML_2_V_VARIABLE">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_ENZYME_ACTIVITY_CONTROL_FUNCTION">
+			<transformation_property type="PATH" value="/src/Control.c"/>
+			<transformation_property type="HEADER_PATH" value="/src/Control.h"/>
+			<transformation_property type="FUNCTION_NAME" value="Control"/>
+		</output_handler>
+		
+	</transformation>
+
+	<transformation id="SBML_2_MAKE_FILE">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_MAKEFILE">
+			<transformation_property type="PATH" value="/src/Makefile"/>
+			<transformation_property type="FUNCTION_NAME" value="Kinetics.c"/>
+			<transformation_property type="FUNCTION_NAME" value="main.c"/>
+			<transformation_property type="FUNCTION_NAME" value="BalanceEquations.c"/>
+			<transformation_property type="FUNCTION_NAME" value="Control.c"/>
+		</output_handler>
+		
+	</transformation>
+	
+	<transformation id="SBML_2_SHELL_SCRIPT_FILE">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_EXECUABLE_SHELL_SCRIPT">
+			<transformation_property type="PATH" value="/src/RunModel.sh"/>
+			<transformation_property type="EXECUTABLE_NAME" value="Model"/>
+			
+			<output_handler_dependencies>
+				<dependency type="EXECUTABLE_PATH" value="/src/Model"/>
+				<dependency type="SIMULATION_RESULTS_PATH" value="/src/Output.dat"/>
+				<dependency type="KINETIC_PARAMETER_PATH" value="/src/KineticParameters.dat"/>
+				<dependency type="INITIAL_CONDITION_PATH" value="/src/InitialConditions.dat"/>
+				<dependency type="STOCHIOMETRIC_MATRIX_PATH" value="/network/Network.dat"/>
 			</output_handler_dependencies>
 			
 		</output_handler>

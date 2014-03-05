@@ -165,14 +165,16 @@
         if ([star_components count] == 1)
         {
             // ok, we just have the raw symbol -
-            [dictionary setObject:@"1.0" forKey:raw_symbol];
+            NSString *safe_symbol = [NSString stringWithFormat:@"%@",raw_symbol];
+            [dictionary setObject:@"1.0" forKey:safe_symbol];
         }
         else
         {
             // split -
             NSString *stcoeff = [star_components objectAtIndex:0];
             NSString *symbol = [star_components objectAtIndex:1];
-            [dictionary setObject:stcoeff forKey:symbol];
+            NSString *safe_symbol = [NSString stringWithFormat:@"%@",symbol];
+            [dictionary setObject:stcoeff forKey:safe_symbol];
         }
     }
     
