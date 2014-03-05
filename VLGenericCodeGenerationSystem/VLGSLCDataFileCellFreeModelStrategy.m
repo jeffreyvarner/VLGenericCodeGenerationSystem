@@ -110,71 +110,38 @@
     NSMutableString *buffer = [[NSMutableString alloc] init];
     
     // start -
-    
-    
-    // What type of model is this?
-    NSString *model_type = [[[document nodesForXPath:@"./model/@type" error:nil] lastObject] stringValue];
-    NSString *model_source_encoding = [[[document nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
-    
-    // depending upon the type of model *and* the source encoding, we execute different logic
-    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
+    // Get the list of reactions -
+    NSArray *reaction_array = [document nodesForXPath:@".//reaction" error:nil];
+    NSInteger rate_counter = 0;
+    NSInteger parameter_counter = 0;
+    for (NSXMLElement *reaction_node in reaction_array)
     {
-        // ok - we have a cell free model coming from a VFF file.
-        // need multiple saturation kinetics
-        NSArray *reaction_array = [document nodesForXPath:@".//interaction" error:nil];
-        NSInteger reaction_counter = 1;
-        NSInteger parameter_counter = 1;
-        for (NSXMLElement *reaction_node in reaction_array)
+        float k_value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+        
+        // comment string -
+        NSString *rate_id = [[reaction_node attributeForName:@"id"] stringValue];
+        NSString *comment_string = [NSString stringWithFormat:@"%@",rate_id];
+        
+        // ok, so we have a k_cat for each reaction, *and* a variable number of K -
+        [buffer appendFormat:@"\t%f\t;\t\%%\t%lu\tk_%lu\t%@\n",k_value,(long)parameter_counter++,rate_counter,comment_string];
+        
+        // Get reaction arrays -
+        NSArray *reactant_array = [reaction_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
+        for (NSXMLElement *reactant_node in reactant_array)
         {
-            // What is the reaction name?
-            NSString *reaction_name_string = [[reaction_node attributeForName:@"id"] stringValue];
-            
-            // Depending upon FORWARD -or- RERVESE
-            NSRange contains_forward_range = [reaction_name_string rangeOfString:@"FORWARD"];
-            NSRange contains_reverse_range = [reaction_name_string rangeOfString:@"REVERSE"];
-            NSRange contains_gen_range = [reaction_name_string rangeOfString:@"GEN"];
-            
-            float value = 0.0f;
-            if (contains_forward_range.location == NSNotFound &&
-                contains_reverse_range.location == NSNotFound)
+            NSString *symbol = [[reactant_node attributeForName:@"species"] stringValue];
+            NSRange enzyme_range = [symbol rangeOfString:@"ENZYME_"];
+            if (enzyme_range.location == NSNotFound)
             {
-                value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+                float K_value = 0.1*[VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+                [buffer appendFormat:@"\t%f\t;\t\%%\t%lu\tK_%@_%lu\t%@\n",K_value,(long)parameter_counter++,symbol,rate_counter,comment_string];
             }
-            else if (contains_reverse_range.location != NSNotFound &&
-                     contains_forward_range.location == NSNotFound)
-            {
-                // reverse value -
-                value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
-            }
-            else if (contains_reverse_range.location == NSNotFound &&
-                     contains_forward_range.location != NSNotFound)
-            {
-                if (contains_gen_range.location == NSNotFound)
-                {
-                    // reverse value -
-                    value = 10*[VLCoreUtilitiesLib generateRandomFloatingPointNumber];
-                }
-                else
-                {
-                    value = 0.0f;
-                }
-            }
-            
-            
-            //  get string -
-            NSString *reactant_string = [[[reaction_node nodesForXPath:@"./interaction_input/@reaction_string" error:nil] lastObject] stringValue];
-            NSString *product_string = [[[reaction_node nodesForXPath:@"./interaction_output/@reaction_string" error:nil] lastObject] stringValue];
-            
-            // comment string -
-            NSString *comment_string = [NSString stringWithFormat:@"%@ --> %@",reactant_string,product_string];
-            
-            // ok, so we have a k_cat for each reaction, *and* a variable number of K -
-            [buffer appendFormat:@"\t %f\t;\t \%%  %lu k_%lu %@\n",value,(long)parameter_counter++,reaction_counter,comment_string];
-            
-            // update the reaction counter (1 based becuase we in octave/,atlab)
-            reaction_counter++;
         }
+        
+        // update rate_counter -
+        rate_counter++;
     }
+    
     
     // return -
     return buffer;

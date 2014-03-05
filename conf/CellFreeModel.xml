@@ -21,6 +21,21 @@
 		
 	</transformation>
 	
+	<transformation id="SBML_2_STM">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_STOICHIOMETRIC_MATRIX">
+			<transformation_property type="PATH" value="/network/Network.dat"/>
+		</output_handler>
+		
+	</transformation>
+	
 	<transformation id="SBML_2_KINETICS">
 		<input_handler strategy_handler="READ_SBML">
 			<transformation_property type="PATH" value="/network/CellFreeModel_VFF_v1.xml"/>
