@@ -35,6 +35,14 @@
     NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
     NSString *tmpFunctionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
     
+    // I need to load the copyright block -
+    NSString *copyright_xpath = @".//properties/property[@symbol=\"COPYRIGHT_TEXT\"]/@value";
+    NSString *copyright_file_path = [[[transformation_tree nodesForXPath:copyright_xpath error:nil] lastObject] stringValue];
+    NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
+    
+    // add the copyright statement -
+    [self addCopyrightStatement:copyright_buffer toBuffer:buffer];
+    
     // headers -
     [buffer appendFormat:@"#include \"%@.h\"\n",tmpFunctionName];
     [buffer appendString:@"\n"];
@@ -160,5 +168,21 @@
     // return -
     return buffer;
 }
+
+#pragma mark - override the copyright statement
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer
+{
+    // first line -
+    [buffer appendString:@"/* ------------------------------------------------------------------------------------  */\n"];
+    
+    for (NSString *line in statement)
+    {
+        [buffer appendFormat:@"/* %@ \n",line];
+    }
+    
+    // close -
+    [buffer appendString:@"/* ------------------------------------------------------------------------------------  */\n"];
+}
+
 
 @end

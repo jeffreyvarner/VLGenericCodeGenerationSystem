@@ -38,6 +38,13 @@
     NSString *dependency_xpath_control = @"./output_handler/output_handler_dependencies/dependency[@type=\"ENZYME_ACTIVITY_CONTROL_FUNCTION_NAME\"]/@value";
     NSString *dependencyNameControl = [[[transformation nodesForXPath:dependency_xpath_control error:nil] lastObject] stringValue];
 
+    // I need to load the copyright block -
+    NSString *copyright_xpath = @".//properties/property[@symbol=\"COPYRIGHT_TEXT\"]/@value";
+    NSString *copyright_file_path = [[[transformation_tree nodesForXPath:copyright_xpath error:nil] lastObject] stringValue];
+    NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
+    
+    // add the copyright statement -
+    [self addCopyrightStatement:copyright_buffer toBuffer:buffer];
     
     // What is my model type?
     NSString *model_source_encoding = [[[input_tree nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
@@ -211,6 +218,21 @@
     }
     
     return buffer;
+}
+
+#pragma mark - override the copyright statement
+-(void)addCopyrightStatement:(NSArray *)statement toBuffer:(NSMutableString *)buffer
+{
+    // first line -
+    [buffer appendString:@"/* ------------------------------------------------------------------------------------  */\n"];
+    
+    for (NSString *line in statement)
+    {
+        [buffer appendFormat:@"/* %@ \n",line];
+    }
+    
+    // close -
+    [buffer appendString:@"/* ------------------------------------------------------------------------------------  */\n"];
 }
 
 
