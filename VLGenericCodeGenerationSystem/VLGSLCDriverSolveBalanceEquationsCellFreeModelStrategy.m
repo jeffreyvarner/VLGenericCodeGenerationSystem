@@ -54,10 +54,34 @@
              [model_type_string isEqualToString:kModelTypeCellFreeModel] == YES)
     {
         // system dimension?
-        NSUInteger NUMBER_OF_RATES = [[input_tree nodesForXPath:@".//reactions" error:nil] count];
+        NSUInteger NUMBER_OF_RATES = [[input_tree nodesForXPath:@".//reaction" error:nil] count];
         NSUInteger NUMBER_OF_STATES = [[input_tree nodesForXPath:@".//species" error:nil] count];
-        NSUInteger NUMBER_OF_PARAMETERS = NUMBER_OF_RATES;
         NSUInteger NUMBER_OF_COMPARTMENTS = [[input_tree nodesForXPath:@".//compartment" error:nil] count];
+        
+        // how many parameters do we have?
+        NSArray *reaction_array = [input_tree nodesForXPath:@".//reaction" error:nil];
+        NSInteger parameter_counter = 0;
+        for (NSXMLElement *reaction_node in reaction_array)
+        {
+            // for every rate, we have a rate constant -
+            parameter_counter++;
+            
+            // we also have saturation coefficients *if* this is *not* and an enzyme
+            NSArray *reactant_array = [reaction_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
+            for (NSXMLElement *reactant_species in reactant_array)
+            {
+                // What is this symbol?
+                NSString *species_symbol = [[reactant_species attributeForName:@"species"] stringValue];
+                NSRange enzyme_range = [species_symbol rangeOfString:@"ENZYME_"];
+                if (enzyme_range.location == NSNotFound)
+                {
+                    parameter_counter++;
+                }
+            }
+        }
+            
+        NSUInteger NUMBER_OF_PARAMETERS = parameter_counter;
+        
         
         // main -
         [buffer appendString:@"/* Load the GSL and other headers - */\n"];
