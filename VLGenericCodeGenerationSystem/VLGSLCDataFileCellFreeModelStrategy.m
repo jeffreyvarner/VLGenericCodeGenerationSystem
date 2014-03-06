@@ -8,6 +8,8 @@
 
 #import "VLGSLCDataFileCellFreeModelStrategy.h"
 
+#define NEW_LINE [buffer appendString:@"\n"]
+
 @implementation VLGSLCDataFileCellFreeModelStrategy
 
 
@@ -113,13 +115,13 @@
     // Get the list of reactions -
     NSArray *reaction_array = [document nodesForXPath:@".//reaction" error:nil];
     NSInteger rate_counter = 0;
-    NSInteger parameter_counter = 0;
+    NSInteger parameter_counter = 1;
     for (NSXMLElement *reaction_node in reaction_array)
     {
         float k_value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
         
         // comment string -
-        NSString *rate_id = [[reaction_node attributeForName:@"id"] stringValue];
+        NSString *rate_id = [[reaction_node attributeForName:@"name"] stringValue];
         NSString *comment_string = [NSString stringWithFormat:@"%@",rate_id];
         
         // ok, so we have a k_cat for each reaction, *and* a variable number of K -

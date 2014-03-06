@@ -69,11 +69,12 @@
         
         // get my list of interactions -
         NSArray *list_of_interactions = [input_tree nodesForXPath:@".//interaction" error:nil];
+        NSInteger rate_counter = 0;
         for (NSXMLElement *interaction_node in list_of_interactions)
         {
             // Get data -
             NSString *interaction_id = [[interaction_node attributeForName:@"id"] stringValue];
-            [buffer appendFormat:@"\t\t\t<reaction id='R_%@' name='%@' reversible='false'>\n",interaction_id,interaction_id];
+            [buffer appendFormat:@"\t\t\t<reaction id='R_%lu' name='R_%@' reversible='false'>\n",(rate_counter++),interaction_id];
             [buffer appendString:@"\t\t\t\t<listOfReactants>\n"];
             
             // build species reference for inputs -
