@@ -189,7 +189,7 @@
         [buffer appendString:@"\t\tdouble rate_value = gsl_vector_get(pRateVector,rate_index);\n"];
         [buffer appendString:@"\t\tdouble control_value = gsl_vector_get(pControlVector,rate_index);\n"];
         [buffer appendString:@"\t\tdouble corrected_value = rate_value*control_value;\n"];
-        [buffer appendString:@"\t\tgsl_vector_set(pCorrectedRateVector,corrected_value,rate_index);\n"];
+        [buffer appendString:@"\t\tgsl_vector_set(pCorrectedRateVector,rate_index,corrected_value);\n"];
         [buffer appendString:@"\t}\n"];
         
         NEW_LINE;

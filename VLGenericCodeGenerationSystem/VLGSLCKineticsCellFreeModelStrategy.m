@@ -67,15 +67,17 @@
         NSArray *reaction_list = [input_tree nodesForXPath:@".//reaction" error:nil];
         NSMutableArray *enzyme_array = [[NSMutableArray alloc] init];
         NSInteger enzyme_counter = 0;
+        NSInteger enzyme_counter_degrade = 0;
         for (NSXMLElement *reaction_node in reaction_list)
         {
             // what is the name of the reaction?
-            NSString *reaction_id = [[reaction_node attributeForName:@"id"] stringValue];
+            NSString *reaction_id = [[reaction_node attributeForName:@"name"] stringValue];
             
             // if we have a foward rate - then update enzyme index
             NSString *enzyme_string;
             NSRange forward_range = [reaction_id rangeOfString:@"FORWARD"];
             NSRange reverse_range = [reaction_id rangeOfString:@"REVERSE"];
+            NSRange degrade_range = [reaction_id rangeOfString:@"DEGRADE"];
             if (forward_range.location != NSNotFound)
             {
                  enzyme_string = [NSString stringWithFormat:@"(ENZYME_%lu)",(enzyme_counter++)];
@@ -85,9 +87,9 @@
                 enzyme_counter -- ;
                 enzyme_string = [NSString stringWithFormat:@"(ENZYME_%lu)",(enzyme_counter++)];
             }
-            else
+            else if (degrade_range.location != NSNotFound)
             {
-                enzyme_string = @"1.0";
+                enzyme_string = [NSString stringWithFormat:@"(ENZYME_%lu)",(enzyme_counter_degrade++)];
             }
             
             [enzyme_array addObject:enzyme_string];
@@ -145,7 +147,7 @@
                 NSRange enzyme_range = [species_symbol rangeOfString:@"ENZYME_"];
                 if (enzyme_range.location != NSNotFound)
                 {
-                    
+                    // ?
                 }
                 else
                 {
@@ -155,7 +157,7 @@
             }
             
             [buffer appendString:@";\n"];
-            [buffer appendFormat:@"\tgsl_vector_set(pRateVector,rate_law,%lu);\n",rate_counter];
+            [buffer appendFormat:@"\tgsl_vector_set(pRateVector,%lu,rate_law);\n",rate_counter];
             NEW_LINE;
             
             // update the counter -
