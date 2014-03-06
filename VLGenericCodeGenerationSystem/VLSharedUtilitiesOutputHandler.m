@@ -107,7 +107,7 @@ static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT
                     else if (stcoeff_reactant != nil &&
                              stcoeff_product == nil)
                     {
-                        [buffer appendFormat:@" %@ ",stcoeff_reactant];
+                        [buffer appendFormat:@" -%@ ",stcoeff_reactant];
                     }
                     else if (stcoeff_reactant == nil &&
                              stcoeff_product != nil)
@@ -118,6 +118,7 @@ static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT
                              stcoeff_product != nil)
                     {
                         // ok - would this ever happen?
+                        // ...
                     }
                 }
             }
