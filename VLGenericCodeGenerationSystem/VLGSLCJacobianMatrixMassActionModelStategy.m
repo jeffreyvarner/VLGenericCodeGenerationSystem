@@ -51,7 +51,7 @@
         [buffer appendString:@"#define EPSILON 1e-8\n"];
         NEW_LINE;
         
-        [buffer appendFormat:@"int %@(double t, const double state[], double *dfdy, double dfdt[],void *parameter_object);\n",tmpFunctionName];
+        [buffer appendFormat:@"int %@(double t, const double state[], double *dfdy, double dfdt[],void *parameter_object)\n",tmpFunctionName];
         [buffer appendString:@"{\n"];
         
         // get parameters and setup computation -
@@ -113,7 +113,7 @@
         [buffer appendString:@"#define EPSILON 1e-8\n"];
         NEW_LINE;
         
-        [buffer appendFormat:@"int %@(double t, const double state[], double *dfdy, double dfdt[],void *parameter_object);\n",tmpFunctionName];
+        [buffer appendFormat:@"int %@(double t, const double state[], double *dfdy, double dfdt[],void *parameter_object)\n",tmpFunctionName];
         [buffer appendString:@"{\n"];
         
         // get parameters and setup computation -
@@ -191,11 +191,11 @@
                                                                                  withOptions:options];
                 if ([entry length] == 0)
                 {
-                    [buffer appendFormat:@"\tdfdy(%lu) = %@;\n",linear_index,@"0.0"];
+                    [buffer appendFormat:@"\tdfdy[%lu] = %@;\n",linear_index,@"0.0"];
                 }
                 else
                 {
-                    [buffer appendFormat:@"\tdfdy(%lu) = %@;\n",linear_index,entry];
+                    [buffer appendFormat:@"\tdfdy[%lu] = %@;\n",linear_index,entry];
                 }
             }
         }

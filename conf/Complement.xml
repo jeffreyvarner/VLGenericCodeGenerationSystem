@@ -133,6 +133,7 @@
 			<transformation_property type="FUNCTION_NAME" value="Kinetics.c"/>
 			<transformation_property type="FUNCTION_NAME" value="main.c"/>
 			<transformation_property type="FUNCTION_NAME" value="BalanceEquations.c"/>
+			<transformation_property type="FUNCTION_NAME" value="Jacobian.c"/>
 		</output_handler>
 		
 	</transformation>
