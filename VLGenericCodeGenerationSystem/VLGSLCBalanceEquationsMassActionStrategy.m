@@ -36,7 +36,7 @@
     NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
 
     // What is my model type?
-    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./model/@source_encoding" error:nil] lastObject] stringValue];
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
     if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
     {
         // system dimension?
@@ -100,9 +100,70 @@
         [buffer appendString:@"\tgsl_vector_free(pRightHandSideVector);\n"];
         [buffer appendString:@"\treturn(GSL_SUCCESS);\n"];
         [buffer appendString:@"}\n"];
+    }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    {
+        // system dimension?
+        NSUInteger NUMBER_OF_RATES = [[input_tree nodesForXPath:@".//reaction" error:nil] count];
+        NSUInteger NUMBER_OF_STATES = [[input_tree nodesForXPath:@".//species" error:nil] count];
+        __unused NSUInteger NUMBER_OF_PARAMETERS = NUMBER_OF_RATES;
+        __unused NSUInteger NUMBER_OF_COMPARTMENTS = 1;
         
-        // return -
-        return [NSString stringWithString:buffer];
+        // headers -
+        [buffer appendFormat:@"#include \"%@.h\"\n",tmpFunctionName];
+        NEW_LINE;
+        
+        [buffer appendString:@"/* Problem specific define statements -- */\n"];
+        [buffer appendFormat:@"#define NUMBER_OF_RATES %lu\n",NUMBER_OF_RATES];
+        [buffer appendFormat:@"#define NUMBER_OF_STATES %lu\n",NUMBER_OF_STATES];
+        [buffer appendString:@"#define EPSILON 1e-8\n"];
+        NEW_LINE;
+        
+        [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object)\n",tmpFunctionName];
+        [buffer appendString:@"{\n"];
+        [buffer appendString:@"\t/* Initialize -- */\n"];
+        [buffer appendString:@"\tstruct VLParameters *parameter_struct = (struct VLParameters *)parameter_object;\n"];
+        [buffer appendString:@"\tgsl_vector *pRateVector = gsl_vector_alloc(NUMBER_OF_RATES);\n"];
+        [buffer appendString:@"\tgsl_vector *pStateVector = gsl_vector_alloc(NUMBER_OF_STATES);\n"];
+        [buffer appendString:@"\tgsl_vector *pRightHandSideVector = gsl_vector_alloc(NUMBER_OF_STATES);\n"];
+        NEW_LINE;
+        [buffer appendString:@"\t/* Setup mass balance calculations -- */\n"];
+        [buffer appendString:@"\tgsl_matrix *pStoichiometricMatrix = parameter_struct->pModelStoichiometricMatrix;\n"];
+        NEW_LINE;
+        [buffer appendString:@"\t/* Populate the state_vector -- */\n"];
+        [buffer appendString:@"\tfor(int state_index = 0; state_index < NUMBER_OF_STATES; state_index++)\n"];
+        [buffer appendString:@"\t{\n"];
+        [buffer appendString:@"\t\t/* correct negative ... */\n"];
+        [buffer appendString:@"\t\tif (x[state_index]<0)\n"];
+        [buffer appendString:@"\t\t{\n"];
+        [buffer appendString:@"\t\t\tgsl_vector_set(pStateVector,state_index,EPSILON);\n"];
+        [buffer appendString:@"\t\t}\n"];
+        [buffer appendString:@"\t\telse\n"];
+        [buffer appendString:@"\t\t{\n"];
+        [buffer appendString:@"\t\t\tgsl_vector_set(pStateVector,state_index,x[state_index]);\n"];
+        [buffer appendString:@"\t\t}\n"];
+        [buffer appendString:@"\t}\n"];
+        NEW_LINE;
+        [buffer appendString:@"\t/* Evaluate the kinetics -- */\n"];
+        [buffer appendFormat:@"\t%@(t,pStateVector,pRateVector,parameter_object);\n",dependencyName];
+        NEW_LINE;
+        [buffer appendString:@"\t/* Calculate the right hand side -- */\n"];
+        [buffer appendString:@"\tgsl_blas_dgemv(CblasNoTrans,1.0,pStoichiometricMatrix,pRateVector,0.0,pRightHandSideVector);\n"];
+        NEW_LINE;
+        
+        [buffer appendString:@"\t/* Populate the f[] term -- */\n"];
+        [buffer appendString:@"\tfor(int state_index = 0; state_index < NUMBER_OF_STATES; state_index++)\n"];
+        [buffer appendString:@"\t{\n"];
+        [buffer appendString:@"\t\tf[state_index]=gsl_vector_get(pRightHandSideVector,state_index);\n"];
+        [buffer appendString:@"\t}\n"];
+        NEW_LINE;
+        
+        [buffer appendString:@"\t/* clean up -- */\n"];
+        [buffer appendString:@"\tgsl_vector_free(pRateVector);\n"];
+        [buffer appendString:@"\tgsl_vector_free(pStateVector);\n"];
+        [buffer appendString:@"\tgsl_vector_free(pRightHandSideVector);\n"];
+        [buffer appendString:@"\treturn(GSL_SUCCESS);\n"];
+        [buffer appendString:@"}\n"];
     }
 
     return buffer;
