@@ -27,11 +27,11 @@
 
 	<transformation id="VFF_2_STM">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_STOICHIOMETRIC_MATRIX">
@@ -43,11 +43,11 @@
 
 	<transformation id="VFF_2_DATAFILE">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_OCTAVE_M_DATAFILE">
@@ -59,11 +59,11 @@
 
 	<transformation id="VFF_2_BALANCE_EQUATIONS">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_GSL_C_BALANCE_EQUATIONS">
@@ -82,11 +82,11 @@
 	
 	<transformation id="VFF_2_KINETICS_EQUATIONS">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_GSL_C_KINETICS_EQUATIONS">
@@ -99,11 +99,11 @@
 	
 	<transformation id="VFF_2_SOLVE_BALANCE_EQUATIONS">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_GSL_C_SOLVE_BALANCE_EQUATIONS">
@@ -121,11 +121,11 @@
 
 	<transformation id="VFF_2_MAKE_FILE">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_GSL_C_MAKEFILE">
@@ -139,11 +139,11 @@
 	
 	<transformation id="VFF_2_JACOBIAN_MATRIX">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_GSL_C_JACOBIAN_MATRIX">
@@ -156,11 +156,11 @@
 	
 	<transformation id="VFF_2_SHELL_SCRIPT_FILE">
 		
-		<input_handler strategy_handler="READ_VFF">
-			<transformation_property type="PATH" value="/Alternative.net"/>
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
 		</input_handler>
 		
-		<filter_handler strategy_handler="FILTER_SPECIES_ALPHABETICAL">
+		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_GSL_C_EXECUABLE_SHELL_SCRIPT">

@@ -27,5 +27,7 @@
 +(NSString *)lookupInputPathForTransformationWithName:(NSString *)transformName inTree:(NSXMLDocument *)blueprintTree;
 +(NSString *)lookupOutputPathForTransformationWithName:(NSString *)transformName inTree:(NSXMLDocument *)blueprintTree;
 +(float)generateRandomFloatingPointNumber;
++(NSArray *)generateStoichiometricMatrixArrayActionWithOptions:(NSDictionary *)options;
+
 
 @end

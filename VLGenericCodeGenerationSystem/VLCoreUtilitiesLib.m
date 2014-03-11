@@ -237,5 +237,87 @@
     return value;
 }
 
++(NSArray *)generateStoichiometricMatrixArrayActionWithOptions:(NSDictionary *)options
+{
+    if (options == nil)
+    {
+        return nil;
+    }
+    
+    // array -
+    NSMutableArray *row_array = [[NSMutableArray alloc] init];
+    
+    // Get our trees from the dictionary -
+    __unused NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
+    __unused NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    
+    // What is my model encoding?
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
+    
+    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
+    {
+    }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    {
+        NSString *xpathString = @".//species";
+        NSArray *list_of_species = [input_tree nodesForXPath:xpathString error:nil];
+        for (NSXMLElement *species_node in list_of_species)
+        {
+            // Build the row array -
+            NSMutableArray *col_array = [[NSMutableArray alloc] init];
+            
+            // get the symbol -
+            NSString *raw_symbol = [[species_node attributeForName:@"id"] stringValue];
+            if ([raw_symbol isEqualToString:@"[]"] == NO)
+            {
+                // Get the reactant products -
+                NSArray *reaction_array = [input_tree nodesForXPath:@".//reaction" error:nil];
+                for (NSXMLElement *reaction_node in reaction_array)
+                {
+                    // for this reaction - what are the reactants?
+                    NSString *xpath_reactant = [NSString stringWithFormat:@"./listOfReactants/speciesReference[@species='%@']/@stoichiometry",raw_symbol];
+                    NSString *stcoeff_reactant = [[[reaction_node nodesForXPath:xpath_reactant error:nil] lastObject] stringValue];
+                    
+                    // for this reaction - what are the products?
+                    NSString *xpath_product = [NSString stringWithFormat:@"./listOfProducts/speciesReference[@species='%@']/@stoichiometry",raw_symbol];
+                    NSString *stcoeff_product = [[[reaction_node nodesForXPath:xpath_product error:nil] lastObject] stringValue];
+                    
+                    // ok - if we have *no* stcoeff, then 0.0
+                    if (stcoeff_reactant == nil &&
+                        stcoeff_product == nil)
+                    {
+                        [col_array addObject:@"0.0"];
+                    }
+                    else if (stcoeff_reactant != nil &&
+                             stcoeff_product == nil)
+                    {
+                        NSString *tmp = [NSString stringWithFormat:@"-%@",stcoeff_reactant];
+                        [col_array addObject:tmp];
+                    }
+                    else if (stcoeff_reactant == nil &&
+                             stcoeff_product != nil)
+                    {
+                        NSString *tmp = [NSString stringWithFormat:@"+%@",stcoeff_product];
+                        [col_array addObject:tmp];
+                    }
+                    else if (stcoeff_reactant == nil &&
+                             stcoeff_product != nil)
+                    {
+                        // ok - would this ever happen?
+                        // ...
+                    }
+                }
+                
+                // add the col_arr to the row_array -
+                [row_array addObject:col_array];
+            }
+        }
+    }
+    
+    // return -
+    return [[NSArray alloc] initWithArray:row_array];
+}
+
 
 @end

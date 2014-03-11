@@ -28,7 +28,7 @@
     NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
     
     // What is my model type?
-    NSString *model_source_encoding = [[[input_tree nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
     
     // function name?
     NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
@@ -146,8 +146,82 @@
         
         [buffer appendString:@"}\n"];
     }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    {
+        NSString *kinetics_string = [self formulateKineticsFromSBMLModelEncodingWithOptions:options];
+        [buffer appendString:kinetics_string];
+    }
     
     return buffer;
+}
+
+#pragma mark - private helpers
+-(NSString *)formulateKineticsFromSBMLModelEncodingWithOptions:(NSDictionary *)options
+{
+    // Get my SBML Tree -
+    NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    
+    // Build an empty buffer which will be returned -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // ok, we have a VFF encoding, so build the kinetics -
+    NSError *xpath_error;
+    NSArray *state_vector = [input_tree nodesForXPath:@".//listOfSpecies/species" error:&xpath_error];
+    NSInteger state_counter = 0;
+    for (NSXMLElement *state in state_vector)
+    {
+        NSString *state_symbol = [[state attributeForName:@"id"] stringValue];
+        [buffer appendFormat:@"\tdouble %@ = gsl_vector_get(pStateVector,%lu);\n",state_symbol,state_counter++];
+    }
+    
+    [buffer appendString:@"\n"];
+    
+    // rates -
+    [buffer appendString:@"\t/* Next calculate the rates - */\n"];
+    NSArray *reactionArray = [input_tree nodesForXPath:@".//reaction" error:nil];
+    NSInteger rate_counter = 0;
+    for (NSXMLElement *reaction_node in reactionArray)
+    {
+        NSString *comment_string = [[reaction_node attributeForName:@"name"] stringValue];
+        [buffer appendFormat:@"\t/* %@ */\n",comment_string];
+        [buffer appendFormat:@"\tparameter_value = gsl_vector_get(pV,%lu);\n",rate_counter];
+        [buffer appendFormat:@"\trate_value = parameter_value"];
+
+        // Get my list of reactants -
+        NSArray *reactants_array = [reaction_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
+        NSInteger MAX_LOCAL_SPECIES_COUNT = [reactants_array count];
+        for (NSInteger local_species_index = 0;local_species_index<MAX_LOCAL_SPECIES_COUNT;local_species_index++)
+        {
+            NSXMLElement *reactant_node = [reactants_array objectAtIndex:local_species_index];
+            NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
+            
+            if ([species_symbol isEqualToString:@"[]"] == NO)
+            {
+                [buffer appendFormat:@"*%@",species_symbol];
+                
+                if (local_species_index == (MAX_LOCAL_SPECIES_COUNT - 1))
+                {
+                    [buffer appendString:@";\n"];
+                }
+            }
+            else
+            {
+                [buffer appendString:@";\n"];
+            }
+        }
+        
+        // add to the gsl rate vector -
+        [buffer appendString:@"\tgsl_vector_set(pRateVector,"];
+        [buffer appendFormat:@"%lu,rate_value);\n",rate_counter];
+        NEW_LINE;
+        
+        // update counter -
+        rate_counter++;
+    }
+    
+    [buffer appendString:@"}\n"];
+    
+    return [[NSString alloc] initWithString:buffer];
 }
 
 @end
