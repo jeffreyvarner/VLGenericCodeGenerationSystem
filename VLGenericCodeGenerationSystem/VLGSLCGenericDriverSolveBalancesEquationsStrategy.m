@@ -30,6 +30,10 @@
     NSString *dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"BALANCE_EQUATIONS_FUNCTION_NAME\"]/@value";
     NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
     
+    // Do we have a jacobian?
+    NSString *jacobian_dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"JACOBIAN_FUNCTION_NAME\"]/@value";
+    NSString *jacobianDependencyName = [[[transformation nodesForXPath:jacobian_dependency_xpath error:nil] lastObject] stringValue];
+    
     // What is my model type?
     NSString *model_type_xpath = @".//model/@type";
     NSString *model_type_string = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
@@ -59,6 +63,13 @@
         NEW_LINE;
         [buffer appendString:@"/* Load the model specific headers - */\n"];
         [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
+        
+        // do we have a jacobian?
+        if (jacobianDependencyName!=nil)
+        {
+            [buffer appendFormat:@"#include \"%@.h\"\n",jacobianDependencyName];
+        }
+        
         NEW_LINE;
         [buffer appendString:@"/* Problem specific define statements -- */\n"];
         [buffer appendString:@"#define NUMBER_OF_ARGUEMENTS 8\n"];
@@ -126,7 +137,16 @@
         [buffer appendString:@"\tgsl_odeiv2_step *pStep = gsl_odeiv2_step_alloc(pT,NUMBER_OF_STATES);\n"];
         [buffer appendString:@"\tgsl_odeiv2_control *pControl = gsl_odeiv2_control_y_new(TOLERANCE,TOLERANCE);\n"];
         [buffer appendString:@"\tgsl_odeiv2_evolve *pEvolve = gsl_odeiv2_evolve_alloc(NUMBER_OF_STATES);\n"];
-        [buffer appendFormat:@"\tgsl_odeiv2_system sys = {%@,NULL,NUMBER_OF_STATES,&parameters_object};\n",dependencyName];
+        
+        if (jacobianDependencyName == nil)
+        {
+            [buffer appendFormat:@"\tgsl_odeiv2_system sys = {%@,NULL,NUMBER_OF_STATES,&parameters_object};\n",dependencyName];
+        }
+        else
+        {
+            [buffer appendFormat:@"\tgsl_odeiv2_system sys = {%@,%@,NUMBER_OF_STATES,&parameters_object};\n",dependencyName,jacobianDependencyName];
+        }
+        
         NEW_LINE;
         [buffer appendString:@"\t/* Open simulation output file  -- */\n"];
         [buffer appendString:@"\tpSimulationOutputFile = fopen(pSimulationOutputFilePath, \"w\");\n"];

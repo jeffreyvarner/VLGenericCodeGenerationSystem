@@ -109,9 +109,11 @@
 		<output_handler strategy_handler="WRITE_GSL_C_SOLVE_BALANCE_EQUATIONS">
 			<transformation_property type="PATH" value="/src/main.c"/>
 			<transformation_property type="FUNCTION_NAME" value="main"/>
+			<transformation_property type="HEADER_PATH" value="/src/VLGlobal.h"/>
 
 			<output_handler_dependencies>
 				<dependency type="KINETICS_FUNCTION_NAME" value="Kinetics"/>
+				<dependency type="JACOBIAN_FUNCTION_NAME" value="Jacobian"/>
 				<dependency type="BALANCE_EQUATIONS_FUNCTION_NAME" value="BalanceEquations"/>
 			</output_handler_dependencies>
 

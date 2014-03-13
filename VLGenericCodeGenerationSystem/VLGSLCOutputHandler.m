@@ -91,6 +91,10 @@
     // write -
     [self writeCodeGenerationOutput:result toFileWithOptions:options];
     
+    // header content -
+    NSString *header_buffer = [self generateVLGlobalHeaderBufferWithOptions:options];
+    [self writeCodeGenerationHeaderFileOutput:header_buffer toFileWithOptions:options];
+    
     // return the result from the strategy object -
     return result;
 }
@@ -249,13 +253,7 @@
     [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
     [buffer appendString:@"\n"];
     [buffer appendString:@"/* parameter struct */\n"];
-    [buffer appendString:@"struct VLParameters\n"];
-    [buffer appendString:@"{\n"];
-    [buffer appendString:@"\tgsl_vector *pModelKineticsParameterVector;\n"];
-    [buffer appendString:@"\tgsl_vector *pModelVolumeVector;\n"];
-    [buffer appendString:@"\tgsl_matrix *pModelCirculationMatrix;\n"];
-    [buffer appendString:@"\tgsl_matrix *pModelStoichiometricMatrix;\n"];
-    [buffer appendString:@"};\n\n"];
+    [buffer appendString:@"#include \"VLGlobal.h\"\n"];
     [buffer appendString:@"\n"];
     [buffer appendString:@"/* public methods */\n"];
     [buffer appendFormat:@"void %@(double t,gsl_vector *pStateVector, gsl_vector *pRateVector, void* parameter_object);\n\n",functionName];
@@ -263,6 +261,38 @@
     
     // return -
     return [NSString stringWithString:buffer];
+}
+
+-(NSString *)generateVLGlobalHeaderBufferWithOptions:(NSDictionary *)options
+{
+    // Declare parameter struct in this header -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    /* Load the GSL and other headers - */
+    [buffer appendString:@"#include <stdio.h>\n"];
+    [buffer appendString:@"#include <math.h>\n"];
+    [buffer appendString:@"#include <time.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_blas.h>\n"];
+    
+    [buffer appendString:@"/* parameter struct */\n"];
+    [buffer appendString:@"#ifndef VLGLOBAL_H\n"];
+    [buffer appendString:@"#define VLGLOBAL_H\n"];
+    
+    [buffer appendString:@"\tstruct VLParameters\n"];
+    [buffer appendString:@"{\n"];
+    [buffer appendString:@"\tgsl_vector *pModelKineticsParameterVector;\n"];
+    [buffer appendString:@"\tgsl_vector *pModelVolumeVector;\n"];
+    [buffer appendString:@"\tgsl_matrix *pModelCirculationMatrix;\n"];
+    [buffer appendString:@"\tgsl_matrix *pModelStoichiometricMatrix;\n"];
+    [buffer appendString:@"};\n"];
+    [buffer appendString:@"#endif\n"];
+    
+    // return -
+    return buffer;
 }
 
 -(NSString *)generateModelMassBalancesHeaderBufferWithOptions:(NSDictionary *)options
@@ -306,6 +336,7 @@
         
         NEW_LINE;
         [buffer appendString:@"/* Load the model specific headers - */\n"];
+        [buffer appendString:@"#include \"VLGlobal.h\"\n"];
         [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
         [buffer appendFormat:@"#include \"%@.h\"\n",dependencyNameControl];
         NEW_LINE;
@@ -361,6 +392,7 @@
     [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
     [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
     [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+    [buffer appendString:@"#include \"VLGlobal.h\"\n"];
     
     NEW_LINE;
     [buffer appendString:@"/* public methods */\n"];
