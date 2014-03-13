@@ -21,6 +21,7 @@
 		AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A88A218A2D95300BAA649 /* VLIdentityFilterHandler.m */; };
 		AD3A88A618A2DA8500BAA649 /* VLSBMLOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3A88A518A2DA8500BAA649 /* VLSBMLOutputHandler.m */; };
 		AD62086918C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.m in Sources */ = {isa = PBXBuildFile; fileRef = AD62086818C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.m */; };
+		AD6DA02818D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6DA02718D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.m */; };
 		AD6DFFE918C66D7600617102 /* VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6DFFE818C66D7600617102 /* VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.m */; };
 		AD6DFFEC18C6733500617102 /* VLGSLCBalanceEquationsCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6DFFEB18C6733500617102 /* VLGSLCBalanceEquationsCellFreeModelStrategy.m */; };
 		AD6DFFEF18C67D5400617102 /* VLGSLCEnzymeActivityControlCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6DFFEE18C67D5400617102 /* VLGSLCEnzymeActivityControlCellFreeModelStrategy.m */; };
@@ -90,6 +91,8 @@
 		AD3A88A518A2DA8500BAA649 /* VLSBMLOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLSBMLOutputHandler.m; sourceTree = "<group>"; };
 		AD62086718C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGenericCodeGenerationServiceStringsAndBlocks.h; sourceTree = "<group>"; };
 		AD62086818C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGenericCodeGenerationServiceStringsAndBlocks.m; sourceTree = "<group>"; };
+		AD6DA02618D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCBMatrixMassActionModelStrategy.h; sourceTree = "<group>"; };
+		AD6DA02718D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCBMatrixMassActionModelStrategy.m; sourceTree = "<group>"; };
 		AD6DFFE718C66D7600617102 /* VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.h; sourceTree = "<group>"; };
 		AD6DFFE818C66D7600617102 /* VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.m; sourceTree = "<group>"; };
 		AD6DFFEA18C6733500617102 /* VLGSLCBalanceEquationsCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCBalanceEquationsCellFreeModelStrategy.h; sourceTree = "<group>"; };
@@ -301,6 +304,8 @@
 				AD7A42D718C4F92D0097AA60 /* VLGSLCJacobianMatrixMassActionModelStategy.h */,
 				AD7A42D818C4F92D0097AA60 /* VLGSLCBalanceEquationsMassActionStrategy.h */,
 				AD7A42D918C4F92D0097AA60 /* VLGSLCKineticsMassActionModelStrategy.h */,
+				AD6DA02618D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.h */,
+				AD6DA02718D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.m */,
 			);
 			name = mass_action_model;
 			sourceTree = "<group>";
@@ -433,6 +438,7 @@
 				AD6DFFE918C66D7600617102 /* VLGSLCDriverSolveBalanceEquationsCellFreeModelStrategy.m in Sources */,
 				AD3A889A18A2D88600BAA649 /* VLVFFInputHandler.m in Sources */,
 				ADCF3DC218BD277F00A83257 /* VLOctaveCKineticsMassActionModelStrategy.m in Sources */,
+				AD6DA02818D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.m in Sources */,
 				AD6DFFEF18C67D5400617102 /* VLGSLCEnzymeActivityControlCellFreeModelStrategy.m in Sources */,
 				AD3A889718A2D83E00BAA649 /* VLAbstractFilterHandler.m in Sources */,
 				ADFAB3A218B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m in Sources */,
