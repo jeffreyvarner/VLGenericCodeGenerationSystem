@@ -60,14 +60,17 @@
         
         // get parameters and setup computation -
         [buffer appendString:@"\t/* initialize -- */\n"];
-        [buffer appendString:@"\tdouble rate_value = 0.0;\n"];
-        [buffer appendString:@"\tdouble parameter_value = 0.0;\n"];
+        [buffer appendString:@"\tdouble matrix_value = 0.0;\n"];
         [buffer appendString:@"\n"];
         [buffer appendString:@"\t/* Get the parameters from disk - */\n"];
         [buffer appendString:@"\tstruct VLParameters *parameter_struct = (struct VLParameters *)parameter_object;\n"];
         [buffer appendString:@"\tgsl_vector *pV = parameter_struct->pModelKineticsParameterVector;\n"];
         [buffer appendString:@"\n"];
+        [buffer appendString:@"\t/* Initialize elements of the B-matrix - */\n"];
+        [buffer appendString:@"\tgsl_matrix_set_zero(pBMatrix);\n"];
+        NEW_LINE;
         [buffer appendString:@"\t/* Alias elements of the state vector - */\n"];
+        
         
         // ok, we have a SBML encoding, so build the species alias list -
         NSError *xpath_error;
@@ -77,7 +80,7 @@
         for (NSXMLElement *state in state_vector)
         {
             NSString *state_symbol = [[state attributeForName:@"id"] stringValue];
-            [buffer appendFormat:@"\tdouble %@ = state[%lu];\n",state_symbol,state_counter++];
+            [buffer appendFormat:@"\tdouble %@ = gsl_vector_get(pStateVector,%lu);\n",state_symbol,state_counter++];
             
             // grab the state symbol -
             [local_state_vector addObject:state_symbol];
@@ -86,44 +89,39 @@
         
         // build the parameter list -
         NSArray *reaction_array = [input_tree nodesForXPath:@".//reaction" error:nil];
-        NSInteger rate_counter = 0;
-        for (NSXMLElement *rate_node in reaction_array)
+        [buffer appendString:@"\t/* Alias elements of the parameter vector - */\n"];
+        for (NSUInteger rate_index = 0;rate_index<NUMBER_OF_RATES;rate_index++)
         {
-            [buffer appendFormat:@"\tdouble k_%lu = gsl_vector_get(pV,%lu);\n",rate_counter,rate_counter];
-            rate_counter++;
+            [buffer appendFormat:@"\tdouble k_%lu = gsl_vector_get(pV,%lu);\n",rate_index,rate_index];
         }
         [buffer appendString:@"\n"];
         
         // build the stoichiometric matrix array -
         NSArray *stochiometric_array = [VLCoreUtilitiesLib generateStoichiometricMatrixArrayActionWithOptions:options];
         
-        // Species and reaction arrays -
-        NSArray *species_array = [input_tree nodesForXPath:@".//species" error:nil];
-        
         // build the jacobian -
         for (NSInteger outer_index = 0;outer_index<NUMBER_OF_STATES;outer_index++)
         {
             // What is my outer index species?
             NSArray *stm_row_array = [stochiometric_array objectAtIndex:outer_index];
-            
-            // which rates are involved with this balance?
-            NSMutableArray *local_reaction_array = [[NSMutableArray alloc] init];
-            for (NSUInteger rate_index = 0;rate_index<NUMBER_OF_RATES;rate_index++)
+            for (NSUInteger reaction_index = 0;reaction_index<NUMBER_OF_RATES;reaction_index++)
             {
-                // What is my stocoeff?
-                NSString *stocoeff = [stm_row_array objectAtIndex:rate_index];
-                if ([stocoeff isEqualToString:@"0.0"] == NO)
+                // what is the entry?
+                NSString *entry = [self generateBMatrixEntryForSpeciesWithStoichiometricRow:stm_row_array
+                                                                          withReactionArray:reaction_array
+                                                                          withReactionIndex:reaction_index
+                                                                                withOptions:options];
+                
+                // ok, do we have anything in this entry?
+                if ([entry length] != 0)
                 {
-                    NSXMLElement *rate_node = [reaction_array objectAtIndex:rate_index];
-                    [local_reaction_array addObject:rate_node];
-                    
-                    // formulate the entry -
-                    
-                }
-                else
-                {
-                    // ok, this rate *is *not* involved in this balance. We'll have a zero entry -
-                    [buffer appendFormat:@"\tgsl_matrix_set(pBMatrix,%lu,%lu,0.0);\n",outer_index,rate_index];
+                    // put a comment line -
+                    NSXMLElement *species_node = [state_vector objectAtIndex:outer_index];
+                    NSString *state_symbol = [[species_node attributeForName:@"id"] stringValue];
+                    [buffer appendFormat:@"\t/* partial(%@)/partial(k_%lu) */\n",state_symbol,reaction_index];
+                    [buffer appendFormat:@"\tmatrix_value = %@;\n",entry];
+                    [buffer appendFormat:@"\tgsl_matrix_set(pBMatrix,%lu,%lu,matrix_value);\n",outer_index,reaction_index];
+                    NEW_LINE;
                 }
             }
         }
@@ -138,5 +136,45 @@
     return buffer;
 }
 
+-(NSString *)generateBMatrixEntryForSpeciesWithStoichiometricRow:(NSArray *)stoichiometricRow
+                                               withReactionArray:(NSArray *)reactionArray
+                                               withReactionIndex:(NSUInteger)reactionIndex
+                                                     withOptions:(NSDictionary *)options
+{
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // How many rates do we have?
+    NSUInteger NUMBER_OF_RATES = [reactionArray count];
+    
+    // iterate through the rates, figure out which rates are involved in this balance -
+    for (NSUInteger local_rate_index = 0;local_rate_index<NUMBER_OF_RATES;local_rate_index++)
+    {
+        // Is this rate involved in this balance?
+        NSString *stcoeff = [stoichiometricRow objectAtIndex:local_rate_index];
+        if ([stcoeff isEqualToString:@"0.0"] == NO)
+        {
+            // ok, this rate *is* involved in this balance
+            // is it the reaction index that I'm on?
+            if (reactionIndex == local_rate_index)
+            {
+                // ok, we are looking at this rate -
+                [buffer appendFormat:@"%@",stcoeff];
+                NSXMLElement *rateNode = [reactionArray objectAtIndex:local_rate_index];
+                NSArray *reactantArray = [rateNode nodesForXPath:@"./listOfReactants/speciesReference/@species" error:nil];
+                for (NSXMLElement *reactant_node in reactantArray)
+                {
+                    NSString *species_symbol = [reactant_node stringValue];
+                    if ([species_symbol isEqualToString:@"[]"] == NO)
+                    {
+                        [buffer appendFormat:@"*%@",species_symbol];
+                    }
+                }
+            }
+        }
+    }
+    
+    // return -
+    return buffer;
+}
 
 @end

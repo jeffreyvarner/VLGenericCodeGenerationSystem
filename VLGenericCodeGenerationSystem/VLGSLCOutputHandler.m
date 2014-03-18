@@ -78,6 +78,28 @@
     return result;
 }
 
+-(id)generateGSLCBMatrixActionWithOptions:(NSDictionary *)options
+{
+    // I also need my current method sel and my class -
+    SEL my_current_selector = _cmd;
+    
+    // execute strategy -
+    id result = [self executeStrategyFactoryCallForObject:self
+                                              andSelector:my_current_selector
+                                              withOptions:options];
+    
+    // write -
+    [self writeCodeGenerationOutput:result toFileWithOptions:options];
+    
+    // Header content -
+    NSString *header_buffer = [self generateModelBMatrixHeaderBufferWithOptions:options];
+    [self writeCodeGenerationHeaderFileOutput:header_buffer toFileWithOptions:options];
+    
+    // return the result from the strategy object -
+    return result;
+
+}
+
 -(id)generateGSLCSolveBalanceEquationsActionWithOptions:(NSDictionary *)options
 {
     // I also need my current method sel and my class -
@@ -369,6 +391,40 @@
     return [NSString stringWithString:buffer];
     
 }
+
+-(NSString *)generateModelBMatrixHeaderBufferWithOptions:(NSDictionary *)options
+{
+    // get the transformation -
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    
+    // function name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
+    NSString *functionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+    
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // headers -
+    [buffer appendString:@"/* Load the GSL and other headers - */\n"];
+    [buffer appendString:@"#include <stdio.h>\n"];
+    [buffer appendString:@"#include <math.h>\n"];
+    [buffer appendString:@"#include <time.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+    [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+    [buffer appendString:@"#include \"VLGlobal.h\"\n"];
+    
+    NEW_LINE;
+    [buffer appendString:@"/* public methods */\n"];
+    [buffer appendFormat:@"int %@(double t, gsl_vector *pStateVector, gsl_matrix *pBMatrix, void* parameter_object);\n",functionName];
+    
+    
+    // return -
+    return [NSString stringWithString:buffer];
+}
+
 
 -(NSString *)generateModelJacobianMatrixHeaderBufferWithOptions:(NSDictionary *)options
 {

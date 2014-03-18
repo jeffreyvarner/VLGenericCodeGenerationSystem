@@ -23,6 +23,7 @@
 	<map_link symbol="WRITE_GSL_C_MAKEFILE" class="VLGSLCOutputHandler" method="generateGSLCMakeFileActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_EXECUABLE_SHELL_SCRIPT" class="VLGSLCOutputHandler" method="generateGSLCShellScriptActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_JACOBIAN_MATRIX" class="VLGSLCOutputHandler" method="generateGSLCJacobianMatrixActionWithOptions:"/>
+	<map_link symbol="WRITE_GSL_C_PARTIAL_DERIVATIVE_PARAMETER_MATRIX" class="VLGSLCOutputHandler" method="generateGSLCBMatrixActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_ENZYME_ACTIVITY_CONTROL_FUNCTION" class="VLGSLCOutputHandler" method="generateGSLCEnzymeActivityControlActionWithOptions:"/>
 	
 	<map_link symbol="FILTER_IDENTITY" class="VLIdentityFilterHandler" method="performVLGenericCodeGenerationFilterActionWithOptions:"/>
@@ -63,6 +64,7 @@
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCKineticsActionWithOptions:" strategy_class="VLGSLCKineticsMassActionModelStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCSolveBalanceEquationsActionWithOptions:" strategy_class="VLGSLCGenericDriverSolveBalancesEquationsStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCJacobianMatrixActionWithOptions:" strategy_class="VLGSLCJacobianMatrixMassActionModelStategy"/>
+			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCBMatrixActionWithOptions:" strategy_class="VLGSLCBMatrixMassActionModelStrategy"/>
 			
 		</VLGSLCOutputHandler>
 		
