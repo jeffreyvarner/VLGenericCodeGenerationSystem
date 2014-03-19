@@ -31,7 +31,7 @@
     NSArray *copyright_buffer = [VLCoreUtilitiesLib loadCopyrightFileAtPath:copyright_file_path];
     
     // What is my model type?
-    NSString *model_type_xpath = @"./model/@type";
+    NSString *model_type_xpath = @".//model/@type";
     NSString *typeString = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
     
     // What is my function name?
@@ -100,8 +100,7 @@
     
     
     // What type of model is this?
-    NSString *model_type = [[[document nodesForXPath:@"./model/@type" error:nil] lastObject] stringValue];
-    NSString *model_source_encoding = [[[document nodesForXPath:@"./Model/@source_encoding" error:nil] lastObject] stringValue];
+    NSString *model_source_encoding = [[[document nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
     
     // depending upon the type of model *and* the source encoding, we execute different logic
     if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
@@ -162,6 +161,61 @@
             reaction_counter++;
         }
     }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    {
+        // ok - we have a cell free model coming from a VFF file.
+        // need multiple saturation kinetics
+        NSArray *reaction_array = [document nodesForXPath:@".//reaction" error:nil];
+        NSInteger reaction_counter = 1;
+        NSInteger parameter_counter = 1;
+        for (NSXMLElement *reaction_node in reaction_array)
+        {
+            // What is the reaction name?
+            NSString *reaction_name_string = [[reaction_node attributeForName:@"name"] stringValue];
+            NSString *reaction_id_string = [[reaction_node attributeForName:@"id"] stringValue];
+            
+            // Depending upon FORWARD -or- RERVESE
+            NSRange contains_forward_range = [reaction_name_string rangeOfString:@"FORWARD"];
+            NSRange contains_reverse_range = [reaction_name_string rangeOfString:@"REVERSE"];
+            NSRange contains_gen_range = [reaction_name_string rangeOfString:@"GEN"];
+            
+            float value = 0.0f;
+            if (contains_forward_range.location == NSNotFound &&
+                contains_reverse_range.location == NSNotFound)
+            {
+                value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+            }
+            else if (contains_reverse_range.location != NSNotFound &&
+                     contains_forward_range.location == NSNotFound)
+            {
+                // reverse value -
+                value = [VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+            }
+            else if (contains_reverse_range.location == NSNotFound &&
+                     contains_forward_range.location != NSNotFound)
+            {
+                if (contains_gen_range.location == NSNotFound)
+                {
+                    // reverse value -
+                    value = 10*[VLCoreUtilitiesLib generateRandomFloatingPointNumber];
+                }
+                else
+                {
+                    value = 0.0f;
+                }
+            }
+            
+        
+            // comment string -
+            NSString *comment_string = [NSString stringWithFormat:@"id: %@  name: %@",reaction_id_string,reaction_name_string];
+            
+            // ok, so we have a k_cat for each reaction, *and* a variable number of K -
+            [buffer appendFormat:@"\t %f\t;\t \%%  %lu k_%lu %@\n",value,(long)parameter_counter++,reaction_counter,comment_string];
+            
+            // update the reaction counter (1 based becuase we in octave/matlab)
+            reaction_counter++;
+        }
+    }
 
     // return -
     return buffer;
@@ -172,37 +226,57 @@
     // Initialize initial string -
     __block NSMutableString *tmpBuffer = [NSMutableString string];
     
-    // Ok, get the list of species -
-    NSError *err = nil;
-    NSString *xpathString = @"//species/@initial_amount";
-    NSArray *listOfICValues = [document nodesForXPath:xpathString error:&err];
-    
-    // check -
-    if (err!=nil)
+    // What type of model is this?
+    NSString *model_source_encoding = [[[document nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
+    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
     {
-        // Ok, we have an error -
-        NSLog(@"ERROR %@",[err description]);
-    }
-    else
-    {
-        // Ok, if we get here, we need to get the name list and then formulate IC list -
-        NSString *tmpXPathSpeciesNames = @"//species/@symbol";
-        NSArray *listOfNames= [document nodesForXPath:tmpXPathSpeciesNames error:&err];
+        // Ok, get the list of species -
+        NSError *err = nil;
+        NSString *xpathString = @".//species/@initial_amount";
+        NSArray *listOfICValues = [document nodesForXPath:xpathString error:&err];
         
-        // Put the values -
-        [listOfICValues enumerateObjectsUsingBlock:^(NSXMLElement *xmlElement,NSUInteger index,BOOL *stop){
+        // check -
+        if (err!=nil)
+        {
+            // Ok, we have an error -
+            NSLog(@"ERROR %@",[err description]);
+        }
+        else
+        {
+            // Ok, if we get here, we need to get the name list and then formulate IC list -
+            NSString *tmpXPathSpeciesNames = @"//species/@symbol";
+            NSArray *listOfNames= [document nodesForXPath:tmpXPathSpeciesNames error:&err];
             
-            // Get the name -
-            NSXMLElement *tmpNameElement = [listOfNames objectAtIndex:index];
+            // Put the values -
+            [listOfICValues enumerateObjectsUsingBlock:^(NSXMLElement *xmlElement,NSUInteger index,BOOL *stop){
+                
+                // Get the name -
+                NSXMLElement *tmpNameElement = [listOfNames objectAtIndex:index];
+                
+                // Get the string -
+                NSString *value = [xmlElement stringValue];
+                NSString *name = [tmpNameElement stringValue];
+                
+                // Add the row -
+                [tmpBuffer appendFormat:@"\t%@\t;\t%%\t%lu\t%@\n",value,(index+1),name];
+            }];
             
-            // Get the string -
-            NSString *value = [xmlElement stringValue];
-            NSString *name = [tmpNameElement stringValue];
+        }
+    }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    {
+        NSArray *species_array = [document nodesForXPath:@".//species" error:nil];
+        NSInteger species_counter = 1;
+        for (NSXMLElement *species_node in species_array)
+        {
+            // What is the symbol -or- id?
+            NSString *species_id = [[species_node attributeForName:@"id"] stringValue];
+            NSString *initial_amount = [[species_node attributeForName:@"initialAmount"] stringValue];
             
             // Add the row -
-            [tmpBuffer appendFormat:@"\t%@\t;\t%%\t%lu\t%@\n",value,(index+1),name];
-        }];
-        
+            [tmpBuffer appendFormat:@"\t%@\t;\t%%\t%lu\t%@\n",initial_amount,species_counter,species_id];
+            species_counter++;
+        }
     }
     
     // return -

@@ -25,6 +25,17 @@
 }
 
 #pragma mark - public methods
+-(id)generateGSLCAdjointMakeFileActionWithOptions:(NSDictionary *)options
+{
+    // construct the build file -
+    NSString *buffer = [self generateAdjointModelMakeFileBufferWithOptions:options];
+    
+    // write -
+    [self writeCodeGenerationOutput:buffer toFileWithOptions:options];
+    
+    return buffer;
+}
+
 -(id)generateGSLCMakeFileActionWithOptions:(NSDictionary *)options
 {
     // construct the build file -
@@ -227,6 +238,18 @@
 {
     // build the shell script -
     NSString *shell_script = [self generateModelSolveShellScriptBufferWithOptions:options];
+    
+    // dump to disk -
+    [self writeCodeGenerationOutput:shell_script toFileWithOptions:options];
+    
+    // return -
+    return shell_script;
+}
+
+-(id)generateGSLCAdjointShellScriptActionWithOptions:(NSDictionary *)options
+{
+    // build the shell script -
+    NSString *shell_script = [self generateAdjointModelSolveShellScriptBufferWithOptions:options];
     
     // dump to disk -
     [self writeCodeGenerationOutput:shell_script toFileWithOptions:options];
@@ -590,6 +613,73 @@
     
 }
 
+-(NSString *)generateAdjointModelSolveShellScriptBufferWithOptions:(NSDictionary *)options
+{
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // get the transformation -
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLElement *transformation_tree = [options objectForKey:kXMLTransformationTree];
+    
+    // What is the executable name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"EXECUTABLE_NAME\"]/@value";
+    NSString *functionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+    
+    // What is my working directory?
+    NSString *working_directory = [[[transformation_tree nodesForXPath:@".//property[@symbol='WORKING_DIRECTORY']/@value" error:nil] lastObject] stringValue];
+    
+    // What is my working directory?
+    [buffer appendString:@"#!/bin/sh\n"];
+    NEW_LINE;
+    
+    // what options do we have?
+    NSArray *dependency_array = [transformation nodesForXPath:@"./output_handler/output_handler_dependencies/dependency" error:nil];
+    for (NSXMLElement *dependency_node in dependency_array)
+    {
+        // Get the type and value data -
+        NSString *type_string = [[dependency_node attributeForName:@"type"] stringValue];
+        NSString *value_string = [[dependency_node attributeForName:@"value"] stringValue];
+        NSString *full_path;
+        
+        // Do we have a working dir to append?
+        if (working_directory!=nil)
+        {
+            full_path = [NSString stringWithFormat:@"%@%@",working_directory,value_string];
+        }
+        else
+        {
+            full_path = value_string;
+        }
+        
+        
+        // build the read-only lines -
+        [buffer appendFormat:@"readonly %@=%@\n",type_string,full_path];
+    }
+    
+    //readonly EXECUTABLE_PATH=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P3/src
+    //readonly OUTPUT_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/Simulation_P1.out
+    //readonly KINETICS_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/Parameters.dat
+    //readonly IC_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/InitialConditions.dat
+    //readonly ST_MATRIX=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/StoichiometricMatrix.dat
+    //readonly FLOW_MATRIX=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/CirculationMatrix.dat
+    //readonly VOLUME_FILE=/Users/jeffreyvarner/octave_work/PBPK_model_v1/P1/src/Volume.dat
+    
+    NEW_LINE;
+    
+    // build the execution line -
+    for (NSXMLElement *dependency_node in dependency_array)
+    {
+        // Get the type and value data -
+        NSString *type_string = [[dependency_node attributeForName:@"type"] stringValue];
+        [buffer appendFormat:@"$%@ ",type_string];
+    }
+    
+    [buffer appendString:@"$1 $2 $3 $4\n"];
+    
+    // return -
+    return buffer;
+}
 
 -(NSString *)generateModelSolveShellScriptBufferWithOptions:(NSDictionary *)options
 {
@@ -657,6 +747,78 @@
 
     // return -
     return buffer;
+}
+
+-(NSString *)generateAdjointModelMakeFileBufferWithOptions:(NSDictionary *)options
+{
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    NSMutableArray *file_name_array = [[NSMutableArray alloc] init];
+    
+    // get trees from the options -
+    NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationElement];
+    
+    // build the flags at the beginning -
+    [buffer appendString:@"CFLAGS = -std=c99 -pedantic -v -O2\n"];
+    [buffer appendString:@"CC = gcc\n"];
+    [buffer appendString:@"LFLAGS = /usr/local/lib/libgsl.a /usr/local/lib/libgslcblas.a -lm\n"];
+    NEW_LINE;
+    
+    // Get the list of transformations -
+    NSError *xpath_error;
+    NSArray *transformation_array = [transformation_tree nodesForXPath:@"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value" error:&xpath_error];
+    for (NSXMLElement *value in transformation_array)
+    {
+        // get the children -
+        NSString *output_file_name = [value stringValue];
+        
+        // What is the extension?
+        NSString *file_extension = [output_file_name pathExtension];
+        if ([file_extension isEqualToString:@"c"] == YES || [file_extension isEqualToString:@".c"] == YES)
+        {
+            // ok, so grab -
+            NSRange name_range = NSMakeRange(0, [output_file_name length] - 2);
+            NSString *file_name = [output_file_name substringWithRange:name_range];
+            [file_name_array addObject:file_name];
+        }
+    }
+    
+    // write driver target -
+    [buffer appendString:@"Sensitivity: "];
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.c ",file_name];
+    }
+    NEW_LINE;
+    
+    // write the compile line -
+    [buffer appendString:@"\t$(CC) $(CCFLAGS) -o Sensitivity "];
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.c ",file_name];
+    }
+    [buffer appendString:@"$(LFLAGS)"];
+    NEW_LINE;
+    
+    // write clean target -
+    [buffer appendString:@"clean:\n\trm -f "];
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.o %@ ",file_name,file_name];
+    }
+    NEW_LINE;
+    
+    // write the all target -
+    [buffer appendString:@"all:\n\trm -f "];
+    
+    for (NSString *file_name in file_name_array)
+    {
+        [buffer appendFormat:@"%@.o %@ %@.c %@.h ",file_name,file_name,file_name,file_name];
+    }
+    NEW_LINE;
+    
+    // return -
+    return [NSString stringWithString:buffer];
 }
 
 -(NSString *)generateModelMakeFileBufferWithOptions:(NSDictionary *)options

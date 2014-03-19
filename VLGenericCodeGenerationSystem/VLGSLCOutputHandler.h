@@ -23,6 +23,7 @@
 -(id)generateGSLCKineticsActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCMakeFileActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCShellScriptActionWithOptions:(NSDictionary *)options;
+-(id)generateGSLCAdjointShellScriptActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCJacobianMatrixActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCBMatrixActionWithOptions:(NSDictionary *)options;
 -(id)generateGSLCEnzymeActivityControlActionWithOptions:(NSDictionary *)options;
