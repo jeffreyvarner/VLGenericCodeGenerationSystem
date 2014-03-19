@@ -100,6 +100,27 @@
 
 }
 
+-(id)generateGSLCSolveAdjointBalanceEquationsActionWithOptions:(NSDictionary *)options
+{
+    // I also need my current method sel and my class -
+    SEL my_current_selector = _cmd;
+    
+    // execute strategy -
+    id result = [self executeStrategyFactoryCallForObject:self
+                                              andSelector:my_current_selector
+                                              withOptions:options];
+    
+    // write -
+    [self writeCodeGenerationOutput:result toFileWithOptions:options];
+    
+    // header content -
+    NSString *header_buffer = [self generateVLGlobalHeaderBufferWithOptions:options];
+    [self writeCodeGenerationHeaderFileOutput:header_buffer toFileWithOptions:options];
+    
+    // return the result from the strategy object -
+    return result;
+}
+
 -(id)generateGSLCSolveBalanceEquationsActionWithOptions:(NSDictionary *)options
 {
     // I also need my current method sel and my class -

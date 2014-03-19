@@ -146,6 +146,29 @@
 		
 	</transformation>
 
+	<transformation id="SBML_2_SOLVE_ADJOINT_BALANCE_EQUATIONS">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_SOLVE_ADJOINT_BALANCE_EQUATIONS">
+			<transformation_property type="PATH" value="/src/main_adjoint.c"/>
+			<transformation_property type="FUNCTION_NAME" value="main_adjoint"/>
+			<transformation_property type="HEADER_PATH" value="/src/VLGlobal.h"/>
+
+			<output_handler_dependencies>
+				<dependency type="BALANCE_EQUATIONS_FUNCTION_NAME" value="AdjointBalanceEquations"/>
+			</output_handler_dependencies>
+
+		</output_handler>
+		
+	</transformation>
+
+
 	<transformation id="VFF_2_MAKE_FILE">
 		
 		<input_handler strategy_handler="READ_SBML">

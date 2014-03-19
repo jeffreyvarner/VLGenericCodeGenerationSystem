@@ -19,6 +19,7 @@
 	<map_link symbol="WRITE_GSL_C_DATAFILE" class="VLGSLCOutputHandler" method="generateGSLCDataFileActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_BALANCE_EQUATIONS" class="VLGSLCOutputHandler" method="generateGSLCBalanceEquationsActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_SOLVE_BALANCE_EQUATIONS" class="VLGSLCOutputHandler" method="generateGSLCSolveBalanceEquationsActionWithOptions:"/>
+	<map_link symbol="WRITE_GSL_C_SOLVE_ADJOINT_BALANCE_EQUATIONS" class="VLGSLCOutputHandler" method="generateGSLCSolveAdjointBalanceEquationsActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_KINETICS_EQUATIONS" class="VLGSLCOutputHandler" method="generateGSLCKineticsActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_MAKEFILE" class="VLGSLCOutputHandler" method="generateGSLCMakeFileActionWithOptions:"/>
 	<map_link symbol="WRITE_GSL_C_EXECUABLE_SHELL_SCRIPT" class="VLGSLCOutputHandler" method="generateGSLCShellScriptActionWithOptions:"/>
@@ -66,6 +67,7 @@
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCAdjointBalanceEquationsActionWithOptions:" strategy_class="VLGSLCAdjointBalanceEquationsMassActionStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCKineticsActionWithOptions:" strategy_class="VLGSLCKineticsMassActionModelStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCSolveBalanceEquationsActionWithOptions:" strategy_class="VLGSLCGenericDriverSolveBalancesEquationsStrategy"/>
+			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCSolveAdjointBalanceEquationsActionWithOptions:" strategy_class="VLGSLCDriverSolveAdjointBalanceEquationsStrategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCJacobianMatrixActionWithOptions:" strategy_class="VLGSLCJacobianMatrixMassActionModelStategy"/>
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateGSLCBMatrixActionWithOptions:" strategy_class="VLGSLCBMatrixMassActionModelStrategy"/>
 			
