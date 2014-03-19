@@ -55,7 +55,7 @@
         [buffer appendString:@"#define EPSILON 1e-8\n"];
         NEW_LINE;
         
-        [buffer appendFormat:@"int %@(double t, gsl_vector *pStateVector, gsl_matrix *pBMatrix, void* parameter_object)\n",tmpFunctionName];
+        [buffer appendFormat:@"int %@(double t, const double state[], gsl_matrix *pBMatrix, void* parameter_object)\n",tmpFunctionName];
         [buffer appendString:@"{\n"];
         
         // get parameters and setup computation -
@@ -80,7 +80,7 @@
         for (NSXMLElement *state in state_vector)
         {
             NSString *state_symbol = [[state attributeForName:@"id"] stringValue];
-            [buffer appendFormat:@"\tdouble %@ = gsl_vector_get(pStateVector,%lu);\n",state_symbol,state_counter++];
+            [buffer appendFormat:@"\tdouble %@ = state[%lu];\n",state_symbol,state_counter++];
             
             // grab the state symbol -
             [local_state_vector addObject:state_symbol];

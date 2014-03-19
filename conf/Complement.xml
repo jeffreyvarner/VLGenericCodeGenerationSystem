@@ -80,6 +80,31 @@
 		
 	</transformation>
 	
+	<transformation id="SBML_2_ADJOINT_BALANCE_EQUATIONS">
+		
+		<input_handler strategy_handler="READ_SBML">
+			<transformation_property type="PATH" value="/network/Complement_VFF_v2.xml"/>
+		</input_handler>
+		
+		<filter_handler strategy_handler="FILTER_IDENTITY">
+		</filter_handler>
+		
+		<output_handler strategy_handler="WRITE_GSL_C_ADJOINT_BALANCE_EQUATIONS">
+			<transformation_property type="PATH" value="/src/AdjointBalanceEquations.c"/>
+			<transformation_property type="HEADER_PATH" value="/src/AdjointBalanceEquations.h"/>
+			<transformation_property type="FUNCTION_NAME" value="AdjointBalanceEquations"/>
+			<transformation_property type="COMPACT_BALANCE_MODE" value="TRUE"/>
+			
+			<output_handler_dependencies>
+				<dependency type="KINETICS_FUNCTION_NAME" value="Kinetics"/>
+				<dependency type="JACOBIAN_FUNCTION_NAME" value="Jacobian"/>
+				<dependency type="PARTIAL_DERIVATIVE_PARAMETER_FUNCTION_NAME" value="BMatrix"/>
+			</output_handler_dependencies>
+			
+		</output_handler>
+		
+	</transformation>
+	
 	<transformation id="VFF_2_KINETICS_EQUATIONS">
 		
 		<input_handler strategy_handler="READ_SBML">
@@ -135,6 +160,7 @@
 			<transformation_property type="FUNCTION_NAME" value="Kinetics.c"/>
 			<transformation_property type="FUNCTION_NAME" value="main.c"/>
 			<transformation_property type="FUNCTION_NAME" value="BalanceEquations.c"/>
+			<transformation_property type="FUNCTION_NAME" value="AdjointBalanceEquations.c"/>
 			<transformation_property type="FUNCTION_NAME" value="Jacobian.c"/>
 			<transformation_property type="FUNCTION_NAME" value="BMatrix.c"/>
 		</output_handler>

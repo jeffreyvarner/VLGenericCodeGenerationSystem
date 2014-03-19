@@ -138,6 +138,27 @@
     return result;
 }
 
+-(id)generateGSLCAdjointBalanceEquationsActionWithOptions:(NSDictionary *)options
+{
+    // I also need my current method sel and my class -
+    SEL my_current_selector = _cmd;
+    
+    // execute strategy -
+    id result = [self executeStrategyFactoryCallForObject:self
+                                              andSelector:my_current_selector
+                                              withOptions:options];
+    
+    // write -
+    [self writeCodeGenerationOutput:result toFileWithOptions:options];
+    
+    // Header content -
+    NSString *header_buffer = [self generateModelAdjointMassBalancesHeaderBufferWithOptions:options];
+    [self writeCodeGenerationHeaderFileOutput:header_buffer toFileWithOptions:options];
+    
+    // return the result from the strategy object -
+    return result;
+}
+
 -(id)generateGSLCBalanceEquationsActionWithOptions:(NSDictionary *)options
 {
     
@@ -310,11 +331,99 @@
     [buffer appendString:@"\tgsl_vector *pModelVolumeVector;\n"];
     [buffer appendString:@"\tgsl_matrix *pModelCirculationMatrix;\n"];
     [buffer appendString:@"\tgsl_matrix *pModelStoichiometricMatrix;\n"];
+    [buffer appendString:@"\tint parameter_index;\n"];
     [buffer appendString:@"};\n"];
     [buffer appendString:@"#endif\n"];
     
     // return -
     return buffer;
+}
+
+-(NSString *)generateModelAdjointMassBalancesHeaderBufferWithOptions:(NSDictionary *)options
+{
+    // get the transformation -
+    NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    
+    // What is my model type?
+    NSString *model_type_xpath = @".//model/@type";
+    NSString *model_type_string = [[[input_tree nodesForXPath:model_type_xpath error:nil] lastObject] stringValue];
+    
+    // function name?
+    NSString *fname_xpath = @"./output_handler/transformation_property[@type=\"FUNCTION_NAME\"]/@value";
+    NSString *functionName = [[[transformation nodesForXPath:fname_xpath error:nil] lastObject] stringValue];
+    
+    // Balance equations requires the name of the kinetics function name -
+    NSString *dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"KINETICS_FUNCTION_NAME\"]/@value";
+    NSString *dependencyName = [[[transformation nodesForXPath:dependency_xpath error:nil] lastObject] stringValue];
+    
+    // Do we have a jacobian?
+    NSString *jacobian_dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"JACOBIAN_FUNCTION_NAME\"]/@value";
+    NSString *jacobianDependencyName = [[[transformation nodesForXPath:jacobian_dependency_xpath error:nil] lastObject] stringValue];
+    
+    // do we have a BMatrix?
+    NSString *bmatrix_dependency_xpath = @"./output_handler/output_handler_dependencies/dependency[@type=\"PARTIAL_DERIVATIVE_PARAMETER_FUNCTION_NAME\"]/@value";
+    NSString *bmatrixDependencyName = [[[transformation nodesForXPath:bmatrix_dependency_xpath error:nil] lastObject] stringValue];
+
+    
+    // initialize the buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // There are a few options *depending* upon which model type we are -
+    if ([model_type_string isEqualToString:kModelTypeCellFreeModel] == YES)
+    {
+        // Cell free *also* depends upon a control function -
+        NSString *dependency_xpath_control = @"./output_handler/output_handler_dependencies/dependency[@type=\"ENZYME_ACTIVITY_CONTROL_FUNCTION_NAME\"]/@value";
+        NSString *dependencyNameControl = [[[transformation nodesForXPath:dependency_xpath_control error:nil] lastObject] stringValue];
+        
+        // headers -
+        [buffer appendString:@"/* Load the GSL and other headers - */\n"];
+        [buffer appendString:@"#include <stdio.h>\n"];
+        [buffer appendString:@"#include <math.h>\n"];
+        [buffer appendString:@"#include <time.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+        
+        NEW_LINE;
+        [buffer appendString:@"/* Load the model specific headers - */\n"];
+        [buffer appendString:@"#include \"VLGlobal.h\"\n"];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyNameControl];
+        NEW_LINE;
+        [buffer appendString:@"/* public methods */\n"];
+        [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object);\n",functionName];
+    }
+    else if ([model_type_string isEqualToString:kModelTypeMassActionModel] == YES)
+    {
+        // headers -
+        [buffer appendString:@"/* Load the GSL and other headers - */\n"];
+        [buffer appendString:@"#include <stdio.h>\n"];
+        [buffer appendString:@"#include <math.h>\n"];
+        [buffer appendString:@"#include <time.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_errno.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_matrix.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_odeiv.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_vector.h>\n"];
+        [buffer appendString:@"#include <gsl/gsl_blas.h>\n\n"];
+        
+        NEW_LINE;
+        [buffer appendString:@"/* Load the model specific headers - */\n"];
+        [buffer appendString:@"#include \"VLGlobal.h\"\n"];
+        [buffer appendFormat:@"#include \"%@.h\"\n",dependencyName];
+        [buffer appendFormat:@"#include \"%@.h\"\n",jacobianDependencyName];
+        [buffer appendFormat:@"#include \"%@.h\"\n",bmatrixDependencyName];
+        
+        NEW_LINE;
+        [buffer appendString:@"/* public methods */\n"];
+        [buffer appendFormat:@"int %@(double t,const double x[],double f[],void * parameter_object);\n",functionName];
+    }
+    
+    
+    // return -
+    return [NSString stringWithString:buffer];
 }
 
 -(NSString *)generateModelMassBalancesHeaderBufferWithOptions:(NSDictionary *)options
@@ -418,7 +527,7 @@
     
     NEW_LINE;
     [buffer appendString:@"/* public methods */\n"];
-    [buffer appendFormat:@"int %@(double t, gsl_vector *pStateVector, gsl_matrix *pBMatrix, void* parameter_object);\n",functionName];
+    [buffer appendFormat:@"int %@(double t, const double state[], gsl_matrix *pBMatrix, void* parameter_object);\n",functionName];
     
     
     // return -
