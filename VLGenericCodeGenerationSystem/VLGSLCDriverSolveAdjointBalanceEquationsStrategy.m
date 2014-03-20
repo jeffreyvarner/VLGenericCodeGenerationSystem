@@ -390,7 +390,7 @@
         
         [buffer appendString:@"static void populateDoubleCArraryFromFile(const char* pFilename,double *pDoubleArray)\n"];
         [buffer appendString:@"{\n"];
-        [buffer appendString:@"\tgsl_vector *tmp = gsl_vector_alloc(NUMBER_OF_STATES);\n"];
+        [buffer appendString:@"\tgsl_vector *tmp = gsl_vector_alloc(2*NUMBER_OF_STATES);\n"];
         [buffer appendString:@"\tFILE *pFile = fopen(pFilename,\"r\");\n"];
         [buffer appendString:@"\tgsl_vector_fscanf(pFile, tmp);\n"];
         [buffer appendString:@"\tfclose(pFile);\n\n"];
@@ -410,7 +410,7 @@
         [buffer appendString:@"\t\tdouble tmp_state_value = *(pDoubleResultsArray + state_index);\n"];
         NEW_LINE;
         [buffer appendString:@"\t\t/* correct for negavtives */\n"];
-        [buffer appendString:@"\t\tif (tmp_state_value<0)\n"];
+        [buffer appendString:@"\t\tif (state_index<NUMBER_OF_STATES && tmp_state_value<0)\n"];
         [buffer appendString:@"\t\t{\n"];
         [buffer appendString:@"\t\t\ttmp_state_value = 0.0;\n"];
         [buffer appendString:@"\t\t}\n"];
