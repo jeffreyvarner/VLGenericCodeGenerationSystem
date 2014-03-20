@@ -759,7 +759,7 @@
     NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationElement];
     
     // build the flags at the beginning -
-    [buffer appendString:@"CFLAGS = -std=c99 -pedantic -v -O2\n"];
+    [buffer appendString:@"CFLAGS = -std=c99 -pedantic -O3\n"];
     [buffer appendString:@"CC = gcc\n"];
     [buffer appendString:@"LFLAGS = /usr/local/lib/libgsl.a /usr/local/lib/libgslcblas.a -lm\n"];
     NEW_LINE;
@@ -792,7 +792,7 @@
     NEW_LINE;
     
     // write the compile line -
-    [buffer appendString:@"\t$(CC) $(CCFLAGS) -o Sensitivity "];
+    [buffer appendString:@"\t$(CC) $(CFLAGS) -o Sensitivity "];
     for (NSString *file_name in file_name_array)
     {
         [buffer appendFormat:@"%@.c ",file_name];
@@ -831,7 +831,7 @@
     NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationElement];
     
     // build the flags at the beginning -
-    [buffer appendString:@"CFLAGS = -std=c99 -pedantic -v -O2\n"];
+    [buffer appendString:@"CFLAGS = -std=c99 -pedantic -O3\n"];
     [buffer appendString:@"CC = gcc\n"];
     [buffer appendString:@"LFLAGS = /usr/local/lib/libgsl.a /usr/local/lib/libgslcblas.a -lm\n"];
     NEW_LINE;
@@ -864,7 +864,7 @@
     NEW_LINE;
     
     // write the compile line -
-    [buffer appendString:@"\t$(CC) $(CCFLAGS) -o Model "];
+    [buffer appendString:@"\t$(CC) $(CFLAGS) -o Model "];
     for (NSString *file_name in file_name_array)
     {
         [buffer appendFormat:@"%@.c ",file_name];

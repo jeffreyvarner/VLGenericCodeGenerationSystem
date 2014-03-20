@@ -148,7 +148,7 @@
         NEW_LINE;
         [buffer appendString:@"\t/* Compute the sensitivity balances -- */\n"];
         [buffer appendString:@"\tdouble tmp_value = 0.0;\n"];
-        [buffer appendString:@"\tfor (int state_index = (NUMBER_OF_STATES);state_index<(2*NUMBER_OF_STATES - 1);state_index++)\n"];
+        [buffer appendString:@"\tfor (int state_index = (NUMBER_OF_STATES);state_index<(2*NUMBER_OF_STATES);state_index++)\n"];
         [buffer appendFormat:@"\t{\n"];
         [buffer appendFormat:@"\t\ttmp_value = x[state_index];\n"];
         [buffer appendFormat:@"\t\tgsl_vector_set(pSensitivityStateVector,(state_index - NUMBER_OF_STATES),tmp_value);\n"];
@@ -174,7 +174,7 @@
         NEW_LINE;
         
         [buffer appendString:@"\t/* Populate the f[] term for sensitivity states -- */\n"];
-        [buffer appendString:@"\tfor(int state_index = (NUMBER_OF_STATES); state_index < (2*NUMBER_OF_STATES - 1); state_index++)\n"];
+        [buffer appendString:@"\tfor(int state_index = (NUMBER_OF_STATES); state_index < (2*NUMBER_OF_STATES); state_index++)\n"];
         [buffer appendString:@"\t{\n"];
         [buffer appendString:@"\t\tf[state_index]=gsl_vector_get(pRightHandSideSensitivityVector,(state_index - NUMBER_OF_STATES));\n"];
         [buffer appendString:@"\t}\n"];

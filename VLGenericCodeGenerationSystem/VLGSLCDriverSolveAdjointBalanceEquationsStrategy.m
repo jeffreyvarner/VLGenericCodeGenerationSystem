@@ -264,7 +264,7 @@
         [buffer appendString:@"/* Problem specific define statements -- */\n"];
         [buffer appendString:@"#define NUMBER_OF_ARGUEMENTS 9\n"];
         [buffer appendFormat:@"#define NUMBER_OF_RATES %lu\n",NUMBER_OF_RATES];
-        [buffer appendFormat:@"#define NUMBER_OF_STATES %lu\n",2*NUMBER_OF_STATES];
+        [buffer appendFormat:@"#define NUMBER_OF_STATES %lu\n",NUMBER_OF_STATES];
         [buffer appendFormat:@"#define NUMBER_OF_PARAMETERS %lu\n",NUMBER_OF_PARAMETERS];
         [buffer appendFormat:@"#define NUMBER_OF_COMPARTMENTS %lu\n",NUMBER_OF_COMPARTMENTS];
         [buffer appendFormat:@"#define TOLERANCE 1e-6\n"];
@@ -318,7 +318,7 @@
         [buffer appendString:@"\tparameters_object.pModelCirculationMatrix = gsl_matrix_alloc(NUMBER_OF_STATES,NUMBER_OF_STATES);\n"];
         [buffer appendString:@"\tparameters_object.pModelStoichiometricMatrix = gsl_matrix_alloc(NUMBER_OF_STATES,NUMBER_OF_RATES);\n"];
         [buffer appendString:@"\tparameters_object.parameter_index = parameter_index;\n"];
-        [buffer appendString:@"\tpStateArray = malloc(NUMBER_OF_STATES*sizeof(double));\n"];
+        [buffer appendString:@"\tpStateArray = malloc(2*NUMBER_OF_STATES*sizeof(double));\n"];
         NEW_LINE;
         [buffer appendString:@"\t/* Load model parameters and matrices from disk  -- */\n"];
         [buffer appendString:@"\tpopulateGSLMatrixFromFile(pStoichiometricMatrixFile,parameters_object.pModelStoichiometricMatrix);\n"];
@@ -327,10 +327,10 @@
         NEW_LINE;
         [buffer appendString:@"\t/* Setup the GSL solver  -- */\n"];
         [buffer appendString:@"\tconst gsl_odeiv2_step_type *pT = gsl_odeiv2_step_rk8pd;\n"];
-        [buffer appendString:@"\tgsl_odeiv2_step *pStep = gsl_odeiv2_step_alloc(pT,NUMBER_OF_STATES);\n"];
+        [buffer appendString:@"\tgsl_odeiv2_step *pStep = gsl_odeiv2_step_alloc(pT,2*NUMBER_OF_STATES);\n"];
         [buffer appendString:@"\tgsl_odeiv2_control *pControl = gsl_odeiv2_control_y_new(TOLERANCE,TOLERANCE);\n"];
-        [buffer appendString:@"\tgsl_odeiv2_evolve *pEvolve = gsl_odeiv2_evolve_alloc(NUMBER_OF_STATES);\n"];
-        [buffer appendFormat:@"\tgsl_odeiv2_system sys = {%@,NULL,NUMBER_OF_STATES,&parameters_object};\n",dependencyName];
+        [buffer appendString:@"\tgsl_odeiv2_evolve *pEvolve = gsl_odeiv2_evolve_alloc(2*NUMBER_OF_STATES);\n"];
+        [buffer appendFormat:@"\tgsl_odeiv2_system sys = {%@,NULL,2*NUMBER_OF_STATES,&parameters_object};\n",dependencyName];
         NEW_LINE;
         [buffer appendString:@"\t/* Open simulation output file  -- */\n"];
         [buffer appendString:@"\tpSimulationOutputFile = fopen(pSimulationOutputFilePath, \"w\");\n"];
@@ -394,7 +394,7 @@
         [buffer appendString:@"\tFILE *pFile = fopen(pFilename,\"r\");\n"];
         [buffer appendString:@"\tgsl_vector_fscanf(pFile, tmp);\n"];
         [buffer appendString:@"\tfclose(pFile);\n\n"];
-        [buffer appendString:@"\tfor (int state_index=0; state_index<NUMBER_OF_STATES; state_index++)\n"];
+        [buffer appendString:@"\tfor (int state_index=0; state_index<2*NUMBER_OF_STATES; state_index++)\n"];
         [buffer appendString:@"\t{\n"];
         [buffer appendString:@"\t\t*(pDoubleArray + state_index) = gsl_vector_get(tmp,state_index);\n"];
         [buffer appendString:@"\t}\n"];
@@ -405,7 +405,7 @@
         [buffer appendString:@"static void writeSimulationOutputRecord(FILE *output_file,double time,double *pDoubleResultsArray)\n"];
         [buffer appendString:@"{\n"];
         [buffer appendString:@"\tfprintf(output_file,\"%g \",time);\n"];
-        [buffer appendString:@"\tfor (int state_index=0; state_index<NUMBER_OF_STATES; state_index++)\n"];
+        [buffer appendString:@"\tfor (int state_index=0; state_index<2*NUMBER_OF_STATES; state_index++)\n"];
         [buffer appendString:@"\t{\n"];
         [buffer appendString:@"\t\tdouble tmp_state_value = *(pDoubleResultsArray + state_index);\n"];
         NEW_LINE;
