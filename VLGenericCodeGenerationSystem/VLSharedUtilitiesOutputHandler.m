@@ -127,6 +127,67 @@ static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT
             [buffer appendString:@"\n"];
         }
     }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingCFLML] == YES)
+    {
+        // Get list of species -
+        NSMutableArray *species_array = [[NSMutableArray alloc] init];
+        NSArray *species_node_array = [input_tree nodesForXPath:@".//speciesReference" error:nil];
+        for (NSXMLElement *species_node in species_node_array)
+        {
+            // Get the species symbol -
+            NSString *species_symbol = [[species_node attributeForName:@"species"] stringValue];
+            
+            if ([species_array containsObject:species_symbol] == NO)
+            {
+                [species_array addObject:species_symbol];
+            }
+        }
+        
+        for (NSString *raw_symbol in species_array)
+        {
+            if ([raw_symbol isEqualToString:@"[]"] == NO)
+            {
+                // Get the reactant products -
+                NSArray *reaction_array = [input_tree nodesForXPath:@".//rule" error:nil];
+                for (NSXMLElement *reaction_node in reaction_array)
+                {
+                    // for this reaction - what are the reactants?
+                    NSString *xpath_reactant = [NSString stringWithFormat:@"./listOfReactants/speciesReference[@species='%@']/@stoichiometry",raw_symbol];
+                    NSString *stcoeff_reactant = [[[reaction_node nodesForXPath:xpath_reactant error:nil] lastObject] stringValue];
+                    
+                    // for this reaction - what are the products?
+                    NSString *xpath_product = [NSString stringWithFormat:@"./listOfProducts/speciesReference[@species='%@']/@stoichiometry",raw_symbol];
+                    NSString *stcoeff_product = [[[reaction_node nodesForXPath:xpath_product error:nil] lastObject] stringValue];
+                    
+                    // ok - if we have *no* stcoeff, then 0.0
+                    if (stcoeff_reactant == nil &&
+                        stcoeff_product == nil)
+                    {
+                        [buffer appendString:@" 0.0 "];
+                    }
+                    else if (stcoeff_reactant != nil &&
+                             stcoeff_product == nil)
+                    {
+                        [buffer appendFormat:@" -%@ ",stcoeff_reactant];
+                    }
+                    else if (stcoeff_reactant == nil &&
+                             stcoeff_product != nil)
+                    {
+                        [buffer appendFormat:@" %@ ",stcoeff_product];
+                    }
+                    else if (stcoeff_reactant == nil &&
+                             stcoeff_product != nil)
+                    {
+                        // ok - would this ever happen?
+                        // ...
+                    }
+                }
+            }
+            
+            // next row -
+            [buffer appendString:@"\n"];
+        }
+    }
     
     // write -
     [self writeCodeGenerationOutput:buffer toFileWithOptions:options];

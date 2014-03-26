@@ -117,7 +117,7 @@
                 [buffer appendFormat:@"\tP_%@_R%lu = ",species_symbol,rule_counter];
                 [buffer appendFormat:@"(%@^N_%@_R%lu)/",species_symbol,species_symbol,rule_counter];
                 [buffer appendFormat:@"(%@^N_%@_R%lu",species_symbol,species_symbol,rule_counter];
-                [buffer appendFormat:@"+K_%@_R%lu^N_%@_R%lu);\n",species_symbol,rule_counter,species_symbol,parameter_counter];
+                [buffer appendFormat:@"+K_%@_R%lu^N_%@_R%lu);\n",species_symbol,rule_counter,species_symbol,rule_counter];
             }
             
             // what is this rule type -

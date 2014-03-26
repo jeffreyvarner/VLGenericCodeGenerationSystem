@@ -40,7 +40,12 @@
         // ok, we have the correct source encoding -
         [buffer appendFormat:@"function DF = %@(START,STOP)\n",tmpFunctionName];
         NEW_LINE;
-
+        
+        [buffer appendString:@"\t% Load the network - \n"];
+        [buffer appendString:@"\tS = load('Network.dat');\n"];
+        [buffer appendString:@"\t[NSTATES,NRATES] = size(S);\n"];
+        NEW_LINE;
+        
         // Get list of species -
         NSInteger species_counter = 1;
         NSMutableArray *species_array = [[NSMutableArray alloc] init];
@@ -72,7 +77,7 @@
                 
                 // Write -
                 [buffer appendFormat:@"\t\t1.0\t\t;\t%% %lu K_%@_R%lu\n",(parameter_counter++),species_symbol,rule_counter];
-                [buffer appendFormat:@"\t\t1.0\t\t;\t%% %lu N_%@_R%lu\n",(parameter_counter++),species_symbol,rule_counter];
+                [buffer appendFormat:@"\t\t10.0\t\t;\t%% %lu N_%@_R%lu\n",(parameter_counter++),species_symbol,rule_counter];
             }
             
             // update -
