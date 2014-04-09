@@ -23,3 +23,4 @@ FOUNDATION_EXPORT NSString *const kSourceEncodingCFLML;
 FOUNDATION_EXPORT NSString *const kModelTypeMassActionModel;
 FOUNDATION_EXPORT NSString *const kModelTypeCellFreeModel;
 FOUNDATION_EXPORT NSString *const kModelTypeHybridCFLModel;
+FOUNDATION_EXPORT NSString *const kModelTypeMetabolicModel;

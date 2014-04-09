@@ -23,3 +23,4 @@ NSString *const kSourceEncodingCFLML = @"CFLML";
 NSString *const kModelTypeMassActionModel = @"MASS_ACTION_MODEL";
 NSString *const kModelTypeCellFreeModel = @"CELL_FREE_MODEL";
 NSString *const kModelTypeHybridCFLModel = @"HYBRID_CFL_MODEL";
+NSString *const kModelTypeMetabolicModel = @"METABOLIC_MODEL";

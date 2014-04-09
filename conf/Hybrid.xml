@@ -2,18 +2,18 @@
 <Model type="MASS_ACTION_MODEL">
 
 	<properties>
-		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/octave_work/cfl_model_v2"/>
+		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/octave_work/cfl_reg_nfl"/>
 		<property symbol="COPYRIGHT_TEXT" value="/Users/jeffreyvarner/Desktop/MyUniversalProjects/VLGenericCodeGenerationSystem/conf/Copyright.text"/>
 		
 		<property type="STOCHIOMETRIC_MATRIX_FILE_NAME" value="Network.dat"/>
-		<property type="STOCHIOMETRIC_MATRIX_FILE_PATH" value="/cfl_model_v2/network/Network.dat"/>
+		<property type="STOCHIOMETRIC_MATRIX_FILE_PATH" value="/cfl_network_dp/Network.dat"/>
 		
 	</properties>
 
 	<transformation id="CFLML_2_KINETICS">
 		
 		<input_handler strategy_handler="READ_CFLML">
-			<transformation_property type="PATH" value="/Test.xml"/>
+			<transformation_property type="PATH" value="/CFLNetwork.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
@@ -29,7 +29,7 @@
 	<transformation id="CFLML_2_DATAFILE">
 		
 		<input_handler strategy_handler="READ_CFLML">
-			<transformation_property type="PATH" value="/Test.xml"/>
+			<transformation_property type="PATH" value="/CFLNetwork.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
@@ -45,7 +45,7 @@
 	<transformation id="CFLML_2_STM">
 		
 		<input_handler strategy_handler="READ_CFLML">
-			<transformation_property type="PATH" value="/Test.xml"/>
+			<transformation_property type="PATH" value="/CFLNetwork.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">

@@ -10,6 +10,12 @@
 
 #define NEW_LINE [buffer appendString:@"\n"]
 
+// types -
+static NSString* kHybridCFLModelRuleTypeAnd = @"AND";
+static NSString* kHybridCFLModelRuleTypeOr = @"OR";
+static NSString* kHybridCFLModelRuleTypeNegativeAnd = @"NEGATIVE_AND";
+static NSString* kHybridCFLModelRuleTypeNegativeOr = @"NEGATIVE_OR";
+
 @implementation VLOctaveMKineticsHybridCFLModelStrategy
 
 -(id)executeStrategyWithOptions:(NSDictionary *)options
@@ -63,7 +69,8 @@
             // Get the species symbol -
             NSString *species_symbol = [[species_node attributeForName:@"species"] stringValue];
             
-            if ([species_array containsObject:species_symbol] == NO)
+            if ([species_array containsObject:species_symbol] == NO &&
+                [species_symbol isEqualToString:@"[]"] == NO)
             {
                 [species_array addObject:species_symbol];
             }
@@ -83,6 +90,9 @@
         NSInteger parameter_counter = 1;
         for (NSXMLElement *rule_node in rule_array)
         {
+            // put alpha -
+            [buffer appendFormat:@"\tALPHA_R%lu = kV(%lu,1);\n",rule_counter,(parameter_counter++)];
+                        
             // Get the species for this rule -
             NSArray *species_array = [rule_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
             for (NSXMLElement *species_node in species_array)
@@ -120,11 +130,13 @@
                 [buffer appendFormat:@"+K_%@_R%lu^N_%@_R%lu);\n",species_symbol,rule_counter,species_symbol,rule_counter];
             }
             
+            // put alpha -
+            [buffer appendFormat:@"\trV(%lu,1) = ALPHA_R%lu",rule_counter,rule_counter];
+            
             // what is this rule type -
             NSString *rule_type = [[rule_node attributeForName:@"type"] stringValue];
-            if ([rule_type isEqualToString:@"AND"] == YES)
+            if ([rule_type isEqualToString:kHybridCFLModelRuleTypeAnd] == YES)
             {
-                [buffer appendFormat:@"\trV(%lu,1) = 1.0",rule_counter];
                 for (NSXMLElement *species_node in species_array)
                 {
                     // get the symbol -
@@ -138,7 +150,7 @@
                 [buffer appendString:@";\n"];
                 NEW_LINE;
             }
-            else if ([rule_type isEqualToString:@"OR"] == YES)
+            else if ([rule_type isEqualToString:kHybridCFLModelRuleTypeOr] == YES)
             {
                 [buffer appendFormat:@"rV(%lu,1) = 0.0",rule_counter];
                 for (NSXMLElement *species_node in species_array)
@@ -162,6 +174,24 @@
 
                 // buffer -
                 [buffer appendString:@";\n"];
+            }
+            else if ([rule_type isEqualToString:kHybridCFLModelRuleTypeNegativeAnd] == YES)
+            {
+                
+                [buffer appendString:@"*(1 - 1.0"];
+                for (NSXMLElement *species_node in species_array)
+                {
+                    // get the symbol -
+                    NSString *species_symbol = [[species_node attributeForName:@"species"] stringValue];
+                    
+                    // Write -
+                    [buffer appendFormat:@"*(P_%@_R%lu)",species_symbol,rule_counter];
+                }
+                
+                // buffer -
+                [buffer appendString:@");\n"];
+                NEW_LINE;
+
             }
             
             // update -

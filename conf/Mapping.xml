@@ -8,6 +8,7 @@
 	<map_link symbol="WRITE_STOICHIOMETRIC_MATRIX" class="VLSharedUtilitiesOutputHandler" method="generateStoichiometricMatrixActionWithOptions:"/>
 	
 	<map_link symbol="WRITE_OCTAVE_M_DATAFILE" class="VLOctaveMOutputHandler" method="generateOctaveMDataFileActionWithOptions:"/>
+	<map_link symbol="WRITE_OCTAVE_M_METABOLIC_DATAFILE" class="VLOctaveMOutputHandler" method="generateOctaveMMetabolicDataFileActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_M_BALANCE_EQUATIONS" class="VLOctaveMOutputHandler" method="generateOctaveMBalanceEquationsActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_M_SOLVE_BALANCE_EQUATIONS" class="VLOctaveMOutputHandler" method="generateOctaveMSolveBalanceEquationsActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_M_KINETICS_EQUATIONS" class="VLOctaveMOutputHandler" method="generateOctaveMKineticsActionWithOptions:"/>
@@ -33,8 +34,9 @@
 	
 	<map_link symbol="FILTER_IDENTITY" class="VLIdentityFilterHandler" method="performVLGenericCodeGenerationFilterActionWithOptions:"/>
 	<map_link symbol="FILTER_SPECIES_ALPHABETICAL" class="VLAlphabeticalSpeciesFilterHandler" method="performVLGenericCodeGenerationFilterActionWithOptions:"/>
+	<map_link symbol="FILTER_SPECIES_COMPARTMENT" class="VLCompartmentSpeciesFilterHandler" method="performVLGenericCodeGenerationFilterActionWithOptions:"/>
 	
-	
+
 	<strategy_mapping_block>
 		
 		<VLOctaveMOutputHandler>
@@ -45,6 +47,9 @@
 			<strategy_map model_type="CELL_FREE_MODEL" method="generateOctaveMKineticsActionWithOptions:" strategy_class="VLOctaveMKineticsCellFreeModelStrategy"/>
 			
 			<strategy_map model_type="MASS_ACTION_MODEL" method="generateOctaveMDataFileActionWithOptions:" strategy_class="VLOctaveMDataFileMassActionModelStrategy"/>
+			
+			<strategy_map model_type="METABOLIC_MODEL" method="generateOctaveMDataFileActionWithOptions:" strategy_class="VLOctaveMDataFileMetabolicModelStrategy"/>
+			
 			
 			<strategy_map model_type="HYBRID_CFL_MODEL" method="generateOctaveMKineticsActionWithOptions:" strategy_class="VLOctaveMKineticsHybridCFLModelStrategy"/>
 			<strategy_map model_type="HYBRID_CFL_MODEL" method="generateOctaveMDataFileActionWithOptions:" strategy_class="VLOctaveMDataFileHybridCFLModelStrategy"/>

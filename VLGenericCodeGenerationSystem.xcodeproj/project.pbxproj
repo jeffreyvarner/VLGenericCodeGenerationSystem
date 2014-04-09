@@ -34,6 +34,8 @@
 		AD81890718D8D6A900C05C70 /* VLGSLCDriverSolveAdjointBalanceEquationsStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD81890618D8D6A900C05C70 /* VLGSLCDriverSolveAdjointBalanceEquationsStrategy.m */; };
 		AD81890A18D8D7BE00C05C70 /* VLGSLCAdjointBalanceEquationsMassActionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD81890918D8D7BE00C05C70 /* VLGSLCAdjointBalanceEquationsMassActionStrategy.m */; };
 		ADB25E2F18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB25E2E18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.m */; };
+		ADCA5C6418F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCA5C6318F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m */; };
+		ADCA5C6818F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCA5C6718F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m */; };
 		ADCF3DAE18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DAD18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m */; };
 		ADCF3DB118BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DB018BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.m */; };
 		ADCF3DB418BD1A8000A83257 /* VLOctaveCOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCF3DB318BD1A8000A83257 /* VLOctaveCOutputHandler.m */; };
@@ -122,6 +124,10 @@
 		AD81890918D8D7BE00C05C70 /* VLGSLCAdjointBalanceEquationsMassActionStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCAdjointBalanceEquationsMassActionStrategy.m; sourceTree = "<group>"; };
 		ADB25E2D18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCDataFileCellFreeModelStrategy.h; sourceTree = "<group>"; };
 		ADB25E2E18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCDataFileCellFreeModelStrategy.m; sourceTree = "<group>"; };
+		ADCA5C6218F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCompartmentSpeciesFilterHandler.h; sourceTree = "<group>"; };
+		ADCA5C6318F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCompartmentSpeciesFilterHandler.m; sourceTree = "<group>"; };
+		ADCA5C6618F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMDataFileMetabolicModelStrategy.h; sourceTree = "<group>"; };
+		ADCA5C6718F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMDataFileMetabolicModelStrategy.m; sourceTree = "<group>"; };
 		ADCF3DAC18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h; sourceTree = "<group>"; };
 		ADCF3DAD18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLOctaveMGenericDriverSolveBalancesEquationsStrategy.m; sourceTree = "<group>"; };
 		ADCF3DAF18BBF40200A83257 /* VLOctaveMKineticsCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLOctaveMKineticsCellFreeModelStrategy.h; sourceTree = "<group>"; };
@@ -290,6 +296,8 @@
 				ADD8CF0C18BF798400317679 /* VLAlphabeticalSpeciesFilterHandler.m */,
 				AD7A42E418C4FBD00097AA60 /* VLReorderSpeciesUsingOrderFileFilterHandler.h */,
 				AD7A42E518C4FBD00097AA60 /* VLReorderSpeciesUsingOrderFileFilterHandler.m */,
+				ADCA5C6218F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.h */,
+				ADCA5C6318F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m */,
 			);
 			name = filter_handler;
 			sourceTree = "<group>";
@@ -361,9 +369,19 @@
 			name = mass_action_model;
 			sourceTree = "<group>";
 		};
+		ADCA5C6518F4BD8D00E95221 /* metabolic_model */ = {
+			isa = PBXGroup;
+			children = (
+				ADCA5C6618F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.h */,
+				ADCA5C6718F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m */,
+			);
+			name = metabolic_model;
+			sourceTree = "<group>";
+		};
 		ADCF3DB818BD26DC00A83257 /* octave_m */ = {
 			isa = PBXGroup;
 			children = (
+				ADCA5C6518F4BD8D00E95221 /* metabolic_model */,
 				ADD1C67B18E251000087EAC7 /* cell_free_model */,
 				ADD1C67A18E250E90087EAC7 /* cfl_model */,
 				ADCF3DAC18BBEC4B00A83257 /* VLOctaveMGenericDriverSolveBalancesEquationsStrategy.h */,
@@ -481,6 +499,7 @@
 				AD3A889A18A2D88600BAA649 /* VLVFFInputHandler.m in Sources */,
 				ADCF3DC218BD277F00A83257 /* VLOctaveCKineticsMassActionModelStrategy.m in Sources */,
 				AD6DA02818D1FD420002744E /* VLGSLCBMatrixMassActionModelStrategy.m in Sources */,
+				ADCA5C6818F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m in Sources */,
 				AD6DFFEF18C67D5400617102 /* VLGSLCEnzymeActivityControlCellFreeModelStrategy.m in Sources */,
 				AD3A889718A2D83E00BAA649 /* VLAbstractFilterHandler.m in Sources */,
 				ADFAB3A218B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m in Sources */,
@@ -495,6 +514,7 @@
 				ADFAB39F18B78331004C45BD /* VLOctaveMDataFileCellFreeModelStrategy.m in Sources */,
 				AD3A888818A2D06B00BAA649 /* VLAbstractService.m in Sources */,
 				AD3A889118A2D81700BAA649 /* VLAbstractInputHandler.m in Sources */,
+				ADCA5C6418F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m in Sources */,
 				ADCF3DC518BD655B00A83257 /* VLOctaveMDataFileMassActionModelStrategy.m in Sources */,
 				ADD1C68418E2614B0087EAC7 /* VLCFLMLInputHandler.m in Sources */,
 				AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */,

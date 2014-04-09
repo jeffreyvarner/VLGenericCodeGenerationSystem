@@ -55,7 +55,8 @@
             // Get the species symbol -
             NSString *species_symbol = [[species_node attributeForName:@"species"] stringValue];
             
-            if ([species_array containsObject:species_symbol] == NO)
+            if ([species_array containsObject:species_symbol] == NO &&
+                [species_symbol isEqualToString:@"[]"] == NO)
             {
                 [species_array addObject:species_symbol];
             }
@@ -68,6 +69,12 @@
         NSInteger parameter_counter = 1;
         for (NSXMLElement *rule_node in rule_array)
         {
+            // comment?
+            NSString *comment = [[rule_node attributeForName:@"symbol"] stringValue];
+            
+            [buffer appendFormat:@"\t\t%% %@ -- \n",comment];
+            [buffer appendFormat:@"\t\t1.00\t\t;\t%% %lu ALPHA_R%lu\n",(parameter_counter++),rule_counter];
+            
             // Get the species for this rule -
             NSArray *species_array = [rule_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
             for (NSXMLElement *species_node in species_array)
@@ -76,8 +83,9 @@
                 NSString *species_symbol = [[species_node attributeForName:@"species"] stringValue];
                 
                 // Write -
-                [buffer appendFormat:@"\t\t1.0\t\t;\t%% %lu K_%@_R%lu\n",(parameter_counter++),species_symbol,rule_counter];
-                [buffer appendFormat:@"\t\t10.0\t\t;\t%% %lu N_%@_R%lu\n",(parameter_counter++),species_symbol,rule_counter];
+                [buffer appendFormat:@"\t\t10.0\t\t;\t%% %lu K_%@_R%lu\t%@\n",(parameter_counter++),species_symbol,rule_counter,comment];
+                [buffer appendFormat:@"\t\t10.0\t\t;\t%% %lu N_%@_R%lu\t%@\n",(parameter_counter++),species_symbol,rule_counter,comment];
+                NEW_LINE;
             }
             
             // update -
