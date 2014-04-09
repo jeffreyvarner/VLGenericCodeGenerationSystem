@@ -14,5 +14,6 @@
 }
 
 -(id)generateStoichiometricMatrixActionWithOptions:(NSDictionary *)options;
+-(id)generateFluxBoundsActionWithOptions:(NSDictionary *)options;
 
 @end

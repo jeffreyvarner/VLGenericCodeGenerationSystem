@@ -69,6 +69,9 @@
     [buffer appendString:@"% Stoichiometric matrix --\n"];
     [buffer appendString:@"STM = load('../network/Network.dat');\n"];
     [buffer appendString:@"\n"];
+    [buffer appendString:@"% Load the FB - \n"];
+    [buffer appendString:@"FB = load('../network/FB.dat');\n"];
+    [buffer appendString:@"\n"];
     [buffer appendString:@"% Get the dimension of the system -\n"];
     [buffer appendString:@"[NR,NCO]=size(STM);\n"];
     [buffer appendString:@"\n"];

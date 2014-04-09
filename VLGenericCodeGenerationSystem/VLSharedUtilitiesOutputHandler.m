@@ -12,6 +12,47 @@
 
 static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT";
 
+-(id)generateFluxBoundsActionWithOptions:(NSDictionary *)options
+{
+    if (options == nil)
+    {
+        return nil;
+    }
+    
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // Get our trees from the dictionary -
+    __unused NSXMLDocument *transformation_tree = [options objectForKey:kXMLTransformationTree];
+    __unused NSXMLElement *transformation = [options objectForKey:kXMLTransformationElement];
+    NSXMLDocument *input_tree = (NSXMLDocument *)[options objectForKey:kXMLModelInputTree];
+    
+    // What is my model encoding?
+    NSString *model_source_encoding = [[[input_tree nodesForXPath:@".//model/@source_encoding" error:nil] lastObject] stringValue];
+    
+    if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
+    {
+    }
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    {
+        // Get list of reations -
+        NSArray *reactions_array = [input_tree nodesForXPath:@".//listOfReactions/reaction" error:nil];
+        for (NSXMLElement *reaction_node in reactions_array)
+        {
+            // name?
+            __unused NSString *name = [[reaction_node attributeForName:@"name"] stringValue];
+            
+            // List of species -
+            [buffer appendFormat:@"0\tinf\n"];
+        }
+    }
+    
+    // write -
+    [self writeCodeGenerationOutput:buffer toFileWithOptions:options];
+    
+    return buffer;
+}
+
 -(id)generateStoichiometricMatrixActionWithOptions:(NSDictionary *)options
 {
     if (options == nil)

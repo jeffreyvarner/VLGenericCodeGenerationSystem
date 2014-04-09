@@ -6,6 +6,7 @@
 	<map_link symbol="READ_CFLML" class="VLCFLMLInputHandler" method="performVLGenericCodeGenerationInputActionWithOptions:"/>
 	<map_link symbol="WRITE_SBML" class="VLSBMLOutputHandler" method="performVLGenericCodeGenerationOutputActionWithOptions:"/>
 	<map_link symbol="WRITE_STOICHIOMETRIC_MATRIX" class="VLSharedUtilitiesOutputHandler" method="generateStoichiometricMatrixActionWithOptions:"/>
+	<map_link symbol="WRITE_FLUX_BOUNDS" class="VLSharedUtilitiesOutputHandler" method="generateFluxBoundsActionWithOptions:"/>
 	
 	<map_link symbol="WRITE_OCTAVE_M_DATAFILE" class="VLOctaveMOutputHandler" method="generateOctaveMDataFileActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_M_METABOLIC_DATAFILE" class="VLOctaveMOutputHandler" method="generateOctaveMMetabolicDataFileActionWithOptions:"/>
