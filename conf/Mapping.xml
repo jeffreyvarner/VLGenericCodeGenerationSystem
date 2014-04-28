@@ -2,6 +2,7 @@
 <Mapping>
 	
 	<map_link symbol="READ_VFF" class="VLVFFInputHandler" method="performVLGenericCodeGenerationInputActionWithOptions:"/>
+	<map_link symbol="READ_NLVFF" class="VLNLVFFInputHandler" method="performVLGenericCodeGenerationInputActionWithOptions:"/>
 	<map_link symbol="READ_SBML" class="VLSBMLInputHandler" method="performVLGenericCodeGenerationInputActionWithOptions:"/>
 	<map_link symbol="READ_CFLML" class="VLCFLMLInputHandler" method="performVLGenericCodeGenerationInputActionWithOptions:"/>
 	<map_link symbol="WRITE_SBML" class="VLSBMLOutputHandler" method="performVLGenericCodeGenerationOutputActionWithOptions:"/>

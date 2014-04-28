@@ -16,11 +16,14 @@ FOUNDATION_EXPORT NSString *const kXMLTransformationElement;
 
 // Model source encodings -
 FOUNDATION_EXPORT NSString *const kSourceEncodingVFF;
+FOUNDATION_EXPORT NSString *const kSourceEncodingNLVFF;
 FOUNDATION_EXPORT NSString *const kSourceEncodingSBML;
 FOUNDATION_EXPORT NSString *const kSourceEncodingCFLML;
+
 
 // Model type encoding -
 FOUNDATION_EXPORT NSString *const kModelTypeMassActionModel;
 FOUNDATION_EXPORT NSString *const kModelTypeCellFreeModel;
 FOUNDATION_EXPORT NSString *const kModelTypeHybridCFLModel;
 FOUNDATION_EXPORT NSString *const kModelTypeMetabolicModel;
+FOUNDATION_EXPORT NSString *const kModelTypeCBSignalling;

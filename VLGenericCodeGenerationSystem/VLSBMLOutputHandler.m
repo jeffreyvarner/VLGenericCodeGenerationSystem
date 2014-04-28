@@ -137,7 +137,8 @@
         // write -
         [self writeCodeGenerationOutput:buffer toFileWithOptions:options];
     }
-    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES ||
+             [model_source_encoding isEqualToString:kSourceEncodingNLVFF] == YES)
     {
         // get the tree -
         NSString *local_sbml_tree = [input_tree XMLStringWithOptions:NSXMLNodePrettyPrint];

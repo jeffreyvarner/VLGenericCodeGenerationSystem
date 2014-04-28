@@ -16,6 +16,7 @@ NSString *const kXMLTransformationElement = @"TRANSFORMATION_XML_ELEMENT";
 
 // Model source encodings -
 NSString *const kSourceEncodingVFF = @"VFF";
+NSString *const kSourceEncodingNLVFF = @"NLVFF";
 NSString *const kSourceEncodingSBML = @"SBML";
 NSString *const kSourceEncodingCFLML = @"CFLML";
 
@@ -24,3 +25,4 @@ NSString *const kModelTypeMassActionModel = @"MASS_ACTION_MODEL";
 NSString *const kModelTypeCellFreeModel = @"CELL_FREE_MODEL";
 NSString *const kModelTypeHybridCFLModel = @"HYBRID_CFL_MODEL";
 NSString *const kModelTypeMetabolicModel = @"METABOLIC_MODEL";
+NSString *const kModelTypeCBSignalling = @"CONSTRAINTS_BASED_SIGNALING_MODEL";
