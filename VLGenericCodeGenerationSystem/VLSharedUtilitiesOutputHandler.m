@@ -33,7 +33,8 @@ static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT
     if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
     {
     }
-    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES ||
+             [model_source_encoding isEqualToString:kSourceEncodingNLVFF] == YES)
     {
         // Get list of reations -
         NSArray *reactions_array = [input_tree nodesForXPath:@".//listOfReactions/reaction" error:nil];
@@ -117,7 +118,8 @@ static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT
             }
         }
     }
-    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES ||
+             [model_source_encoding isEqualToString:kSourceEncodingNLVFF] == YES)
     {
         NSString *xpathString = @".//species";
         NSArray *list_of_species = [input_tree nodesForXPath:xpathString error:nil];
@@ -155,11 +157,14 @@ static const NSString *kStoichiometricCoefficient = @"STOICHIOMETRIC_COEFFICIENT
                     {
                         [buffer appendFormat:@" %@ ",stcoeff_product];
                     }
-                    else if (stcoeff_reactant == nil &&
+                    else if (stcoeff_reactant != nil &&
                              stcoeff_product != nil)
                     {
                         // ok - would this ever happen?
-                        // ...
+                        CGFloat reactant_coeff = [stcoeff_reactant floatValue];
+                        CGFloat product_coeff = [stcoeff_product floatValue];
+                        CGFloat net_coeff = product_coeff - reactant_coeff;
+                        [buffer appendFormat:@" %f ",net_coeff];
                     }
                 }
             }

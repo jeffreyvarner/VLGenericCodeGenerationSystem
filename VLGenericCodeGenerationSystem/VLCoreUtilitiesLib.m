@@ -258,7 +258,8 @@
     if ([model_source_encoding isEqualToString:kSourceEncodingVFF] == YES)
     {
     }
-    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES)
+    else if ([model_source_encoding isEqualToString:kSourceEncodingSBML] == YES ||
+             [model_source_encoding isEqualToString:kSourceEncodingNLVFF] == YES)
     {
         NSString *xpathString = @".//species";
         NSArray *list_of_species = [input_tree nodesForXPath:xpathString error:nil];

@@ -120,13 +120,14 @@
     
     // array of verbs -
     NSArray *verb_array = @[@"binds",
-                            @"autoactivates",
+                            @"auto",
                             @"transcribes",
                             @"translates",
                             @"activates",
                             @"phosphorylates",
                             @"dephosphorylates",
-                            @"degrades"];
+                            @"degrades",
+                            @"flux_inputs"];
     
     // ok - go through my array -
     NSInteger reaction_counter = 0;
@@ -143,25 +144,77 @@
         NSString *reaction_block;
         for (NSString *verb in verb_array)
         {
-            NSRange match = [transformation_string rangeOfString:verb];
-            if (match.location!=NSNotFound)
+            NSRange match = [transformation_string rangeOfString:verb options:NSLiteralSearch];
+            if (match.location != NSNotFound)
             {
-                if ([verb isEqualToString:@"binds"] == YES)
+                NSString *verb_fragment = [transformation_string substringWithRange:match];
+                
+                if ([verb_fragment isEqualToString:@"binds"] == YES)
                 {
                     NSArray *split = [transformation_string componentsSeparatedByString:verb];
                     reaction_block = [self processBindsInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
                     [buffer appendString:reaction_block];
                 }
-                else if ([verb isEqualToString:@"degrades"] == YES)
+                else if ([verb_fragment isEqualToString:@"degrades"] == YES)
                 {
                     NSArray *split = [transformation_string componentsSeparatedByString:verb];
                     reaction_block = [self processDegradesInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
                     [buffer appendString:reaction_block];
                 }
-                else if ([verb isEqualToString:@"transcribes"] == YES)
+                else if ([verb_fragment isEqualToString:@"auto"] == YES)
+                {
+                    NSArray *split = [transformation_string componentsSeparatedByString:verb];
+                    reaction_block = [self processAutoactivationInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
+                    [buffer appendString:reaction_block];
+                }
+                else if ([verb_fragment isEqualToString:@"transcribes"] == YES)
                 {
                     NSArray *split = [transformation_string componentsSeparatedByString:verb];
                     reaction_block = [self processTranscribesInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
+                    [buffer appendString:reaction_block];
+                }
+                else if ([verb_fragment isEqualToString:@"translates"] == YES)
+                {
+                    NSArray *split = [transformation_string componentsSeparatedByString:verb];
+                    reaction_block = [self processTranslatesInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
+                    [buffer appendString:reaction_block];
+                }
+                else if ([verb_fragment isEqualToString:@"phosphorylates"] == YES &&
+                         [verb_fragment isEqualToString:verb] == YES)
+                {
+                    // we are getting false +'s => make sure *not* dephosphorylates
+                    NSRange local_range = [transformation_string rangeOfString:@"dephosphorylates"];
+                    if (local_range.location == NSNotFound)
+                    {
+                        NSArray *split = [transformation_string componentsSeparatedByString:verb];
+                        reaction_block = [self processPhosphorylatesInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
+                        [buffer appendString:reaction_block];
+                    }
+                }
+                else if ([verb_fragment isEqualToString:@"dephosphorylates"] == YES)
+                {
+                    NSLog(@"%@",transformation_string);
+                    
+                    // we are getting false +'s => make sure *not* phosphorylates
+                    NSRange local_range = [transformation_string rangeOfString:@"phosphorylates"];
+                    NSString *tmp = @"dephosphorylates";
+                    if (local_range.length != [tmp length])
+                    {
+                        NSArray *split = [transformation_string componentsSeparatedByString:verb];
+                        reaction_block = [self processDephosphorylatesInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
+                        [buffer appendString:reaction_block];
+                    }
+                }
+                else if ([verb_fragment isEqualToString:@"activates"] == YES)
+                {
+                    NSArray *split = [transformation_string componentsSeparatedByString:verb];
+                    reaction_block = [self processActivatesInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
+                    [buffer appendString:reaction_block];
+                }
+                else if ([verb_fragment isEqualToString:@"flux_inputs"] == YES)
+                {
+                    NSArray *split = [transformation_string componentsSeparatedByString:verb];
+                    reaction_block = [self processFluxInputsInteractionWithInputArray:split andOutputString:output_string atReactionIndex:&reaction_counter];
                     [buffer appendString:reaction_block];
                 }
             }
@@ -172,13 +225,124 @@
         [reaction_set addObject:buffer];
         
         // update -
-        reaction_counter++;
+        //reaction_counter++;
     }
     
     return reaction_set;
 }
 
+-(NSString *)processFluxInputsInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
+{
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // do we have compound reactants?
+    NSString *reactant_1 = [[reactantArray objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *reactant_2 = [[reactantArray objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *productString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    
+    __unused NSArray *major_reactant_array = [reactant_1 componentsSeparatedByString:@","];
+    __unused NSArray *minor_reactant_array = [reactant_2 componentsSeparatedByString:@","];
+    NSArray *product_array = [productString componentsSeparatedByString:@","];
+    
+    // forward -
+    // NSInteger local_counter = 0;
+    for (NSString *major_species in product_array)
+    {
+        [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_INPUT_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+        [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",@"[]"];
+        [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+        
+        [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+        [buffer appendString:@"\t\t</reaction>\n"];
+        
+        // update reaction counter -
+        (*reactionIndex)++;
+    }
+    
+    // return -
+    return buffer;
+}
+
+
+-(NSString *)processAutoactivationInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
+{
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // do we have compound reactants?
+    NSString *reactant_1 = [[reactantArray objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *reactant_2 = [[reactantArray objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *productString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    
+    NSArray *major_reactant_array = [reactant_1 componentsSeparatedByString:@","];
+    __unused NSArray *minor_reactant_array = [reactant_2 componentsSeparatedByString:@","];
+    NSArray *product_array = [productString componentsSeparatedByString:@","];
+    
+    // forward -
+    NSInteger local_counter = 0;
+    for (NSString *major_species in major_reactant_array)
+    {
+        [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_AUTOACTIVATION_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+        [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+        
+        [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+        NSString *product_species = [product_array objectAtIndex:local_counter];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",product_species];
+        [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+        [buffer appendString:@"\t\t</reaction>\n"];
+        
+        // update reaction counter -
+        (*reactionIndex)++;
+    }
+    
+    // return -
+    return buffer;
+}
+
+
 -(NSString *)processDegradesInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
+{
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // do we have compound reactants?
+    NSString *reactant_1 = [[reactantArray objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *reactant_2 = [[reactantArray objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *productString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    
+    NSArray *major_reactant_array = [reactant_1 componentsSeparatedByString:@","];
+    __unused NSArray *minor_reactant_array = [reactant_2 componentsSeparatedByString:@","];
+    __unused NSArray *product_array = [productString componentsSeparatedByString:@","];
+    
+    // forward -
+    // NSInteger local_counter = 0;
+    for (NSString *major_species in major_reactant_array)
+    {
+        [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_DEGRADES_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+        [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+        
+        [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",@"[]"];
+        [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+        [buffer appendString:@"\t\t</reaction>\n"];
+        
+        // update reaction counter -
+        (*reactionIndex)++;
+    }
+    
+    // return -
+    return buffer;
+}
+
+-(NSString *)processActivatesInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
 {
     // Buffer -
     NSMutableString *buffer = [[NSMutableString alloc] init];
@@ -193,25 +357,173 @@
     NSArray *product_array = [productString componentsSeparatedByString:@","];
     
     // forward -
-    // NSInteger local_counter = 0;
+    NSInteger local_counter = 0;
     for (NSString *major_species in major_reactant_array)
     {
-        [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_DEGRADES_R%lu::FORWARD' reversible='false'>\n",*reactionIndex,*reactionIndex];
-        [buffer appendString:@"\t\t\t<listOfReactants>\n"];
-        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-        [buffer appendString:@"\t\t\t</listOfReactants>\n"];
-        
-        [buffer appendString:@"\t\t\t<listOfProducts>\n"];
-        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",@"[]"];
-        [buffer appendString:@"\t\t\t</listOfProducts>\n"];
-        [buffer appendString:@"\t\t</reaction>\n"];
-        
-        // update reaction counter -
-        (*reactionIndex)++;
+        for (NSString *minor_species in minor_reactant_array)
+        {
+            [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_ACTIVATES_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+            [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            
+            [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+            
+            [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+            NSString *product_species = [product_array objectAtIndex:local_counter];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+            [buffer appendString:@"\t\t</reaction>\n"];
+            
+            // update counter -
+            local_counter++;
+            
+            // update reaction counter -
+            (*reactionIndex)++;
+        }
     }
     
-    // return -
     return buffer;
+}
+
+
+-(NSString *)processPhosphorylatesInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
+{
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // do we have compound reactants?
+    NSString *reactant_1 = [[reactantArray objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *reactant_2 = [[reactantArray objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *productString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    
+    NSArray *major_reactant_array = [reactant_1 componentsSeparatedByString:@","];
+    NSArray *minor_reactant_array = [reactant_2 componentsSeparatedByString:@","];
+    NSArray *product_array = [productString componentsSeparatedByString:@","];
+    
+    // forward -
+    NSInteger local_counter = 0;
+    for (NSString *major_species in major_reactant_array)
+    {
+        for (NSString *minor_species in minor_reactant_array)
+        {
+            [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_PHOSPHORYLATES_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+            [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            
+            [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+            
+            [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+            NSString *product_species = [product_array objectAtIndex:local_counter];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+            [buffer appendString:@"\t\t</reaction>\n"];
+            
+            // update counter -
+            local_counter++;
+            
+            // update reaction counter -
+            (*reactionIndex)++;
+        }
+    }
+    
+    return buffer;
+}
+
+
+-(NSString *)processDephosphorylatesInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
+{
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // do we have compound reactants?
+    NSString *reactant_1 = [[reactantArray objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *reactant_2 = [[reactantArray objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *productString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    
+    NSArray *major_reactant_array = [reactant_1 componentsSeparatedByString:@","];
+    NSArray *minor_reactant_array = [reactant_2 componentsSeparatedByString:@","];
+    NSArray *product_array = [productString componentsSeparatedByString:@","];
+    
+    // forward -
+    NSInteger local_counter = 0;
+    for (NSString *major_species in major_reactant_array)
+    {
+        for (NSString *minor_species in minor_reactant_array)
+        {
+            [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_DEPHOSPHORYLATES_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+            [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            
+            [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+            
+            [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+            NSString *product_species = [product_array objectAtIndex:local_counter];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+            [buffer appendString:@"\t\t</reaction>\n"];
+            
+            // update counter -
+            local_counter++;
+            
+            // update reaction counter -
+            (*reactionIndex)++;
+        }
+    }
+    
+    return buffer;
+}
+
+-(NSString *)processTranslatesInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
+{
+    // Buffer -
+    NSMutableString *buffer = [[NSMutableString alloc] init];
+    
+    // do we have compound reactants?
+    NSString *reactant_1 = [[reactantArray objectAtIndex:0] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *reactant_2 = [[reactantArray objectAtIndex:1] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    NSString *productString = [outputString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"( )"]];
+    
+    NSArray *major_reactant_array = [reactant_1 componentsSeparatedByString:@","];
+    NSArray *minor_reactant_array = [reactant_2 componentsSeparatedByString:@","];
+    NSArray *product_array = [productString componentsSeparatedByString:@","];
+    
+    // forward -
+    NSInteger local_counter = 0;
+    for (NSString *major_species in major_reactant_array)
+    {
+        for (NSString *minor_species in minor_reactant_array)
+        {
+            [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_TRANSLATES_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
+            [buffer appendString:@"\t\t\t<listOfReactants>\n"];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            
+            [buffer appendString:@"\t\t\t</listOfReactants>\n"];
+            
+            [buffer appendString:@"\t\t\t<listOfProducts>\n"];
+            NSString *product_species = [product_array objectAtIndex:local_counter];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendString:@"\t\t\t</listOfProducts>\n"];
+            [buffer appendString:@"\t\t</reaction>\n"];
+            
+            // update counter -
+            local_counter++;
+            
+            // update reaction counter -
+            (*reactionIndex)++;
+        }
+    }
+    
+    return buffer;
+
 }
 
 -(NSString *)processTranscribesInteractionWithInputArray:(NSArray *)reactantArray andOutputString:(NSString *)outputString atReactionIndex:(NSInteger *)reactionIndex
@@ -234,17 +546,18 @@
     {
         for (NSString *minor_species in minor_reactant_array)
         {
-            [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_TRANSCRIBES_R%lu::FORWARD' reversible='false'>\n",*reactionIndex,*reactionIndex];
+            [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_TRANSCRIBES_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
             [buffer appendString:@"\t\t\t<listOfReactants>\n"];
-            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
             
             [buffer appendString:@"\t\t\t</listOfReactants>\n"];
             
             [buffer appendString:@"\t\t\t<listOfProducts>\n"];
             NSString *product_species = [product_array objectAtIndex:local_counter];
-            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
             [buffer appendString:@"\t\t\t</listOfProducts>\n"];
             [buffer appendString:@"\t\t</reaction>\n"];
             
@@ -277,23 +590,26 @@
     NSInteger local_counter = 0;
     for (NSString *major_species in major_reactant_array)
     {
-        [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_BINDS_R%lu::FORWARD' reversible='false'>\n",*reactionIndex,*reactionIndex];
+        [buffer appendFormat:@"\t\t<reaction id='R_%lu' name='R_BINDS_R%lu' reversible='false'>\n",*reactionIndex,*reactionIndex];
         [buffer appendString:@"\t\t\t<listOfReactants>\n"];
         for (NSString *minor_species in minor_reactant_array)
         {
-            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[major_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+            [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[minor_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         }
         [buffer appendString:@"\t\t\t</listOfReactants>\n"];
         
         [buffer appendString:@"\t\t\t<listOfProducts>\n"];
         NSString *product_species = [product_array objectAtIndex:local_counter];
-        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' initialAmount='0.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        [buffer appendFormat:@"\t\t\t\t<speciesReference species='%@' stoichiometry='1.0'/>\n",[product_species stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         [buffer appendString:@"\t\t\t</listOfProducts>\n"];
         [buffer appendString:@"\t\t</reaction>\n"];
         
         // update counter -
         local_counter++;
+        
+        // update reaction counter -
+        (*reactionIndex)++;
     }
     
     // reverse -
