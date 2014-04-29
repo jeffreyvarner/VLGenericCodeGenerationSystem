@@ -81,7 +81,11 @@
             NSArray *compound_species_list = [raw_species_2 componentsSeparatedByString:@","];
             for (NSString *species_symbol in compound_species_list)
             {
-                [speciesArray addObject:species_symbol];
+                
+                if ([speciesArray containsObject:species_symbol] == NO)
+                {
+                    [speciesArray addObject:species_symbol];
+                }
             }
         }
     }

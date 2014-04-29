@@ -16,6 +16,7 @@
 	<map_link symbol="WRITE_OCTAVE_M_KINETICS_EQUATIONS" class="VLOctaveMOutputHandler" method="generateOctaveMKineticsActionWithOptions:"/>
 	
 	<map_link symbol="WRITE_MATLAB_M_CONSTRAINED_SIGNALING_DATAFILE" class="VLMatlabMOutputHandler" method="generateMatlabMConstrainedSiganlingDataFileActionWithOptions:"/>
+	<map_link symbol="WRITE_MATLAB_M_CONSTRAINED_SIGNALING_CONTROL_EQUATIONS" class="VLMatlabMOutputHandler" method="generateMatlabMConstrainedSiganlingControlFileActionWithOptions:"/>
 	
 	<map_link symbol="WRITE_OCATVE_C_DATAFILE" class="VLOctaveCOutputHandler" method="generateOctaveCDataFileActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_C_BALANCE_EQUATIONS" class="VLOctaveCOutputHandler" method="generateOctaveCBalanceEquationsActionWithOptions:"/>
@@ -90,6 +91,7 @@
 		
 		<VLMatlabMOutputHandler>
 			<strategy_map model_type="CONSTRAINTS_BASED_SIGNALING_MODEL" method="generateMatlabMConstrainedSiganlingDataFileActionWithOptions:" strategy_class="VLMatlabMDataFileCBSignalingModelStrategy"/>
+			<strategy_map model_type="CONSTRAINTS_BASED_SIGNALING_MODEL" method="generateMatlabMConstrainedSiganlingControlFileActionWithOptions:" strategy_class="VLMatlabMControlFunctionCBSignalingModelStrategy"/>
 		</VLMatlabMOutputHandler>
 		
 	</strategy_mapping_block>

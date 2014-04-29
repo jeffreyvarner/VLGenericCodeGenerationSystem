@@ -15,5 +15,6 @@
 
 // language specific logic methods
 -(id)generateMatlabMConstrainedSiganlingDataFileActionWithOptions:(NSDictionary *)options;
+-(id)generateMatlabMConstrainedSiganlingControlFileActionWithOptions:(NSDictionary *)options;
 
 @end

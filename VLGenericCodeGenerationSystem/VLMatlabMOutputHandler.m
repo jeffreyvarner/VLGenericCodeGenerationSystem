@@ -27,6 +27,23 @@
     return result;
 }
 
+-(id)generateMatlabMConstrainedSiganlingControlFileActionWithOptions:(NSDictionary *)options
+{
+    // I also need my current method sel and my class -
+    SEL my_current_selector = _cmd;
+    
+    // execute strategy -
+    id result = [self executeStrategyFactoryCallForObject:self
+                                              andSelector:my_current_selector
+                                              withOptions:options];
+    
+    // write -
+    [self writeCodeGenerationOutput:result toFileWithOptions:options];
+    
+    // return the result from the strategy object -
+    return result;
+}
+
 #pragma mark - helper
 -(id)executeStrategyFactoryCallForObject:(NSObject *)caller
                              andSelector:(SEL)methodSelector
