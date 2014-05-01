@@ -93,7 +93,14 @@
             NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
             if ([species_symbol isEqualToString:@"[]"] == NO)
             {
-                [buffer appendFormat:@"*((%@)/(1.0 + %@))",species_symbol,species_symbol];
+                if ([species_symbol isEqualTo:@"RNAP"] == YES || [species_symbol isEqualTo:@"RIBOSOME"] == YES)
+                {
+                    [buffer appendFormat:@"*((%@)/(10.0 + %@))",species_symbol,species_symbol];
+                }
+                else
+                {
+                    [buffer appendFormat:@"*((%@)/(1.0 + %@))",species_symbol,species_symbol];
+                }
             }
         }
         
