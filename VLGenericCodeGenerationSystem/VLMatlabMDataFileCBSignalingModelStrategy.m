@@ -129,6 +129,38 @@
         }
         [buffer appendString:@"];\n"];
 
+        NEW_LINE;
+        [buffer appendString:@"% Upper bound gain --\n"];
+        [buffer appendString:@"BETA = [\n"];
+        reaction_counter = 1;
+        for (NSXMLElement *reaction_node in reaction_array)
+        {
+            NSMutableString *comment_buffer = [[NSMutableString alloc] init];
+            [comment_buffer appendString:@"("];
+            NSArray *reactant_array = [reaction_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
+            for (NSXMLElement *reactant_node in reactant_array)
+            {
+                NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
+                [comment_buffer appendFormat:@"%@ ",species_symbol];
+            }
+            
+            [comment_buffer appendString:@") --> ("];
+            NSArray *product_array = [reaction_node nodesForXPath:@"./listOfProducts/speciesReference" error:nil];
+            for (NSXMLElement *product_node in product_array)
+            {
+                NSString *species_symbol = [[product_node attributeForName:@"species"] stringValue];
+                [comment_buffer appendFormat:@"%@ ",species_symbol];
+            }
+            
+            [comment_buffer appendString:@")"];
+            
+            NSString *name = [[reaction_node attributeForName:@"name"] stringValue];
+            [buffer appendFormat:@"\t100.0\t;\t%% R_%lu\t%@\t%@\n",reaction_counter,name,comment_buffer];
+            
+            // update counter -
+            reaction_counter++;
+        }
+        [buffer appendString:@"];\n"];
         
         // bottom footer -
         NEW_LINE;
@@ -151,6 +183,7 @@
     [tmpBuffer appendString:@"DF.STOICHIOMETRIC_MATRIX          =   STM;\n"];
     [tmpBuffer appendString:@"DF.FLUX_BOUNDS                    =   FB;\n"];
     [tmpBuffer appendString:@"DF.GAIN_LOWER_BOUND               =   ALPHA;\n"];
+    [tmpBuffer appendString:@"DF.GAIN_UPPER_BOUND               =   BETA;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_OF_STATES               =   NSTATES;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_OF_RATES                =   NRATES;\n"];
     [tmpBuffer appendString:@"% ================================================================== %\n"];

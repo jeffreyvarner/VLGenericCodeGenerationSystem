@@ -109,6 +109,39 @@
         // update reaction counter -
         reaction_counter++;
     }
+    NEW_LINE;
+    [buffer appendString:@"BETA = DFIN.GAIN_UPPER_BOUND;\n"];
+    
+    // write the LB -
+    reaction_counter = 1;
+    for (NSXMLElement *reaction_node in reaction_array)
+    {
+        [buffer appendFormat:@"UB(%lu,1) = BETA(%lu,1)",reaction_counter,reaction_counter];
+        
+        // What are the reactants?
+        NSArray *reactant_array = [reaction_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
+        for (NSXMLElement *reactant_node in reactant_array)
+        {
+            NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
+            if ([species_symbol isEqualToString:@"[]"] == NO)
+            {
+                if ([species_symbol isEqualTo:@"RNAP"] == YES || [species_symbol isEqualTo:@"RIBOSOME"] == YES)
+                {
+                    [buffer appendFormat:@"*((%@)/(10.0 + %@))",species_symbol,species_symbol];
+                }
+                else
+                {
+                    [buffer appendFormat:@"*((%@)/(1.0 + %@))",species_symbol,species_symbol];
+                }
+            }
+        }
+        
+        [buffer appendString:@";\n"];
+        
+        // update reaction counter -
+        reaction_counter++;
+    }
+
     
     NEW_LINE;
     [buffer appendString:@"return;\n"];
