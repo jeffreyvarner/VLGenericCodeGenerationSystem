@@ -78,10 +78,13 @@
     }
     NEW_LINE;
     [buffer appendString:@"ALPHA = DFIN.GAIN_LOWER_BOUND;\n"];
+    [buffer appendString:@"k = DFIN.PARAMETERS_BOUNDS;\n"];
     
     // write the LB -
     NSArray *reaction_array = [input_tree nodesForXPath:@".//reaction" error:nil];
     NSUInteger reaction_counter = 1;
+    NSUInteger parameter_counter = 1;
+    NSUInteger reactant_index = 1;
     for (NSXMLElement *reaction_node in reaction_array)
     {
         [buffer appendFormat:@"LB(%lu,1) = ALPHA(%lu,1)",reaction_counter,reaction_counter];
@@ -93,15 +96,16 @@
             NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
             if ([species_symbol isEqualToString:@"[]"] == NO)
             {
-                if ([species_symbol isEqualTo:@"RNAP"] == YES || [species_symbol isEqualTo:@"RIBOSOME"] == YES)
-                {
-                    [buffer appendFormat:@"*((%@)/(10.0 + %@))",species_symbol,species_symbol];
-                }
-                else
-                {
-                    [buffer appendFormat:@"*((%@)/(1.0 + %@))",species_symbol,species_symbol];
-                }
+                NSInteger hill_index = reactant_index;
+                NSInteger saturation_index = reactant_index + 1;
+                
+                [buffer appendFormat:@"*((%@^k(%lu,1))/",species_symbol,hill_index];
+                [buffer appendFormat:@"(k(%lu,1)",saturation_index];
+                [buffer appendFormat:@"^k(%lu,1)",hill_index];
+                [buffer appendFormat:@" + %@^k(%lu,1)))",species_symbol,hill_index];
             }
+            
+            reactant_index = reactant_index + 2;
         }
         
         [buffer appendString:@";\n"];
@@ -114,6 +118,8 @@
     
     // write the LB -
     reaction_counter = 1;
+    parameter_counter = 1;
+    reactant_index = 1;
     for (NSXMLElement *reaction_node in reaction_array)
     {
         [buffer appendFormat:@"UB(%lu,1) = BETA(%lu,1)",reaction_counter,reaction_counter];
@@ -125,15 +131,16 @@
             NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
             if ([species_symbol isEqualToString:@"[]"] == NO)
             {
-                if ([species_symbol isEqualTo:@"RNAP"] == YES || [species_symbol isEqualTo:@"RIBOSOME"] == YES)
-                {
-                    [buffer appendFormat:@"*((%@)/(10.0 + %@))",species_symbol,species_symbol];
-                }
-                else
-                {
-                    [buffer appendFormat:@"*((%@)/(1.0 + %@))",species_symbol,species_symbol];
-                }
+                NSInteger hill_index = reactant_index;
+                NSInteger saturation_index = reactant_index + 1;
+                
+                [buffer appendFormat:@"*((%@^k(%lu,2))/",species_symbol,hill_index];
+                [buffer appendFormat:@"(k(%lu,2)",saturation_index];
+                [buffer appendFormat:@"^k(%lu,2)",hill_index];
+                [buffer appendFormat:@" + %@^k(%lu,2)))",species_symbol,hill_index];
             }
+            
+            reactant_index = reactant_index + 2;
         }
         
         [buffer appendString:@";\n"];

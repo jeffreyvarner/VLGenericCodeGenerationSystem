@@ -161,6 +161,35 @@
             reaction_counter++;
         }
         [buffer appendString:@"];\n"];
+        NEW_LINE;
+        [buffer appendString:@"% Parameters in the bounds functions --\n"];
+        [buffer appendString:@"kV = [\n"];
+        for (NSXMLElement *reaction_node in reaction_array)
+        {
+            // What are the reactants?
+            NSArray *reactant_array = [reaction_node nodesForXPath:@"./listOfReactants/speciesReference" error:nil];
+            for (NSXMLElement *reactant_node in reactant_array)
+            {
+                NSString *species_symbol = [[reactant_node attributeForName:@"species"] stringValue];
+                if ([species_symbol isEqualToString:@"[]"] == NO)
+                {
+                    // hill-coefficients -
+                    [buffer appendString:@"\t1.0 1.0\t;\t% Hill-coefficients \n"];
+                    
+                    // saturation coefficients -
+                    if ([species_symbol isEqualToString:@"RNAP"] == YES ||
+                        [species_symbol isEqualToString:@"RIBOSOME"] == YES)
+                    {
+                        [buffer appendString:@"\t10.0 10.0\t;\t% Saturation \n"];
+                    }
+                    else
+                    {
+                        [buffer appendString:@"\t1.0 1.0\t;\t% Saturation \n"];
+                    }
+                }
+            }
+        }
+        [buffer appendString:@"];\n"];
         
         // bottom footer -
         NEW_LINE;
@@ -184,6 +213,7 @@
     [tmpBuffer appendString:@"DF.FLUX_BOUNDS                    =   FB;\n"];
     [tmpBuffer appendString:@"DF.GAIN_LOWER_BOUND               =   ALPHA;\n"];
     [tmpBuffer appendString:@"DF.GAIN_UPPER_BOUND               =   BETA;\n"];
+    [tmpBuffer appendString:@"DF.PARAMETERS_BOUNDS              =   kV;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_OF_STATES               =   NSTATES;\n"];
     [tmpBuffer appendString:@"DF.NUMBER_OF_RATES                =   NRATES;\n"];
     [tmpBuffer appendString:@"% ================================================================== %\n"];

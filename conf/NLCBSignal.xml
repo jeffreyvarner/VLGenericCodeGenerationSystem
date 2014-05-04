@@ -2,21 +2,21 @@
 <Model type="CONSTRAINTS_BASED_SIGNALING_MODEL">
 
 	<properties>
-		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/matlab_work/signal_flux"/>
+		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/julia_work/type_2_iffl"/>
 		<property symbol="COPYRIGHT_TEXT" value="/Users/jeffreyvarner/Desktop/MyUniversalProjects/VLGenericCodeGenerationSystem/conf/Copyright.text"/>
 	</properties>
 	
 	<transformation id="NLVFF_2_STM">
 		
 		<input_handler strategy_handler="READ_NLVFF">
-			<transformation_property type="PATH" value="/Memory.net"/>
+			<transformation_property type="PATH" value="/Type2.net"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
 		<output_handler strategy_handler="WRITE_SBML">
-			<transformation_property type="PATH" value="/Network.xml"/>
+			<transformation_property type="PATH" value="/Type2.xml"/>
 		</output_handler>
 		
 	</transformation>
@@ -24,7 +24,7 @@
 	<transformation id="SBML_2_STM">
 		
 		<input_handler strategy_handler="READ_SBML">
-			<transformation_property type="PATH" value="/Network.xml"/>
+			<transformation_property type="PATH" value="/Type2.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
@@ -39,7 +39,7 @@
 	<transformation id="SBML_2_FB">
 		
 		<input_handler strategy_handler="READ_SBML">
-			<transformation_property type="PATH" value="/Network.xml"/>
+			<transformation_property type="PATH" value="/Type2.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
@@ -54,7 +54,7 @@
 	<transformation id="SBML_2_DATAFILE">
 		
 		<input_handler strategy_handler="READ_SBML">
-			<transformation_property type="PATH" value="/Network.xml"/>
+			<transformation_property type="PATH" value="/Type2.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
@@ -71,7 +71,7 @@
 	<transformation id="SBML_2_CONTROLFILE">
 		
 		<input_handler strategy_handler="READ_SBML">
-			<transformation_property type="PATH" value="/Network.xml"/>
+			<transformation_property type="PATH" value="/Type2.xml"/>
 		</input_handler>
 		
 		<filter_handler strategy_handler="FILTER_IDENTITY">
