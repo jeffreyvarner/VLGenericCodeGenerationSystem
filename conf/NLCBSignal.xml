@@ -2,7 +2,7 @@
 <Model type="CONSTRAINTS_BASED_SIGNALING_MODEL">
 
 	<properties>
-		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/julia_work/type_2_iffl"/>
+		<property symbol="WORKING_DIRECTORY" value="/Users/jeffreyvarner/julia_work/type_2_iffl_julia"/>
 		<property symbol="COPYRIGHT_TEXT" value="/Users/jeffreyvarner/Desktop/MyUniversalProjects/VLGenericCodeGenerationSystem/conf/Copyright.text"/>
 	</properties>
 	
@@ -60,8 +60,8 @@
 		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
-		<output_handler strategy_handler="WRITE_MATLAB_M_CONSTRAINED_SIGNALING_DATAFILE">
-			<transformation_property type="PATH" value="/DataFile.m"/>
+		<output_handler strategy_handler="WRITE_JULIA_CONSTRAINED_SIGNALING_DATAFILE">
+			<transformation_property type="PATH" value="/DataFile.jl"/>
 			<transformation_property type="FUNCTION_NAME" value="DataFile"/>
 			<transformation_property type="UNBALANCED_SPECIES_COMPARTMENT_SYMBOL" value="EXTRACELLULAR"/>
 		</output_handler>
@@ -77,8 +77,8 @@
 		<filter_handler strategy_handler="FILTER_IDENTITY">
 		</filter_handler>
 		
-		<output_handler strategy_handler="WRITE_MATLAB_M_CONSTRAINED_SIGNALING_CONTROL_EQUATIONS">
-			<transformation_property type="PATH" value="/Control.m"/>
+		<output_handler strategy_handler="WRITE_JULIA_CONSTRAINED_SIGNALING_CONTROL_EQUATIONS">
+			<transformation_property type="PATH" value="/Control.jl"/>
 			<transformation_property type="FUNCTION_NAME" value="Control"/>
 		</output_handler>
 		

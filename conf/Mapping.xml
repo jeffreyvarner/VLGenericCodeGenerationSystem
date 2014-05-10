@@ -18,6 +18,9 @@
 	<map_link symbol="WRITE_MATLAB_M_CONSTRAINED_SIGNALING_DATAFILE" class="VLMatlabMOutputHandler" method="generateMatlabMConstrainedSiganlingDataFileActionWithOptions:"/>
 	<map_link symbol="WRITE_MATLAB_M_CONSTRAINED_SIGNALING_CONTROL_EQUATIONS" class="VLMatlabMOutputHandler" method="generateMatlabMConstrainedSiganlingControlFileActionWithOptions:"/>
 	
+	<map_link symbol="WRITE_JULIA_CONSTRAINED_SIGNALING_DATAFILE" class="VLJuliaOutputHandler" method="generateJuliaConstrainedSignalingDataFileActionWithOptions:"/>
+	<map_link symbol="WRITE_JULIA_CONSTRAINED_SIGNALING_CONTROL_EQUATIONS" class="VLJuliaOutputHandler" method="generateJuliaConstrainedSignalingControlFileActionWithOptions:"/>
+	
 	<map_link symbol="WRITE_OCATVE_C_DATAFILE" class="VLOctaveCOutputHandler" method="generateOctaveCDataFileActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_C_BALANCE_EQUATIONS" class="VLOctaveCOutputHandler" method="generateOctaveCBalanceEquationsActionWithOptions:"/>
 	<map_link symbol="WRITE_OCTAVE_C_SOLVE_BALANCE_EQUATIONS" class="VLOctaveCOutputHandler" method="generateOctaveCSolveBalanceEquationsActionWithOptions:"/>
@@ -93,6 +96,11 @@
 			<strategy_map model_type="CONSTRAINTS_BASED_SIGNALING_MODEL" method="generateMatlabMConstrainedSiganlingDataFileActionWithOptions:" strategy_class="VLMatlabMDataFileCBSignalingModelStrategy"/>
 			<strategy_map model_type="CONSTRAINTS_BASED_SIGNALING_MODEL" method="generateMatlabMConstrainedSiganlingControlFileActionWithOptions:" strategy_class="VLMatlabMControlFunctionCBSignalingModelStrategy"/>
 		</VLMatlabMOutputHandler>
+		
+		<VLJuliaOutputHandler>
+			<strategy_map model_type="CONSTRAINTS_BASED_SIGNALING_MODEL" method="generateJuliaConstrainedSignalingDataFileActionWithOptions:" strategy_class="VLJuliaDataFileCBSignalingModelStrategy"/>
+			<strategy_map model_type="CONSTRAINTS_BASED_SIGNALING_MODEL" method="generateJuliaConstrainedSignalingControlFileActionWithOptions:" strategy_class="VLJuliaControlFunctionCBSignalingModelStrategy"/>
+		</VLJuliaOutputHandler>
 		
 	</strategy_mapping_block>
 	

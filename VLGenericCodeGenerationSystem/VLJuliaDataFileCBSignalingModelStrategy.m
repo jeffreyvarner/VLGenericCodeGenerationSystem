@@ -1,16 +1,16 @@
 //
-//  VLMatlabMDataFileCBSignalingModelStrategy.m
+//  VLJuliaDataFileCBSignalingModelStrategy.m
 //  VLGenericCodeGenerationSystem
 //
-//  Created by Jeffrey Varner on 4/28/14.
+//  Created by Jeffrey Varner on 5/7/14.
 //  Copyright (c) 2014 Varnerlab. All rights reserved.
 //
 
-#import "VLMatlabMDataFileCBSignalingModelStrategy.h"
+#import "VLJuliaDataFileCBSignalingModelStrategy.h"
 
 #define NEW_LINE [buffer appendString:@"\n"]
 
-@implementation VLMatlabMDataFileCBSignalingModelStrategy
+@implementation VLJuliaDataFileCBSignalingModelStrategy
 
 -(id)executeStrategyWithOptions:(NSDictionary *)options
 {
@@ -49,37 +49,37 @@
     [self addCopyrightStatement:copyright_buffer toBuffer:buffer];
     
     // Populate the buffer --
-    [buffer appendFormat:@"function DF = %@(TSTART,TSTOP,Ts,INDEX)\n",tmpFunctionName];
-    [buffer appendString:@"% ---------------------------------------------------------------------- %\n"];
-    [buffer appendFormat:@"%% %@.m was generated using the UNIVERSAL code generation system.\n",tmpFunctionName];
-    [buffer appendString:@"% Username: \n"];
-    [buffer appendFormat:@"%% Type: %@ \n",typeString];
-    [buffer appendString:@"% \n"];
-    [buffer appendString:@"% Arguments: \n"];
-    [buffer appendString:@"% TSTART  - Time start \n"];
-    [buffer appendString:@"% TSTOP  - Time stop \n"];
-    [buffer appendString:@"% Ts - Time step \n"];
-    [buffer appendString:@"% INDEX - Parameter set index (for ensemble calculations) \n"];
-    [buffer appendString:@"% DF  - Data file instance \n"];
-    [buffer appendString:@"% ---------------------------------------------------------------------- %\n"];
+    [buffer appendFormat:@"function %@(TSTART,TSTOP,Ts,INDEX)\n",tmpFunctionName];
+    [buffer appendString:@"# ---------------------------------------------------------------------- #\n"];
+    [buffer appendFormat:@"# %@.m was generated using the UNIVERSAL code generation system.\n",tmpFunctionName];
+    [buffer appendString:@"# Username: \n"];
+    [buffer appendFormat:@"# Type: %@ \n",typeString];
+    [buffer appendString:@"# \n"];
+    [buffer appendString:@"# Arguments: \n"];
+    [buffer appendString:@"# TSTART  - Time start \n"];
+    [buffer appendString:@"# TSTOP  - Time stop \n"];
+    [buffer appendString:@"# Ts - Time step \n"];
+    [buffer appendString:@"# INDEX - Parameter set index (for ensemble calculations) \n"];
+    [buffer appendString:@"# DF  - Data file instance \n"];
+    [buffer appendString:@"# ---------------------------------------------------------------------- #\n"];
     [buffer appendString:@"\n"];
     
     // load the stoichiometric matrix -
-    [buffer appendString:@"% Stoichiometric matrix --\n"];
-    [buffer appendString:@"STM = load('Network.dat');\n"];
+    [buffer appendString:@"# Stoichiometric matrix --\n"];
+    [buffer appendString:@"STM = readcsv(\"Network.csv\");\n"];
     [buffer appendString:@"\n"];
-    [buffer appendString:@"% Load the FB - \n"];
-    [buffer appendString:@"FB = load('FB.dat');\n"];
+    [buffer appendString:@"# Load the FB - \n"];
+    [buffer appendString:@"FB = readcsv(\"FB.csv\");\n"];
     [buffer appendString:@"\n"];
-    [buffer appendString:@"% Get the dimension of the system -\n"];
-    [buffer appendString:@"[NSTATES,NRATES]=size(STM);\n"];
+    [buffer appendString:@"# Get the dimension of the system -\n"];
+    [buffer appendString:@"(NSTATES,NRATES) = size(STM);\n"];
     [buffer appendString:@"\n"];
     NEW_LINE;
     
     if ([model_source_encoding isEqualToString:kSourceEncodingNLVFF] == YES)
     {
         // ok - we need ICs -
-        [buffer appendString:@"% Initial conditions --\n"];
+        [buffer appendString:@"# Initial conditions --\n"];
         [buffer appendString:@"IC = [\n"];
         
         // what are my species?
@@ -90,13 +90,13 @@
             // What is the id?
             NSString *species_symbol = [[species_node attributeForName:@"id"] stringValue];
             NSString *initial_amount = [[species_node attributeForName:@"initialAmount"] stringValue];
-            [buffer appendFormat:@"\t%@\t;\t%% %lu\t%@\n",initial_amount,species_counter,species_symbol];
+            [buffer appendFormat:@"\t%@\t;\t# %lu\t%@\n",initial_amount,species_counter,species_symbol];
             species_counter++;
         }
         
         [buffer appendString:@"];\n"];
         NEW_LINE;
-        [buffer appendString:@"% Lower bound gain --\n"];
+        [buffer appendString:@"# Lower bound gain --\n"];
         [buffer appendString:@"ALPHA = [\n"];
         NSArray *reaction_array = [input_tree nodesForXPath:@".//reaction" error:nil];
         NSUInteger reaction_counter = 1;
@@ -118,19 +118,19 @@
                 NSString *species_symbol = [[product_node attributeForName:@"species"] stringValue];
                 [comment_buffer appendFormat:@"%@ ",species_symbol];
             }
-
+            
             [comment_buffer appendString:@")"];
             
             NSString *name = [[reaction_node attributeForName:@"name"] stringValue];
-            [buffer appendFormat:@"\t0.0\t;\t%% R_%lu\t%@\t%@\n",reaction_counter,name,comment_buffer];
+            [buffer appendFormat:@"\t0.0\t;\t# R_%lu\t%@\t%@\n",reaction_counter,name,comment_buffer];
             
             // update counter -
             reaction_counter++;
         }
         [buffer appendString:@"];\n"];
-
+        
         NEW_LINE;
-        [buffer appendString:@"% Upper bound gain --\n"];
+        [buffer appendString:@"# Upper bound gain --\n"];
         [buffer appendString:@"BETA = [\n"];
         reaction_counter = 1;
         for (NSXMLElement *reaction_node in reaction_array)
@@ -155,14 +155,14 @@
             [comment_buffer appendString:@")"];
             
             NSString *name = [[reaction_node attributeForName:@"name"] stringValue];
-            [buffer appendFormat:@"\t100.0\t;\t%% R_%lu\t%@\t%@\n",reaction_counter,name,comment_buffer];
+            [buffer appendFormat:@"\t100.0\t;\t# R_%lu\t%@\t%@\n",reaction_counter,name,comment_buffer];
             
             // update counter -
             reaction_counter++;
         }
         [buffer appendString:@"];\n"];
         NEW_LINE;
-        [buffer appendString:@"% Parameters in the bounds functions --\n"];
+        [buffer appendString:@"# Parameters in the bounds functions --\n"];
         [buffer appendString:@"kV = [\n"];
         NSInteger parameter_counter = 1;
         reaction_counter = 1;
@@ -176,17 +176,17 @@
                 if ([species_symbol isEqualToString:@"[]"] == NO)
                 {
                     // hill-coefficients -
-                    [buffer appendFormat:@"\t1.0 1.0\t;\t%% %lu\t Hill-coefficient %@ in R_%lu\n",(parameter_counter++),species_symbol,reaction_counter];
+                    [buffer appendFormat:@"\t1.0 1.0\t;\t# %lu\t Hill-coefficient %@ in R_%lu\n",(parameter_counter++),species_symbol,reaction_counter];
                     
                     // saturation coefficients -
                     if ([species_symbol isEqualToString:@"RNAP"] == YES ||
                         [species_symbol isEqualToString:@"RIBOSOME"] == YES)
                     {
-                        [buffer appendFormat:@"\t10.0 10.0\t;\t%% %lu\t Saturation %@ in R_%lu\n",(parameter_counter++),species_symbol,reaction_counter];
+                        [buffer appendFormat:@"\t10.0 10.0\t;\t# %lu\t Saturation %@ in R_%lu\n",(parameter_counter++),species_symbol,reaction_counter];
                     }
                     else
                     {
-                        [buffer appendFormat:@"\t1.0 1.0\t;\t%% %lu\t Saturation %@ in R_%lu\n",(parameter_counter++),species_symbol,reaction_counter];
+                        [buffer appendFormat:@"\t1.0 1.0\t;\t# %lu\t Saturation %@ in R_%lu\n",(parameter_counter++),species_symbol,reaction_counter];
                     }
                 }
             }
@@ -203,7 +203,8 @@
         NEW_LINE;
         NSString *footer = [self formulateDataFileStructWithTree:input_tree];
         [buffer appendString:footer];
-        [buffer appendString:@"return;\n"];
+        [buffer appendString:@"return DF;\n"];
+        [buffer appendString:@"end;\n"];
     }
     
     return buffer;
@@ -214,18 +215,18 @@
     // Initialize initial string -
     NSMutableString *tmpBuffer = [NSMutableString string];
     
-    
-    [tmpBuffer appendString:@"% =========== DO NOT EDIT BELOW THIS LINE ========================== %\n"];
-    [tmpBuffer appendString:@"DF.INITIAL_CONDITION_VECTOR       =   IC;\n"];
-    [tmpBuffer appendString:@"DF.STOICHIOMETRIC_MATRIX          =   STM;\n"];
-    [tmpBuffer appendString:@"DF.FLUX_BOUNDS                    =   FB;\n"];
-    [tmpBuffer appendString:@"DF.GAIN_LOWER_BOUND               =   ALPHA;\n"];
-    [tmpBuffer appendString:@"DF.GAIN_UPPER_BOUND               =   BETA;\n"];
-    [tmpBuffer appendString:@"DF.PARAMETERS_BOUNDS              =   kV;\n"];
-    [tmpBuffer appendString:@"DF.NUMBER_OF_STATES               =   NSTATES;\n"];
-    [tmpBuffer appendString:@"DF.NUMBER_OF_RATES                =   NRATES;\n"];
-    [tmpBuffer appendString:@"DF.SPECIFIC_GROWTH_RATE           =   SPECIFIC_GROWTH_RATE;\n"];
-    [tmpBuffer appendString:@"% ================================================================== %\n"];
+    [tmpBuffer appendString:@"# =========== DO NOT EDIT BELOW THIS LINE ========================== #\n"];
+    [tmpBuffer appendString:@"DF = Dict();\n"];
+    [tmpBuffer appendString:@"DF[\"INITIAL_CONDITION_VECTOR\"]       =   IC;\n"];
+    [tmpBuffer appendString:@"DF[\"STOICHIOMETRIC_MATRIX\"]          =   STM;\n"];
+    [tmpBuffer appendString:@"DF[\"FLUX_BOUNDS\"]                    =   FB;\n"];
+    [tmpBuffer appendString:@"DF[\"GAIN_LOWER_BOUND\"]               =   ALPHA;\n"];
+    [tmpBuffer appendString:@"DF[\"GAIN_UPPER_BOUND\"]               =   BETA;\n"];
+    [tmpBuffer appendString:@"DF[\"PARAMETERS_BOUNDS\"]              =   kV;\n"];
+    [tmpBuffer appendString:@"DF[\"NUMBER_OF_STATES\"]               =   NSTATES;\n"];
+    [tmpBuffer appendString:@"DF[\"NUMBER_OF_RATES\"]                =   NRATES;\n"];
+    [tmpBuffer appendString:@"DF[\"SPECIFIC_GROWTH_RATE\"]           =   SPECIFIC_GROWTH_RATE;\n"];
+    [tmpBuffer appendString:@"# ================================================================== #\n"];
     
     // return -
     return tmpBuffer;

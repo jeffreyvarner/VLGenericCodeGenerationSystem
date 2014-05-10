@@ -36,6 +36,9 @@
 		AD8F74AF190D9B8200A6A5A8 /* VLNLVFFInputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8F74AE190D9B8200A6A5A8 /* VLNLVFFInputHandler.m */; };
 		AD8F74B2190EDE1700A6A5A8 /* VLMatlabMDataFileCBSignalingModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8F74B1190EDE1700A6A5A8 /* VLMatlabMDataFileCBSignalingModelStrategy.m */; };
 		AD8F74B5190EE0EE00A6A5A8 /* VLMatlabMOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD8F74B4190EE0EE00A6A5A8 /* VLMatlabMOutputHandler.m */; };
+		AD9CB259191AC3700033E3D0 /* VLJuliaOutputHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9CB258191AC3700033E3D0 /* VLJuliaOutputHandler.m */; };
+		AD9CB25E191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9CB25D191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.m */; };
+		AD9CB261191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = AD9CB260191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.m */; };
 		ADB25E2F18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADB25E2E18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.m */; };
 		ADCA5C6418F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCA5C6318F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.m */; };
 		ADCA5C6818F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = ADCA5C6718F4BE0100E95221 /* VLOctaveMDataFileMetabolicModelStrategy.m */; };
@@ -132,6 +135,12 @@
 		AD8F74B1190EDE1700A6A5A8 /* VLMatlabMDataFileCBSignalingModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLMatlabMDataFileCBSignalingModelStrategy.m; sourceTree = "<group>"; };
 		AD8F74B3190EE0EE00A6A5A8 /* VLMatlabMOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLMatlabMOutputHandler.h; sourceTree = "<group>"; };
 		AD8F74B4190EE0EE00A6A5A8 /* VLMatlabMOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLMatlabMOutputHandler.m; sourceTree = "<group>"; };
+		AD9CB257191AC3700033E3D0 /* VLJuliaOutputHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLJuliaOutputHandler.h; sourceTree = "<group>"; };
+		AD9CB258191AC3700033E3D0 /* VLJuliaOutputHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLJuliaOutputHandler.m; sourceTree = "<group>"; };
+		AD9CB25C191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLJuliaDataFileCBSignalingModelStrategy.h; sourceTree = "<group>"; };
+		AD9CB25D191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLJuliaDataFileCBSignalingModelStrategy.m; sourceTree = "<group>"; };
+		AD9CB25F191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLJuliaControlFunctionCBSignalingModelStrategy.h; sourceTree = "<group>"; };
+		AD9CB260191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLJuliaControlFunctionCBSignalingModelStrategy.m; sourceTree = "<group>"; };
 		ADB25E2D18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLGSLCDataFileCellFreeModelStrategy.h; sourceTree = "<group>"; };
 		ADB25E2E18C7C0DF0068A07B /* VLGSLCDataFileCellFreeModelStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLGSLCDataFileCellFreeModelStrategy.m; sourceTree = "<group>"; };
 		ADCA5C6218F4B7C000E95221 /* VLCompartmentSpeciesFilterHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCompartmentSpeciesFilterHandler.h; sourceTree = "<group>"; };
@@ -297,6 +306,8 @@
 				ADCF3DB318BD1A8000A83257 /* VLOctaveCOutputHandler.m */,
 				ADCF3DC618BD699200A83257 /* VLSharedUtilitiesOutputHandler.h */,
 				ADCF3DC718BD699200A83257 /* VLSharedUtilitiesOutputHandler.m */,
+				AD9CB257191AC3700033E3D0 /* VLJuliaOutputHandler.h */,
+				AD9CB258191AC3700033E3D0 /* VLJuliaOutputHandler.m */,
 			);
 			name = output_handler;
 			sourceTree = "<group>";
@@ -397,6 +408,25 @@
 			name = constraints_signaling_model;
 			sourceTree = "<group>";
 		};
+		AD9CB25A191AC4170033E3D0 /* julia */ = {
+			isa = PBXGroup;
+			children = (
+				AD9CB25B191AC4250033E3D0 /* constrained_signaling_model */,
+			);
+			name = julia;
+			sourceTree = "<group>";
+		};
+		AD9CB25B191AC4250033E3D0 /* constrained_signaling_model */ = {
+			isa = PBXGroup;
+			children = (
+				AD9CB25C191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.h */,
+				AD9CB25D191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.m */,
+				AD9CB25F191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.h */,
+				AD9CB260191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.m */,
+			);
+			name = constrained_signaling_model;
+			sourceTree = "<group>";
+		};
 		ADCA5C6518F4BD8D00E95221 /* metabolic_model */ = {
 			isa = PBXGroup;
 			children = (
@@ -457,6 +487,7 @@
 		ADFAB39318B6C348004C45BD /* strategy_system */ = {
 			isa = PBXGroup;
 			children = (
+				AD9CB25A191AC4170033E3D0 /* julia */,
 				AD7A42D118C4F8EB0097AA60 /* gsl_c */,
 				AD62086218C0CF960091DC42 /* matlab_m */,
 				ADCF3DB918BD26EF00A83257 /* octave_c */,
@@ -534,6 +565,7 @@
 				AD6DFFEF18C67D5400617102 /* VLGSLCEnzymeActivityControlCellFreeModelStrategy.m in Sources */,
 				AD8F74B5190EE0EE00A6A5A8 /* VLMatlabMOutputHandler.m in Sources */,
 				AD3A889718A2D83E00BAA649 /* VLAbstractFilterHandler.m in Sources */,
+				AD9CB25E191AC48E0033E3D0 /* VLJuliaDataFileCBSignalingModelStrategy.m in Sources */,
 				ADFAB3A218B78469004C45BD /* VLOctaveMBalanceEquationsCellFreeModelStrategy.m in Sources */,
 				AD62086918C0D2DD0091DC42 /* VLGenericCodeGenerationServiceStringsAndBlocks.m in Sources */,
 				AD7A42DB18C4F92D0097AA60 /* VLGSLCKineticsMassActionModelStrategy.m in Sources */,
@@ -551,6 +583,7 @@
 				ADD1C68418E2614B0087EAC7 /* VLCFLMLInputHandler.m in Sources */,
 				AD3A88A318A2D95300BAA649 /* VLIdentityFilterHandler.m in Sources */,
 				ADCF3DB718BD1BB800A83257 /* VLGSLCOutputHandler.m in Sources */,
+				AD9CB259191AC3700033E3D0 /* VLJuliaOutputHandler.m in Sources */,
 				ADD1C67E18E251630087EAC7 /* VLOctaveMKineticsHybridCFLModelStrategy.m in Sources */,
 				AD7A42DD18C4F92D0097AA60 /* VLGSLCJacobianMatrixMassActionModelStategy.m in Sources */,
 				ADD1C68118E2518D0087EAC7 /* VLOctaveMDataFileHybridCFLModelStrategy.m in Sources */,
@@ -564,6 +597,7 @@
 				ADFAB39C18B7826A004C45BD /* VLAbstractStrategy.m in Sources */,
 				AD81890718D8D6A900C05C70 /* VLGSLCDriverSolveAdjointBalanceEquationsStrategy.m in Sources */,
 				ADFAB39618B6C443004C45BD /* VLGenericCodeGenerationStrategyFactory.m in Sources */,
+				AD9CB261191AC4CE0033E3D0 /* VLJuliaControlFunctionCBSignalingModelStrategy.m in Sources */,
 				ADCF3DBC18BD273600A83257 /* VLOctaveCDataFileMassActionModelStrategy.m in Sources */,
 				AD3A4F9618C603420018C84D /* VLSBMLInputHandler.m in Sources */,
 				AD3A88A618A2DA8500BAA649 /* VLSBMLOutputHandler.m in Sources */,
